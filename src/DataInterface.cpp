@@ -647,6 +647,15 @@ void DataInterface::importCodes(const QString &fileName, const QString &relDirec
   const std::string loadFile = fileName.toStdString();
   relDir = relDirection.toStdString();
   relDesc = relDescription.toStdString();
+
+  std::vector<bool>::iterator flagIt;
+  for (flagIt = sourceFlagIndex.begin(); flagIt != sourceFlagIndex.end(); flagIt++) {
+    *flagIt = false;
+  }
+  for (flagIt = targetFlagIndex.begin(); flagIt != targetFlagIndex.end(); flagIt++) {
+    *flagIt = false;
+  }
+
   
   // We need to create some temporary data storage units.
   std::vector<std::string> tempHeader;
