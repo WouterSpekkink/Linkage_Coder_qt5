@@ -919,23 +919,21 @@ void DataInterface::importCodes(const QString &fileName, const QString &relDirec
 	    counterTarget = 0;
 	    std::vector <std::string> currentData = rowData[k];
 	    for (std::vector<int>::size_type l = 0; l != indexOriginal.size(); l++) {
-	      for (std::vector<int>::size_type m = 0; m != indexLoaded.size(); m++) {
-		if (currentData[indexOriginal[l]] == tempRowData[i][indexLoaded[m]]) {
-		  counterSource++;
-		}
-		if (currentData[indexOriginal[l]] == tempRowData[j][indexLoaded[m]]) {
-		  counterTarget++;
-		}
-		if (counterSource == goal) { // We found the correct amount of matching cells.
-		  source = k;
-		  foundSource = true;
-		  counterSource = 0; // Reset the counter.
-		}
-		if (counterTarget == goal) {
-		  target = k;
-		  foundTarget = true;
-		  counterTarget = 0; // Reset te counter.
-		}
+	      if (currentData[indexOriginal[l]] == tempRowData[i][indexLoaded[l]]) {
+		counterSource++;
+	      }
+	      if (currentData[indexOriginal[l]] == tempRowData[j][indexLoaded[l]]) {
+		counterTarget++;
+	      }
+	      if (counterSource == goal) { // We found the correct amount of matching cells.
+		source = k;
+		foundSource = true;
+		counterSource = 0; // Reset the counter.
+	      }
+	      if (counterTarget == goal) {
+		target = k;
+		foundTarget = true;
+		counterTarget = 0; // Reset te counter.
 	      }
 	    }
 	    if (foundSource == true && foundTarget == true) {
@@ -954,10 +952,8 @@ void DataInterface::importCodes(const QString &fileName, const QString &relDirec
 	for (std::vector <std::vector <std::string> >::size_type j = 0; j != tempRowData.size(); j++) {
 	  counterSource = 0;
 	  for (std::vector<int>::size_type k = 0; k != indexOriginal.size(); k++) {
-	    for (std::vector<int>::size_type l = 0; l != indexLoaded.size(); l++) {
-	      if (rowData[i][indexOriginal[k]] == tempRowData[j][indexLoaded[l]]) {
-		counterSource++;
-	      }
+	    if (rowData[i][indexOriginal[k]] == tempRowData[j][indexLoaded[k]]) {
+	      counterSource++;
 	    }
 	  }
 	  if (counterSource == goal) {

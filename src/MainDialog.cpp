@@ -906,8 +906,8 @@ void MainDialog::toggleSourceFlag() {
 
 void MainDialog::navigateNextSourceFlag() {
   std::vector<bool>::size_type currentRow = sourceRowIndex;
-  if (relationshipDirection == RELPAST && currentRow != 0) {
-    for (std::vector<bool>::size_type i = currentRow; i != 0; i--) {
+  if (relationshipDirection == RELPAST && currentRow != dataInterface->rowData.size() - 1) {
+    for (std::vector<bool>::size_type i = currentRow; i != dataInterface->sourceFlagIndex.size(); i++) {
       if (dataInterface->sourceFlagIndex[i] == true) {
 	sourceRowIndex = i;
 	targetRowIndex = sourceRowIndex - 1;
@@ -940,8 +940,8 @@ void MainDialog::navigateNextSourceFlag() {
 
 void MainDialog::navigatePreviousSourceFlag() {
   std::vector<bool>::size_type currentRow = sourceRowIndex;
-  if (relationshipDirection == RELPAST && currentRow != dataInterface->sourceFlagIndex.size()) {
-    for (std::vector<bool>::size_type i = currentRow; i != dataInterface->sourceFlagIndex.size(); i++) {
+  if (relationshipDirection == RELPAST && currentRow != 1) {
+    for (std::vector<bool>::size_type i = currentRow; i != dataInterface->sourceFlagIndex.size(); i--) {
       if (dataInterface->sourceFlagIndex[i] == true) {
 	sourceRowIndex = i;
 	targetRowIndex = sourceRowIndex - 1;
