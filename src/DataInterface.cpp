@@ -999,13 +999,10 @@ void DataInterface::writeLinkages(const QString &relDescription, QVector<QString
   filePath.append(fileName);
   std::ofstream fileOut(filePath.toStdString().c_str());
 
-  if (!fileOut.is_open()) {
-    QPointer<QMessageBox> errorBox =  new QMessageBox;
-    errorBox->setText(tr("<b>ERROR: Cannot write file</b>"));
-    errorBox->setInformativeText("It appears impossible to open the file to write data.");
-    errorBox->exec();
-    return;
-  }
+  fileName = "CYPHER.txt";
+  filePath = path;
+  filePath.append(fileName);
+  std::ofstream cypherOut(filePath.toStdString().c_str());
 
   // Now we write the headers of this output file.
   std::vector<std::vector<std::string>::size_type> index;
@@ -1018,6 +1015,9 @@ void DataInterface::writeLinkages(const QString &relDescription, QVector<QString
     }
   }
 
+  cypherOut << "// Here the incidents are created. Remove this block if they were already included.\n\n";
+
+  std::vector<std::string> cypherTemp; 
   if (index.size() == 0) {
     fileOut << "Id" << "," << "Label" << "\n";
   } else {
@@ -1029,6 +1029,7 @@ void DataInterface::writeLinkages(const QString &relDescription, QVector<QString
       } else {
 	fileOut << "\"" << *it << "\"" << "\n";
       }
+      cypherTemp.push_back(*it);
     }
   }
 
@@ -1036,20 +1037,30 @@ void DataInterface::writeLinkages(const QString &relDescription, QVector<QString
   std::vector <std::vector <std::string> >::iterator dIt;
   for (dIt = rowData.begin(); dIt != rowData.end(); dIt++) {
     std::vector<std::string> currentRow = *dIt;
+    std::stringstream ss;
+    ss << counter;
+    std::string curI = "I" + ss.str();
     if (index.size() == 0) {
       fileOut << counter << "," << counter << "," << "\n";
+      cypherOut << "CREATE (" << curI << ":Incident {id: " << counter << "})\n";
     } else {
       fileOut << counter << "," << counter << ",";
+      cypherOut << "CREATE (" << curI << ":Incident {id: " << counter << ", ";
       for (std::vector<std::vector<std::string>::size_type>::size_type i = 0;i != index.size(); i++) {
 	if (i != index.size() - 1) {
 	  fileOut << "\"" << currentRow[index[i]] << "\"" << ",";
+	  cypherOut << cypherTemp[i] << ": " << "\"" << currentRow[index[i]] << "\", ";
 	} else {
 	  fileOut << "\"" << currentRow[index[i]] << "\"" << "\n";
+	  cypherOut << cypherTemp[i] << ": " << "\"" << currentRow[index[i]] << "\"})\n";
 	}
       }
     }
     counter++;
   }
+
+  cypherOut << "\n// End of block where incidents are created. Remove the above if incidents were already included.\n\n";
+  
   fileOut.close();
 
   fileName  = "Linkages_Edges.csv";
@@ -1060,18 +1071,35 @@ void DataInterface::writeLinkages(const QString &relDescription, QVector<QString
   edgesOut << "Source" << "," << "Target" << "," << "Type" << "," << "Weight" <<
     "," << "Description" << "," << "Memo" <<"\n";
 
+  cypherOut << "// Start of block where linkages are created.\n\n";
+
+  counter = 0;
   for (std::vector <std::vector <bool> >::size_type i = 0; i != linkages.size(); i++) {
     std::vector <bool> currentRow = linkages[i];
     for (std::vector <bool>::size_type j = 0; j != currentRow.size(); j++) {
       bool currentPair = currentRow[j];
       if (currentPair) {
-	edgesOut << i + 1 << "," << j + 1 << "," <<
-	  "Directed" << "," << "1" << "," << "Directed" << "," << '\"' <<
-	  memos[i][j]<< '\"' << "\n";
+	edgesOut << i + 1 << "," << j + 1 << "," << "Directed" << "," << "1" << "," << "Directed"
+		 << ",\"" << description << "\",\"" <<  memos[i][j] << "\"\n";
+
+	std::stringstream ss;
+	ss << counter;
+	counter++;
+	std::string currentS = "s" + ss.str();
+	std::string currentT = "t" + ss.str();
+
+	cypherOut << "WITH " << ss.str() << " AS Dummy\n" 
+		  << "MATCH (" << currentS << ":Incident {id: " << i + 1 << "}), ("<< currentT << ":Incident {id: " << j + 1  << "})\n"
+		  << "MERGE (" << currentS << ")-[:HAS_LINKAGE_TO {type: \"" << description << "\", memo: \"" << memos[i][j]
+		  << "\"}]->(" << currentT << ")\n";
       }
     }
   }
+
+  cypherOut << "\n// End of block where linkages are created.\n\n";
+  
   edgesOut.close();
+  cypherOut.close();
   QPointer<QMessageBox> errorBox = new QMessageBox;
   errorBox->setText(tr("<b>Files exported</b>"));
   errorBox->setInformativeText("Your files have been exported to the \"../export\" folder in the program's directory.");

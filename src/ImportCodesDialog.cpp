@@ -59,6 +59,7 @@ ImportCodesDialog::ImportCodesDialog(QWidget *parent, const QVector<QString> Qhe
   QVectorIterator<QString> it(Qheader);
   while (it.hasNext()) {
     QPointer<QCheckBox> tempBox = new QCheckBox(it.next(), this);
+    tempBox->setChecked(true);
     columns.push_back(tempBox);
   }
 
