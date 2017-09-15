@@ -3,12 +3,12 @@
  (lambda ()
    (TeX-add-to-alist 'LaTeX-provided-package-options
                      '(("fontenc" "T1")))
-   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperref")
-   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperimage")
-   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperbaseurl")
-   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "nolinkurl")
-   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "url")
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "path")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "url")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "nolinkurl")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperbaseurl")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperimage")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperref")
    (add-to-list 'LaTeX-verbatim-macros-with-delims-local "path")
    (TeX-run-style-hooks
     "latex2e"
@@ -34,19 +34,31 @@
     "sec:othernotesdatasets"
     "chap:usingtheprogram"
     "sec:loadingnewdataset"
+    "fig:importoptions"
     "sec:importerrors"
     "fig:importerror"
     "sec:savingloadingdata"
+    "fig:saveload"
     "sec:importingcodes"
+    "fig:importcodesfig"
     "fig:importingcodesdiagram"
     "sec:problemsimportingcodes"
     "fig:overwritingcodes"
+    "sec:startinganewsession"
+    "fig:settings"
     "sec:navigatingdata"
+    "fig:incidentsoverview"
+    "fig:extrafields"
+    "fig:indexes"
     "sec:markingincidents"
+    "fig:flagoptions"
+    "fig:flaggedincident"
+    "sec:codinglinkages"
+    "fig:linkage"
+    "fig:memo"
     "sec:exportingdata"
     "sec:logfilesandexiting"
-    "chap:usingtheprogram2"
-    "sec:introductiontocoding"
+    "sec:comparingcodes"
     "chap:whatisnext"
     "sec:graphdatabases"
     "sec:creatingeventgraphs"
