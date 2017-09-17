@@ -598,7 +598,21 @@ void MainDialog::processLoad(const QString &sourceIndex, const QString &targetIn
     leftSelector->addItem(currentHeader);
     rightSelector->addItem(currentHeader);
   }
+
+  relationshipDirSelector = new QComboBox(this);
+  relationshipDirSelector->addItem(RELDEFAULT);
+  relationshipDirSelector->addItem(RELPAST);
+  relationshipDirSelector->addItem(RELFUTURE);
+  relationshipDirSelector->setEnabled(false);
+
+  int tempIndex = relationshipDirSelector->findText(relationshipDirection);
+  relationshipDirSelector->setCurrentIndex(tempIndex);
+  relationshipDescriber->setText(relationshipDescription);
+  QString relText = "--[" + relationshipDescription + "]-->";
+  relationshipReporter->setText(relText);
+  
   setWorkButtons(true);
+
   QDateTime time = QDateTime::currentDateTime();
   QString timeText = time.toString(Qt::TextDate);
   QString newLog = timeText + " - " + "data successfully loaded with [" + relationshipDirection +
