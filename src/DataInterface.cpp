@@ -906,7 +906,46 @@ void DataInterface::importCodes(const QString &fileName, const QString &relDirec
     int target = 0;
     bool foundSource = false;
     bool foundTarget = false;
-  
+
+    // Let us check whether all rows are unique
+    for (std::vector <std::vector <std::string> >::size_type i = 0; i != rowData.size() - 1; i++) {
+      for (std::vector <std::vector <std::string> >::size_type j = i + 1; j != rowData.size(); j++) {
+	counterSource = 0;
+	for (std::vector<int>::size_type k = 0; k != indexOriginal.size(); k++) {
+	  if (rowData[i][indexOriginal[k]] == rowData[j][indexOriginal[k]]) {
+	    counterSource++;
+	  }
+	}
+	if (counterSource == goal) {
+	QPointer <QMessageBox> warningBox = new QMessageBox;
+	warningBox->addButton(QMessageBox::Ok);
+	warningBox->setIcon(QMessageBox::Warning);
+	warningBox->setText("WARNING: Identical entries detected in current data set with current selection of columns!");
+	warningBox->exec();
+	return;
+      }
+      }
+    }
+    
+    for (std::vector <std::vector <std::string> >::size_type i = 0; i != tempRowData.size() - 1; i++) {
+      for (std::vector <std::vector <std::string> >::size_type j = i + 1; j != tempRowData.size(); j++) {
+	counterTarget = 0;
+	for (std::vector<int>::size_type k = 0; k != indexLoaded.size(); k++) {
+	  if (tempRowData[i][indexLoaded[k]] == tempRowData[j][indexLoaded[k]]) {
+	    counterTarget++;
+	  }
+	}
+	if (counterTarget == goal) {
+	  QPointer <QMessageBox> warningBox = new QMessageBox;
+	  warningBox->addButton(QMessageBox::Ok);
+	  warningBox->setIcon(QMessageBox::Warning);
+	  warningBox->setText("WARNING: Identical entries detected in loaded save file with current selection of columns!");
+	  warningBox->exec();
+	  return;
+	}
+      }
+    }
+       
     // Now we have to vectors with the indexes of the columns that should match.
   
     for (std::vector <std::vector <int> >::size_type i = 0; i != tempLinkages.size(); i++) {
