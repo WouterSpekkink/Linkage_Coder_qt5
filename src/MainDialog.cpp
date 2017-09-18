@@ -86,19 +86,19 @@ MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
   eventSelector->addItem(EVENTDEFAULT); // The other options will be added later.
   eventSelector->setEnabled(false); // This is initially disabled.
   selectedEventColumn = EVENTDEFAULT;
-  relationshipDirLabel =  new QLabel(tr("Relationship direction:"));
+  relationshipDirLabel =  new QLabel(tr("Linkage direction:"));
   relationshipDirSelector = new QComboBox(this);
   relationshipDirSelector->addItem(RELDEFAULT);
   relationshipDirSelector->addItem(RELPAST);
   relationshipDirSelector->addItem(RELFUTURE);
   relationshipDirSelector->setEnabled(false);
   relationshipDirection = RELDEFAULT;
-  relationshipDescLabel = new QLabel(tr("Relationship description:"));
+  relationshipDescLabel = new QLabel(tr("Linkage description:"));
   relationshipDescriber = new QLineEdit();
   relationshipDescriber->setMaxLength(15);
   relationshipDescriber->setEnabled(false);
   relationshipDescription = "";
-  relationshipInfoLabel = new QLabel(tr("<b>Relationship type:<b>"));
+  relationshipInfoLabel = new QLabel(tr("<b>Linkage type:<b>"));
   relationshipReporter = new QLabel("");
   startCodingButton = new QPushButton(tr("Start coding")); // Selected if user starts new session.
   startCodingButton->setEnabled(false); // This is initially disabled.

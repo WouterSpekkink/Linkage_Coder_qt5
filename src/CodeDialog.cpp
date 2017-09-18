@@ -61,7 +61,7 @@ CodeDialog::CodeDialog(QWidget *parent) : QDialog(parent) {
   fileNameTwoLabel = new QLabel(""); //  This label will show which second file the user selected.
   openFileTwoButton = new QPushButton(tr("Open file")); // Button to select file two.
   openFileTwoButton->setEnabled(false); // We will only activate this if file one was selected first.
-  compareFilesButton = new QPushButton(tr("Compare file")); // This starts the process of comparing codes.
+  compareFilesButton = new QPushButton(tr("Compare files")); // This starts the process of comparing codes.
   compareFilesButton->setEnabled(false); // We only want to activate this when two files have been selected.
 
   // We always initially reset the file names to empty strings..
@@ -265,40 +265,43 @@ void CodeDialog::compareFiles() {
     for (std::vector <std::vector <bool> >::size_type i = 0; i != dataOne->linkages.size(); i++) {
       std::vector <bool> currentRow = dataOne->linkages[i];
       for (std::vector <bool>::size_type j = 0; j != currentRow.size(); j++) {
-	dyadsTotal++; // We can add a dyad at each pass.
-	// Only count linkages if they are present, for each file separately.
-	if (dataOne->linkages[i][j] == true) {
-	  linkagesOne++;
-	}
-	if (dataTwo->linkages[i][j] == true) {
-	  linkagesTwo++;
-	}
-	// If both files have the same linkage, then we count a match.
-	if (dataOne->linkages[i][j] == true && dataTwo->linkages[i][j] == true) {
-	  positive++;
-	  std::vector <int> tempIndex; // We use this to identify where the match occurred.
-	  tempIndex.push_back(i); // Index of the source.
-	  tempIndex.push_back(j); // Index of the target.
-	  matchedIndexes.push_back(tempIndex); // store the indexes as a pair.
-	}
-	// If either of the files has a linkage that the other doesn't have, we count a mismatch.
-	if (dataOne->linkages[i][j] == true && dataTwo->linkages[i][j] == false) {
-	  negative++;
-	  std::vector <int> tempIndex; // We use this to identify where the mismatch occurred.
-	  tempIndex.push_back(i); // Index of the source.
-	  tempIndex.push_back(j); // Index of the target.
-	  tempIndex.push_back(0); // The linkage did occur in the source, not in the target.
-	  unmatchedIndexes.push_back(tempIndex); // store the indexes as a pair
-	} else if (dataOne->linkages[i][j] == false && dataTwo->linkages[i][j] == true) {
-	  negative++;
-	  std::vector <int> tempIndex;
-	  tempIndex.push_back(i); // Index of the source.
-	  tempIndex.push_back(j); // Index of the target.
-	  tempIndex.push_back(1); // The linkage did occur in the target, not in the source.
-	  unmatchedIndexes.push_back(tempIndex);
+	if (i != j) {
+	  dyadsTotal++; // We can add a dyad at each pass.
+	  // Only count linkages if they are present, for each file separately.
+	  if (dataOne->linkages[i][j] == true) {
+	    linkagesOne++;
+	  }
+	  if (dataTwo->linkages[i][j] == true) {
+	    linkagesTwo++;
+	  }
+	  // If both files have the same linkage, then we count a match.
+	  if (dataOne->linkages[i][j] == true && dataTwo->linkages[i][j] == true) {
+	    positive++;
+	    std::vector <int> tempIndex; // We use this to identify where the match occurred.
+	    tempIndex.push_back(i); // Index of the source.
+	    tempIndex.push_back(j); // Index of the target.
+	    matchedIndexes.push_back(tempIndex); // store the indexes as a pair.
+	  }
+	  // If either of the files has a linkage that the other doesn't have, we count a mismatch.
+	  if (dataOne->linkages[i][j] == true && dataTwo->linkages[i][j] == false) {
+	    negative++;
+	    std::vector <int> tempIndex; // We use this to identify where the mismatch occurred.
+	    tempIndex.push_back(i); // Index of the source.
+	    tempIndex.push_back(j); // Index of the target.
+	    tempIndex.push_back(0); // The linkage did occur in the source, not in the target.
+	    unmatchedIndexes.push_back(tempIndex); // store the indexes as a pair
+	  } else if (dataOne->linkages[i][j] == false && dataTwo->linkages[i][j] == true) {
+	    negative++;
+	    std::vector <int> tempIndex;
+	    tempIndex.push_back(i); // Index of the source.
+	    tempIndex.push_back(j); // Index of the target.
+	    tempIndex.push_back(1); // The linkage did occur in the target, not in the source.
+	    unmatchedIndexes.push_back(tempIndex);
+	  }
 	}
       }
     }
+    dyadsTotal /= 2; // One half of the matrix will always be 0;
     // Now we immediately report some information to the user in the dialog.
     totalDyads->setText(QString::number(dyadsTotal));
     numbLinksOne->setText(QString::number(linkagesOne));

@@ -1058,9 +1058,9 @@ void DataInterface::writeLinkages(const QString &relDescription, QVector<QString
 
   std::vector<std::string> cypherTemp; 
   if (index.size() == 0) {
-    fileOut << "Id" << "," << "Label" << "\n";
+    fileOut << "Id" << "," << "Label" << "," << "Order\n";
   } else {
-    fileOut << "Id" << "," << "Label" << ",";
+    fileOut << "Id" << "," << "Label" << "," << "Order" << ",";
     std::vector<std::string>::iterator it;
     for (it = exportProperties.begin(); it != exportProperties.end(); it++) {
       if (it != exportProperties.end() - 1) {
@@ -1080,12 +1080,14 @@ void DataInterface::writeLinkages(const QString &relDescription, QVector<QString
     ss << counter;
     std::string curI = "I" + ss.str();
     if (index.size() == 0) {
-      fileOut << counter << "," << counter << "," << "\n";
-      cypherOut << "CREATE (" << curI << ":Incident {id: " << counter << "})\n";
+      fileOut << counter << "," << counter << "," << "," << counter << "\n";
+      cypherOut << "CREATE (" << curI << ":Incident {id: " << counter << " , order: "
+		<< counter <<"})\n";
     } else {
-      fileOut << counter << "," << counter << ",";
-      cypherOut << "CREATE (" << curI << ":Incident {id: " << counter << ", ";
-      for (std::vector<std::vector<std::string>::size_type>::size_type i = 0;i != index.size(); i++) {
+      fileOut << counter << "," << counter << "," << counter << ",";
+      cypherOut << "CREATE (" << curI << ":Incident {id: " << counter  << ", order: "
+		<< counter << ", ";
+      for (std::vector<std::vector<std::string>::size_type>::size_type i = 0; i != index.size(); i++) {
 	if (i != index.size() - 1) {
 	  fileOut << "\"" << currentRow[index[i]] << "\"" << ",";
 	  cypherOut << cypherTemp[i] << ": " << "\"" << currentRow[index[i]] << "\", ";

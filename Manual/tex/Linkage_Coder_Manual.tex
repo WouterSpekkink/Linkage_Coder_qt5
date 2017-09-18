@@ -58,9 +58,9 @@ The program is intended to facilitate in the qualitative coding of event data. I
 
 Why is it useful to have this tool? Over the past years I have worked together with other people (especially Frank Boons) to develop and use various methods and tools for the study of social processes. In doing so, we have always worked with the principle that our fundamental units of analysis should be events, that is, things that ``happened'' or ``came to pass'', as opposed to, for example, variables. Based on ideas developed by the researchers from the Minnesota Innovation Research Program, we started collecting data in the form of \emph{incidents}, which are qualitative, bracketed descriptions of activity, which consist (at least) of (1) an indication of the time at which the activity occurred, (2) a (brief) qualitative description of the activity, and (3) the source of data (e.g., a document, an interview, personal conversation)\footnote{The descriptions (point 2) are typically created by the researcher him/herself. When I am using textual sources (e.g., documents, web pages, interview transcripts), I also like to add the ``raw'' text on which my incident description was based.}. During the collection of event data, we create numerous incidents, which we store in chronologically ordered event data sets.
 
-Again, following ideas developed by researchers from the Minnesota Innovation Research Program, we have been using qualitative coding procedures as a step in the analysis of event data. In doing so, we treat our incidents as \emph{empirical observations} that serve as indicators for \emph{theoretical constructs} that cannot be observed directly. Examples of such theoretical constructs are (types of) \emph{events} and \emph{relationships between events}. We may, for example, treat incidents that describe a sequence of activities as indicators for the performance of a social practice\footnote{If you are unfamiliar with the concept of social practice, see the following paper for a good introduction: Reckwitz, A. (2002). Toward a Theory of Social Practices: A Development in Culturalist Theorizing. \emph{European Journal of Social Theory}, 5(2), 243–263.} (an event). If we record multiple such performances, we might also be interested in knowing whether some of the performances were performed in response to others\footnote{See the concept of \emph{chains of action} in Schatzki, T. R. (2016). Keeping Track of Large Phenomena. Geographische Zeitschrift, 104, 4–24.} (a type of relationship between the events). I developed a tool called the \emph{\textbf{Event Coder}} program, the primary purpose of which is to facilitate the coding of incident data to identify and qualify events. The tool discussed in this manual, the \emph{\textbf{Linkage Coder}} tool, is dedicated to the coding of incident data to identify linkages between events. 
+Again, following ideas developed by researchers from the Minnesota Innovation Research Program, we have been using qualitative coding procedures as a step in the analysis of event data. In doing so, we treat our incidents as \emph{empirical observations} that serve as indicators for \emph{theoretical constructs} that cannot be observed directly. Examples of such theoretical constructs are (types of) \emph{events} and \emph{linkages between events}. We may, for example, treat incidents that describe a sequence of activities as indicators for the performance of a social practice\footnote{If you are unfamiliar with the concept of social practice, see the following paper for a good introduction: Reckwitz, A. (2002). Toward a Theory of Social Practices: A Development in Culturalist Theorizing. \emph{European Journal of Social Theory}, 5(2), 243–263.} (an event). If we record multiple such performances, we might also be interested in knowing whether some of the performances were performed in response to others\footnote{See the concept of \emph{chains of action} in Schatzki, T. R. (2016). Keeping Track of Large Phenomena. Geographische Zeitschrift, 104, 4–24.} (a type of linkage between the events). The tool discussed in this manual, the \emph{\textbf{Linkage Coder}} tool, is dedicated to the coding of incident data to identify linkages between events. I also developed another tool, called the \emph{\textbf{Event Coder}} program, the primary purpose of which is to facilitate the coding of incident data to identify and qualify events (also see chapter \ref{chap:whatisnext}). 
 
-This manual gives an in-depth introduction to the program and its functionality. In the remainder of the introduction, I offer some additional background to the program, and I introduce some necessary disclaimers. Consider reading these disclaimers before you send me angry emails. In chapter \ref{chap:preparations} I go into some of the assumptions that the program builds on (e.g., about the data sets that you will code), and what preparations (i.e., things you are assumed to have done before using the program) this implies. In chapter \ref{chap:usingtheprogram} I go through all the features of the program, including importing data, saving and loading files, coding data, and exporting the results. I conclude the main body of the manual with chapter \ref{chap:whatisnext}, discussing some of the things that one could do with the data that the program exports. My contact details can be found in chapter \ref{chap:contactdetails}. 
+This manual gives an in-depth introduction to the program and its functionality. In the remainder of the introduction, I offer some additional background to the program, and I introduce some necessary disclaimers. Consider reading these disclaimers before you send me angry emails. In chapter \ref{chap:preparations} I go into some of the assumptions that the program builds on (e.g., about the data sets that you will code), and what preparations this implies (i.e., things you are assumed to have done before using the program). In chapter \ref{chap:usingtheprogram} I go through all the features of the program, including importing data, saving and loading files, coding data, and exporting the results. I conclude the main body of the manual with chapter \ref{chap:whatisnext}, discussing some of the things that one could do with the data that the program exports. My contact details can be found in chapter \ref{chap:contactdetails}. 
 
 \section{Part of a bigger program}
 \label{sec:partofbiggerprogram}
@@ -69,7 +69,7 @@ It is very important for the reader to realise that, even though I wrote the \te
 
 \textbf{And here is a very important thing to consider before you start using the current version of the program:} I would advice you to at least skim through chapter \ref{chap:whatisnext} first. In this chapter, I offer some examples of how the data that the program exports can be imported into other software, and what possibilities this offers. Making use of this program probably only makes sense if these possibilities are actually interesting for your work.
 
-Please, also see section \ref{sec:exportingdata} to get a good idea of what kind of data the program actually exports. The motivations for the choices that I made in this are perhaps not immediately obvious to everyone, and probably for some they will not become obvious until I actually get to integrating my work in the larger program that I have in mind. However, one thing I can say is that I have a strong preference for storing, visualising, and analysing event data (and related data) in some type of graph format. This can be achieved most efficiently if data are eventually stored either as \textbf{nodes}, \textbf{relationships between those nodes}, or \textbf{properties of nodes or relationships}. This is the reason why the data that the program exports take the form of (primarily) node lists and edge lists, which would allow you to import and visualise the data into various software tools for network visualisation \footnote{see, for example, \url{https://gephi.org}, which is my favourite.}.  
+Please, also see section \ref{sec:exportingdata} to get a good idea of what kind of data the program actually exports. The motivations for the choices that I made in this are perhaps not immediately obvious to everyone, and probably for some they will not become obvious until I actually get to integrating my work in the larger program that I have in mind. However, one thing I can say is that I have a strong preference for storing, visualising, and analysing event data (and related data) in some type of graph format. This can be achieved most efficiently if data are eventually stored either as \textbf{nodes}, \textbf{relationships between those nodes}, or \textbf{properties of nodes or relationships}. This is the reason why the data that the program exports take the form of nodes and edges, which allows you to import and visualise the data into various software tools for network visualisation \footnote{see, for example, \url{https://gephi.org}, which is my favourite.}.  
 
 \section{Other disclaimers}
 \label{sec:disclaimers}
@@ -210,22 +210,22 @@ The procedure for importing codes involves the following steps:
 \item{The user should first make sure that the codes assigned to the \textbf{old version} of the data set are stored, by using the \textbf{Save session option} (see section \ref{sec:savingloadingdata}). At a later step, we will import the codes from this save file. For this example, we refer to this file as \textbf{Saved\textunderscore Codes.sav}.}
 \item{After saving the codes assigned to the \textbf{old version} of the data set, we can import the \textbf{new version} of the data set, using the procedure described in section \ref{sec:loadingnewdataset}. Thus, the steps taken here are the same as when you would start coding a completely new data set.}
 \item{After the \textbf{new version} of the dataset has been loaded, you should click the \textbf{Import codes} button (see figure \ref{fig:importcodesfig}). You will first be shown a warning dialog, just to make sure that you can double check what you are doing. If you select \textbf{Ok} in the warning dialog, you will be shown a file dialog. Use this dialog to find the file with your saved codes (\textbf{Saved\textunderscore Codes.sav} in this example). Select and open this file.}
-\item{A new dialog will appear, the specific contents of which will depend on the contents of your data sets. An example is shown in figure \ref{fig:importcodesfig}, but yours will probably look different. The dialog will show the columns that the \textbf{old version} of your data set and the \textbf{new version} of your data set have in common. The program uses these columns to match entries in the \textbf{old version} of the data set with entries in the \textbf{new version} of the data set. It inspects the data in the selected columns of both files, and if it finds matching rows in the \textbf{old version} and the \textbf{new version} of the data set, the program will ensure that the codes associated with that row of data are copied to the \textbf{new version} of the data set. By default, the program will inspect all columns, but you may want to deselect one or more columns if you decided to make small updates to the contents of these columns. However, for the codes to be imported correctly, the rows of data in both data sets need to be unique. For example, if you set the program to match the data sets using only one column, which has the same contents in multiple rows in one or both of the data sets, then the program will not be able to decide which codes are associated with which row of data. The program will report the error show in figure \ref{fig:importingcodeserror}, amd the import process will be cancelled. If you just added some incidents to your data set, removed incidents from your data set, and/or changed a few existing incidents, then it is usually safest to just have the program match the data sets using all columns. Otherwise, it should enough to select the column that indicates the timing of the incident, and the column that describes what happened in that incident, because having two incidents with the exact same timing, and the exact same contents (description) would probably never make sense, because they would describe the same activity, making one of them redundant. I advise you to always as many columns as possible to prevent problems like this from occurring. See figure \ref{fig:importingcodesdiagram} for a schematic overview that may help to understand the process.}
+\item{A new dialog will appear, the specific contents of which will depend on the contents of your data sets. An example is shown in figure \ref{fig:importcodesfig}, but yours will probably look different. The dialog will show the columns that the \textbf{old version} of your data set and the \textbf{new version} of your data set have in common. The program uses these columns to match entries in the \textbf{old version} of the data set with entries in the \textbf{new version} of the data set. It inspects the data in the selected columns of both files, and it records which rows in the \textbf{old version} of the data set are also present in the \textbf{new version} of the data set. By default, the program will inspect all columns, but you may want to deselect one or more columns if you decided to make small updates to the contents of these columns. However, for the codes to be imported correctly, the rows of data in both data sets need to be unique. For example, if you set the program to match the data sets using only one column, which has the same contents in multiple rows in one or both of the data sets, then the program will not be able to decide which codes are associated with which row of data. The program will report the error show in figure \ref{fig:importingcodeserror}, and the import process will be cancelled. If you just added some incidents to your data set, removed incidents from your data set, and/or changed a few existing incidents, then it is usually safest to just have the program match the data sets using all columns. Otherwise, it should be enough to select the column that indicates the timing of the incident, and the column that describes what happened in that incident, because having two incidents with the exact same timing, and the exact same contents (description) would probably never make sense, because they would describe the same activity, making one of them redundant. Once the program has matched all rows between the two versions of the data set, it will make sure that any linkages that were present in the \textbf{old version} of the data set, and that are still valid, will also be present in the \textbf{new version} of the data set. See figure \ref{fig:importingcodesdiagram} for a schematic overview that may help to understand the process.}
   \begin{figure}[h!]
-  \centering
-  \caption{Importing codes.}
-  \includegraphics[width=60mm]{Screenshot_26.pdf}
-  \label{fig:importingcodeserror}
-\end{figure}
+    \centering
+    \caption{Importing codes.}
+    \includegraphics[width=60mm]{Screenshot_26.pdf}
+    \label{fig:importingcodeserror}
+  \end{figure}
 
 \item{You also have the option to have the program mark any new entries in the \textbf{new version} of the data set. This means that, while checking the columns you have selected, the program will also remember any rows of data in the \textbf{new version} of the data set that it could not match to any rows of data in the \textbf{old version} of the data set. These entries will be marked (see \ref{sec:markingincidents}), so that you can easily find them while coding the data.}
 \item{If you happened to have changed data in one of the rows of the data set, that is, the row was already present in the \textbf{old version} of the data set, but you changed some of the contents of that row of data in the \textbf{new version} of the data set (in one of the selected columns), that row of data will be treated as new entry, and any codes assigned to that entry will be lost.}
-\item{The program should now return to the main screen, and any attribute codes and relationship codes that were present in the save file that you loaded should now also be available in the current session. Moreover, any incidents that already had codes assigned to them in that save file should now also have those codes assigned to them in the current session.}
+\item{The program should now return to the main screen, and any linkages that were present in the save file that you loaded should now also be present in the current session.}
 \end{enumerate}
 
 \begin{figure}[h!]
   \centering
-  \caption{Schematic overview of matching of data set entries.}
+  \caption{Importing codes.}
   \includegraphics[width=100mm]{Diagram_1.pdf}
   \label{fig:importingcodesdiagram}
 \end{figure}
@@ -235,20 +235,20 @@ The procedure for importing codes involves the following steps:
 
 There are several things that could go wrong when importing codes from an old data set into a new one. One problem would occur if you do not select any columns to be imported in the appropriate dialog. In this case the program will simply report that no columns were selected, and it will take no further action. Another similar problem would occur if you try to import codes from a data set that has no columns in common with the data set that is loaded into your current session. In this case the dialog where columns can be selected will be empty (except for the option to mark new entries). If you try to proceed, the program will behave as if no columns were selected (see above), report an error, and take no further action.
 
-Another problem may be that some of the codes assigned to entries in the \textbf{old version} of the data set do not get imported into the \textbf{new version} of the data set, even though these entries appear in both. This should only happen if something changed in the contents of these entries (and only in the contents of those columns that the program tries to match). Even if you made only small changes in the contents of the selected columns, the program will treat the corresponding entry as a new, uncoded entry. 
+Another problem may be that some of the codes assigned to entries in the \textbf{old version} of the data set do not get imported into the \textbf{new version} of the data set, even though these entries appear in both. This should only happen if something changed in the contents of these entries (and only in the contents of those columns that the program tries to match). Even if you made only small changes in the contents of the selected columns, the program will treat the corresponding entry as a new, uncoded entry.
 
 \section{Starting a new session}
 \label{sec:startinganewsession}
 
 Once you have imported data, you are required to set a few important settings that will be used during the coding process. \textbf{These settings cannot be changed after the coding process has started, so you have to think carefully in advance what the settings should be}. What these settings should be will depend on your research questions, your theoretical perspective and/or your research design.
 
-Figure \ref{fig:settings} shows where the settings are located. The left most drop-down menu (\textbf{Column with incident descriptions}) requires you to select the column in your data set that contains the descriptions of your incidents, which are assumed to be the main source of information for identifying relationships between incidents (although additional information can be displayed - see section \ref{sec:navigatingdata}). In the second drop-down menu (\textbf{Relationship direction}) you should select which direction the relationship you wish to code for is pointing in. There are two options to choose from:
+Figure \ref{fig:settings} shows where the settings are located. The left most drop-down menu (\textbf{Column with incident descriptions}) requires you to select the column in your data set that contains the descriptions of your incidents, which are assumed to be the main source of information for identifying linkages between incidents (although additional information can be displayed - see section \ref{sec:navigatingdata}). In the second drop-down menu (\textbf{Linkage direction}) you should select which direction the linkage you wish to code for is pointing in. There are two options to choose from:
 \begin{enumerate}
-\item{\emph{Present to past}: Relationships point from incidents in the ``present'' to incidents that lie in their ``past''. For example, if we have two incidents (\(A\) and \(B\)), and incident \(B\) happened after incident \(A\), then there can only be a relationship from incident \(B\) to incident \(A\), and not the other way around (\(B\rightarrow A\)).}
-\item{\emph{Past to present}: Relationships point from incidents that happened in the ``past'' to incidents in the ``present''}. For example, if we have two incidents (\(A\) and \(B\)), and incident \(B\) happened after incident \(A\), then there can only be a relationship from incident \(A\) to incident \(B\), and not the other way around (\(A\rightarrow B\)).
+\item{\emph{Present to past}: Linkages point from incidents in the ``present'' to incidents that lie in their ``past''. For example, if we have two incidents (\(A\) and \(B\)), and incident \(B\) happened after incident \(A\), then there can only be a linkage from incident \(B\) to incident \(A\), and not the other way around (\(A\leftarrow B\)).}
+\item{\emph{Past to present}: Linkages point from incidents that happened in the ``past'' to incidents in the ``present''}. For example, if we have two incidents (\(A\) and \(B\)), and incident \(B\) happened after incident \(A\), then there can only be a linkage from incident \(A\) to incident \(B\), and not the other way around (\(A\rightarrow B\)).
 \end{enumerate}
 
-Finally, a brief description (or label) of the relationship should be given. This description will be shown throughout the coding process, to remind the coder what type relationship is under consideration.
+Finally, a brief description (or label) of the linkage should be given. This description will be shown throughout the coding process, to remind the coder what type of linkage is being considered.
 
 If all these settings have been chosen, then the \textbf{Start coding} button will be enabled. Clicking this button will start the coding process. \textbf{After this, if the user wants to change any settings (s)he will have to restart the entire process.''}
 
@@ -262,9 +262,9 @@ If all these settings have been chosen, then the \textbf{Start coding} button wi
 \section{Navigating through the data}
 \label{sec:navigatingdata}
 
-The program, to some extent, enforces a specific way to walk through your data set. As explained in section \ref{sec:datasets}, the program assumes that your data are chronologically ordered, with the incidents that occurred earliest at the top, and the incidents that occurred latest at the bottom. When you start coding a new data set, the program will always assume that you wish to start the coding process with the earliest incidents. The program will always present to you the descriptions (see section \ref{sec:startinganewsession}) of two incidents (see figure \ref{fig:incidentsoverview}).
+The program, to some extent, enforces a specific way to walk through your data set. As explained in section \ref{sec:datasets}, the program assumes that your data are chronologically ordered, with the incidents that occurred earliest at the top, and the incidents that occurred latest at the bottom. When you start coding a new data set, the program will always assume that you wish to start the coding process with the earliest incidents. The program will always present to you the descriptions of two incidents (see figure \ref{fig:incidentsoverview}).
 
-In the left text field, the program will show the description of the incident that is the \textbf{source} of the potential relationship, and in the right text field the program will show the description of the incident that is the \textbf{target} of the potential relationship. In the example shown in figure \ref{fig:incidentsoverview} we have chosen for a relationship type that points from the present to the past. Thus, when we start coding, in the left field we see the incident that comes second in the chronological order of the data set that we loaded, and in the right field we see the incident that comes first in the chronological order of the data set.
+In the left text field, the program will show the description of the incident that is the \textbf{source} of the potential linkage, and in the right text field the program will show the description of the incident that is the \textbf{target} of the potential linkage. In the example shown in figure \ref{fig:incidentsoverview} we have chosen for a linkage type that points from the present to the past. Thus, when we start coding, in the left field we see the incident that comes second in the chronological order of the data set that we loaded, and in the right field we see the incident that comes first in the chronological order of the data set.
 
 \begin{figure}[h!]
   \centering
@@ -282,7 +282,7 @@ You will see an extra pair of fields in the bottom of the screen (see figure \re
   \label{fig:extrafields}
 \end{figure}
 
-Typically, you will want to consider assigning a relationship between the current pair of incidents, and then move on to another pair. Indications of the incidents' place in the chronological order of the data set are shown with indexes located above the two main fields (see figure \ref{fig:indexes}). The total number of possible \textbf{source} incidents is always the total number of incidents in the data set minus one. The total number of possible \textbf{target} incidents indicated in the index depends on the currently selected index of the \textbf{source} incident. For example, in figure \ref{fig:indexes}, we have set the relationship direction to ``Present to past''. The currently selected \textbf{source} incident comes second in the chronological order of the complete data set, but the index is show as (\(1 / 7\)), because the first incident in the data set cannot have a relationship to any other incident in the data set, given the currently selected relationship direction. The currently selected \textbf{target} incident comes first in the chronological order of the complete data set. Its index is shown as (\(1 / 1\)), because this incident is the only incident in the data set that the currently selected \textbf{source} incident could have a relationship to.    
+Typically, you will want to consider assigning a linkage between the current pair of incidents, and then move on to another pair. Indications of the incidents' place in the chronological order of the data set are shown with indexes located above the two main fields (see figure \ref{fig:indexes}). The indexes are formatted as \textbf{([Current source(target)] / [Total possible sources(targets)])}. The total number of possible \textbf{source} incidents is always the total number of incidents in the data set minus one. The total number of possible \textbf{target} incidents indicated in the index depends on the currently selected index of the \textbf{source} incident. For example, in figure \ref{fig:indexes}, we have set the linkage direction to ``Present to past''. The currently selected \textbf{source} incident comes second in the chronological order of the complete data set, but the index is shown as (\(1 / 7\)), because the first incident in the data set cannot have a linkage to any other incident in the data set, given the currently selected linkage direction. The currently selected \textbf{target} incident comes first in the chronological order of the complete data set. Its index is shown as (\(1 / 1\)), because this incident is the only incident in the data set that the currently selected \textbf{source} incident could have a linkage to.    
 
 \begin{figure}[h!]
   \centering
@@ -293,7 +293,7 @@ Typically, you will want to consider assigning a relationship between the curren
 
 Most of the time, it makes sense to consider several (if not all) possible \textbf{target} incidents for each \textbf{source incident}. Once the user has decided whether or not the current pair of incidents should be linked (see section \ref{sec:codinglinkages}), then the user will probably want to move on to the next \textbf{target} incident, or \textbf{source} incident. Changing the currently selected incident can be done using the buttons to the left and right of the incident indexes (see figure \ref{fig:indexes}). The current \textbf{source} incident can be changed with the \textbf{Next source} and \textbf{Previous source} buttons, and the current \textbf{target} incident can be changed with the \textbf{Next target} and \textbf{Previous target} buttons.
 
-In between the two main fields you will see a button named \textbf{Jump to}. Clicking this button will open a small dialog that allows you to type index numbers for a \textbf{source} incident and a \textbf{target} incident (both always have to be entered). If you then click the \textbf{Go} button, the program will jump to the incidents with the selected indexes. If you selected an ``illegal'' index for the \textbf{source} incident, nothing will happen. If you select a ``legal'' index for the \textbf{source} incident, but an ``illegal'' index for the target incident, then the program will jump to the selected \textbf{source} incident, and to the first available \textbf{target} incident.
+In between the two main fields you will see a button named \textbf{Jump to}. Clicking this button will open a small dialog that allows you to type index numbers for a \textbf{source} incident and a \textbf{target} incident (both always have to be entered). If you then click the \textbf{Go} button, the program will jump to the incidents with the selected indexes. If you select an ``illegal'' index for the \textbf{source} incident, nothing will happen. If you select a ``legal'' index for the \textbf{source} incident, but an ``illegal'' index for the target incident, then the program will jump to the selected \textbf{source} incident, and to the first available \textbf{target} incident.
 
 \section{Marking incidents}
 \label{sec:markingincidents}
@@ -302,8 +302,8 @@ In the area demarcated in figure \ref{fig:flagoptions}, you will find several bu
 
 \begin{figure}[h!]
   \centering
-  \caption{Indication of flagged incident.}
-  \includegraphics[width=100mm]{Screenshot_7.pdf}
+  \caption{Options related to flagging incidents.}
+  \includegraphics[width=100mm]{Screenshot_15.pdf}
   \label{fig:flagoptions}
 \end{figure}
 
@@ -311,7 +311,7 @@ If you later want to return to a flagged \textbf{source} incident or a flagged \
 
 \begin{figure}[h!]
   \centering
-  \caption{Indication of flagged source incident.}
+  \caption{Indication of flagged incident.}
   \includegraphics[width=40mm]{Screenshot_9.pdf}
   \label{fig:flaggedincident}
 \end{figure}
@@ -320,14 +320,14 @@ If you later want to return to a flagged \textbf{source} incident or a flagged \
 \begin{framed}
 \textbf{Automatically flagging new incidents when importing codes}
   
-  As described in section \ref{sec:importingcodes}, when you import codes from a previously stored session into a new version of a data set, you will also have the option to mark any new incidents. This means that the program will automatically flag all incidents that are in the \textbf{new version} of the data set that you are currently coding, but that were not in the \textbf{old version} of the data set from which you are importing the codes. This allows you to always easily find the incidents that have not received any codes before. 
+  As described in section \ref{sec:importingcodes}, when you import codes from a previously stored session into a new version of a data set, you will also have the option to mark any new incidents. This means that the program will automatically flag all incidents that are in the \textbf{new version} of the data set that you are currently coding, but that were not in the \textbf{old version} of the data set from which you are importing the codes. This allows you to always easily find the incidents that have not been considered for coding before. 
 \end{framed}
 
 
 \section{Coding linkages}
 \label{sec:codinglinkages}
 
-Indeed, the main purpose of the program is to code for linkages between the incidents. Coding for linkages is very easy. In between the two main fields, you will find a button named \textbf{Toggle link} (see figure \ref{fig:incidentsoverview}). If no link has been assigned yet to the current pair of incidents, then clicking this button will make an indicator appear above the button to indicate that a relationship from the current \textbf{source} incident to the current \textbf{target} incident has now been created (see figure \ref{fig:linkage}). Clicking the \textbf{Toggle link} button again will remove the relationship, indicated by the disappearance of the indicator.
+Indeed, the main purpose of the program is to code for linkages between the incidents. Coding for linkages is very easy. In between the two main fields, you will find a button named \textbf{Toggle link} (see figure \ref{fig:incidentsoverview}). If no link has been assigned yet to the current pair of incidents, then clicking this button will make an indicator appear above the button to indicate that a linkage from the current \textbf{source} incident to the current \textbf{target} incident has now been created (see figure \ref{fig:linkage}). Clicking the \textbf{Toggle link} button again will remove the linkage, indicated by the disappearance of the indicator.
 
 \begin{figure}[h!]
   \centering
@@ -336,7 +336,7 @@ Indeed, the main purpose of the program is to code for linkages between the inci
   \label{fig:linkage}
 \end{figure}
 
-Below the two main text fields you will find another text field called \textbf{Memo} (see figure \ref{fig:memo}). This field can be used to record any memos that you would like to add to the current pair of incidents. Whatever you type here will be instantly saved. If you want to remove a memo, simply delete the text. When you export your coded data (see \ref{sec:exportingdata}), the memos will also be included with all relationships that you have created (i.e., memos for pairs of incidents that have no relationship will not be exported). 
+Below the two main text fields you will find another text field called \textbf{Memo} (see figure \ref{fig:memo}). This field can be used to record any memos that you would like to add to the current pair of incidents. Whatever you type here will be instantly saved. If you want to remove a memo, simply delete the text. When you export your coded data (see \ref{sec:exportingdata}), the memos will also be included with all linkages that you have created (i.e., memos for pairs of incidents that have no linkage will not be exported). 
 
 \begin{figure}[h!]
   \centering
@@ -349,76 +349,112 @@ Below the two main text fields you will find another text field called \textbf{M
 \section{Exporting data}
 \label{sec:exportingdata}
 
-In section \ref{sec:codinglinkages} I explain in depth how the coding program itself works. Once you have coded a data set, and you want to export the results, you can click the \textbf{Open export dialog} button. This will open a new dialog, where you can select several export options (see figure %\ref{fig:exportdialog}).
+Once you have coded a data set, and you want to export the results, you can click the \textbf{Export linkages} button. This will open a new dialog, where you can select several export options (see figure \ref{fig:exportdialog}).
 
-% \begin{figure}[h!]
-%   \centering
-%   \caption{The export dialog.}
-%   \includegraphics[width=40mm]{Screenshot_6.pdf}
-%   \label{fig:exportdialog}
-% \end{figure}
+\begin{figure}[h!]
+  \centering
+  \caption{The export dialog.}
+  \includegraphics[width=40mm]{Screenshot_12.pdf}
+  \label{fig:exportdialog}
+\end{figure}
 
-The first set of options, under the header \textbf{Incident export options}, allows you to assign properties to your incidents. These properties are simply the contents of the various columns of the data set that you imported. In fact, if you select all the properties, using the corresponding tick boxes, one of the files exported will simply be a near-identical copy of the original data set that you imported, the only difference being that every incident will be assigned a unique ID, numbered from 1 to \(N\), where \(N\) is the total number of incidents in your data set. These incidents, and any properties that you select for them, will be written to a file that is called \textbf{``Incidents\textunderscore Nodes.csv''}. As the name of the file suggests, this is a node list, which in this case is structured such that it can be immediately imported into Gephi, my favourite network visualisation program\footnote{See https://gephi.org. I offer no instructions on how to import data into Gephi here. Various guides for that are available elsewhere. Indeed, the data can also be imported into other software, although you might have to make small changes for that to work.}. 
+The dialog allows you to assign properties to your incidents. These properties are simply the contents of the various columns of the data set that you imported. In fact, if you select all the properties, using the corresponding tick boxes, one of the files exported will simply be a near-identical copy of the original data set that you imported, the only difference being that every incident will be assigned a unique ID, numbered from 1 to \(N\), where \(N\) is the total number of incidents in your data set. These incidents, and any properties that you select for them, will be written to a file that is called \textbf{"Linkages\textunderscore Nodes.csv"}. As the name of the file suggests, this is a node list, which in this case is structured such that it can be immediately imported into Gephi, my favourite network visualisation program\footnote{See https://gephi.org. I offer no instructions on how to import data into Gephi here. Various guides for that are available elsewhere. Indeed, the data can also be imported into other software, although you might have to make small changes for that to work.}. 
 
-By default, the program will also export (1) all attributes that you have assigned to incidents, (2) all categories that you have assigned to incident attributes, (3) all relationships that you have assigned to incidents, (4) all attributes that you have assigned to entities in relationships, and (5) all categories that you have assigned to entity attributes. You can deselect any of these options, although categories can only be exported if their corresponding attributes are also exported, and entity attributes and categories can only be exported if you also export relationships. Depending on what options you select, the following will be exported:
-
-To understand more about what you could possibly do with all these files, please read chapter \ref{chap:whatisnext}.
-
+The program will also export a file called \textbf{"Linkages\textunderscore Edges.csv"}, which contains all the linkages between incidents that you have identified, as well as any memos that you might have assigned to these linkages. A third file that the program exports is a file called \textbf{CYPHER.txt}, which is a list of Cypher commands, which can be used to import your coded data into a neo4j database. To understand more about what you could possibly do with these files, please read chapter \ref{chap:whatisnext}.
 
 \section{Log files and exiting the program}
 \label{sec:logfilesandexiting}
 
 It will probably come as no surprise to you that the default way to close the program is to click the \textbf{Exit program} button. Alternatively, you could close the dialog of the program in the same way you would close any dialog in your OS.
 
-Just before the program closes, it will export a log file to the \textbf{"logs/"} folder that is located in the folder from which you run the program (if this folder does not exist yet, the program will create it). The log file will be time stamped with the date and time at which it was created. In the log file, you will find a lot of details of various operations that you have performed while using the program, such as navigating to other incidents, assigning or unassigning attributes and/or relationships to incidents, and several other things. These logs are created silently and automatically.
+Just before the program closes, it will export a log file to the \textbf{"logs/"} folder that is located in the folder from which you run the program (if this folder does not exist yet, the program will create it). The log file will be time stamped with the date and time at which it was created. In the log file, you will find a lot of details of various operations that you have performed while using the program, such as navigating to other incidents, creating or removing linkages between incidents, and several other things. These logs are created silently and automatically.
 
-The logs are designed to help you make the coding process more transparent. For example, they may help you retrace your steps if at some point in the coding process you run into some kind of problem, and do not remember how you got there. The log also records which columns of your data set you were inspecting when assigning certain attributes or relationships, helping you to remember on what information you based your decision to assign these codes. I do not expect that anyone will be terribly interested to ever inspect these log files, but it may be reassuring to know that they are there if you need them.  
-
+The logs are designed to help you make the coding process more transparent. For example, they may help you retrace your steps if at some point in the coding process you run into some kind of problem, and do not remember how you got there. I do not expect that anyone will be terribly interested to ever inspect these log files, but it may be reassuring to know that they are there if you need them.  
 
 \section{Comparing codes}
 \label{sec:comparingcodes}
 
+The \emph{\textbf{Linkage Coder}} program also allows you to do some basic inter-coder reliability tests. In the top right of the screen, you will find a button named \textbf{Compare coding}. This will open the dialog visualised in figure \ref{fig:codecomparisondialog}. The dialog requires you to select two different save files that include the codes that you wish to compare. These can be selected by clicking the \textbf{Open file} buttons, which will open file dialogs with which the save files can be selected. The names of the files that are currently selected will be shown in the dialog as well (see figure \ref{fig:comparedcodes}). 
 
+\begin{figure}[h!]
+  \centering
+  \caption{The code comparison dialog.}
+  \includegraphics[width=60mm]{Screenshot_13.pdf}
+  \label{fig:codecomparisondialog}
+\end{figure}
+
+After selecting two files, one can compare the codes in the files by clicking the \textbf{Compare files} button. The results of the comparison are then shown in the dialog, as illustrated in figure \ref{fig:comparedcodes}. The dialog will report (1) how many linkages could in theory exist (if all pairs of incidents considered would be assigned a linkage, (2) the number of linkages that have been coded in file 1, (3) the number of linkages that have been coded in file 2, (4) the number of linkages that match between the two files, and (5) and the number of linkages that do not match between the two files.
+
+\begin{figure}[h!]
+  \centering
+  \caption{Displaying results of comparison.}
+  \includegraphics[width=60mm]{Screenshot_14.pdf}
+  \label{fig:comparedcodes}
+\end{figure}
+
+The last two items should give you a clue of how closely the coding of the two files matches. If you find that there are unmatched codes, a text file with a more detailed report can be exported using the \textbf{Write detailed results to file} button. This file contains additional information that can be used to identify the matched and unmatched linkages in both files. For an example of the kind of information provided, see the screenshot in figure \ref{fig:screenshotresults}. This file can be useful in resolving any differences in the coding of two different coders. 
+
+\begin{figure}[h!]
+  \centering
+  \caption{Screenshot of file with details of code comparison.}
+  \includegraphics[width=100mm]{Screenshot_16.pdf}
+  \label{fig:screenshotresults}
+\end{figure}
 
 \chapter{What is next?}
 \label{chap:whatisnext}
 
+After you have coded your data (see section \ref{sec:codinglinkages}), and exported your files (see section \ref{sec:exportingdata}), you will end up with three files in your \textbf{``export/''} folder. What can you do with these files now? The node list and the edge list that are exported are designed such that they can be immediately imported into the data laboratory of Gephi\footnote{See \url{https://gephi.org/}.}. If you have the \emph{event layout plugin} for Gephi installed\footnote{See \url{http://www.wouterspekkink.org/?page_id=93}.}, then you will be able to quickly create a basic event graph in Gephi (see section \ref{sec:graphdatabasesandeventgraphs} for more details). In event graphs nodes represent events, and the edges represent relationships between events\footnote{For an example of a publication in which event graphs are used, see Spekkink, W. A. H., \& Boons, F. A. A. (2016). The Emergence of Collaborations. \emph{Journal of Public Administration Research and Theory}, 26(4), 613–630.}. Figure \ref{fig:eventgraphone} visualises an example of a basic event graph that can be created in this way. Creating simple event graphs may already help researchers in the further interpretation of their data. However, I believe a much more powerful way to work with the coded data is to use them to create a graph database. 
 
+\begin{figure}[h!]
+  \centering
+  \caption{Screenshot of basic event graph.}
+  \includegraphics[width=100mm]{Diagram_3.pdf}
+  \label{fig:eventgraphone}
+\end{figure}
 
-\section{Graph databases}
-\label{sec:graphdatabases}
+\section{Graph databases and event graphs}
+\label{sec:graphdatabasesandeventgraphs}
 
-At the time of writing this manual, I am experimenting with the use of graph databases, which are, in very simple terms, databases in which all data are either stored as \textbf{nodes}, as \textbf{relationships between nodes}, or as \textbf{properties} of nodes or relationships. For me, storing data this way is ideal, because I usually like to present event data in some ``networked form'', and with graph databases there are very few steps required between storing data and presenting data in such a form. As discussed in section \ref{sec:partofbiggerprogram}, I intend to integrate the \textbf{\emph{Event Coder}} program in a bigger program at some point. My intention is for this bigger program to interface directly with a graph database, without the user ever having to worry about how this works. For now, however, the user will need to use third-party solutions for creating such a graph database, and import the coded data into such a database manually.
+At the time of writing this manual, I am experimenting with the use of graph databases, which are, in very simple terms, databases in which all data are either stored as \textbf{nodes}, as \textbf{relationships between nodes}, or as \textbf{properties} of nodes or relationships. For me, storing data this way is ideal, because I usually like to present event data in some ``networked form'', and with graph databases there are very few steps required between storing data and presenting data in such a form. As discussed in section \ref{sec:partofbiggerprogram}, I intend to integrate the \textbf{\emph{Linkage Coder}} program in a bigger program at some point. My intention is for this bigger program to interface directly with a graph database, without the user ever having to worry about how this works. For now, however, the user will need to use third-party solutions for creating such a graph database, and import the coded data into the database manually.
 
-The graph database technology that I currently work with myself is the Neo4j Community Edition\footnote{See \url{https://neo4j.com/}.}, because (1) it is open source, which is something that I encourage, and (2) because it uses a query language and interface that I find very useful\footnote{I also see important drawbacks to Neo4j. In my opinion the configuration of Neo4j on your system, and the creation and management of new databases could have been made more intuitive. If you are completely new to Neo4j, it might take a while for you to get a solid grasp of how it works.}. I will not go into the details of how to use Neo4j here, because that would take me well beyond the scope of this manual. There is a wealth of information that can be found on the website of Neo4j\footnote{See, for example, \url{https://neo4j.com/docs/}.}, as well as on numerous other online forums. One of the files exported by the \emph{\textbf{Event Coder}} program (\textbf{"CYPHER.txt"} is a list of Cypher commands (Cypher is the language used by Neo4j) that the user can simply copy and paste into the Neo4j interface to recreate the complete, coded data set as a Neo4j database.    
+The graph database technology that I currently work with myself is the Neo4j Community Edition\footnote{See \url{https://neo4j.com/}.}, because (1) it is open source, which is something that I encourage, and (2) because it uses a query language and interface that I find very useful\footnote{I also see important drawbacks to Neo4j. In my opinion the configuration of Neo4j on your system, and the creation and management of new databases could have been made more intuitive. If you are completely new to Neo4j, it might take a while for you to get a solid grasp of how it works.}. I will not go into the details of how to use Neo4j here, because that would take me well beyond the scope of this manual. There is a wealth of information that can be found on the website of Neo4j\footnote{See, for example, \url{https://neo4j.com/docs/}.}, as well as on numerous other online forums. One of the files exported by the \emph{\textbf{Event Coder}} program (\textbf{"CYPHER.txt"}) is a list of Cypher commands (Cypher is the language used by Neo4j) that the user can simply copy and paste into the Neo4j interface to recreate the complete, coded data set as a Neo4j database.    
 
-Figure %\ref{fig:graphdatabaseexample} shows a screenshot of a Neo4j database that I created in this way, using some made-up data that I also used throughout the manual. In this screenshot, the larger red nodes represent incidents, the larger green nodes, represent relationships indicated by these incidents, the pink nodes represent entities in these relationships, the yellow nodes are attributes that have been assigned to incidents or entities, and so on. All information that we created when coding the data is represented in this graph as a node, a relationship, or a property of a node or relationship.
+Figure \ref{fig:graphdatabaseexample} shows a screenshot of a Neo4j database that I created in this way, using some made-up data. In this screenshot, the green nodes are our incidents, and the relationships contain all information on the linkages between our incidents.
 
-% \begin{figure}[h!]
-%   \centering
-%   \caption{A coded version of our fictional data set stored in a graph database.}
-%   \includegraphics[width=100mm]{Screenshot_23.pdf}
-%   \label{fig:graphdatabaseexample}
-% \end{figure}
+\begin{figure}[h!]
+  \centering
+  \caption{A coded version of our fictional data set stored in a graph database.}
+  \includegraphics[width=100mm]{Screenshot_17.pdf}
+  \label{fig:graphdatabaseexample}
+\end{figure}
+
+We could add other information to the database we created this way. Another program I recently created is the \textbf{\emph{Event Coder}} program. The \textbf{\emph{Event Coder}} program and the \textbf{\emph{Linkage Coder}} program are intimately related. In fact, I plan to integrate both of them in a larger program in the future (see section \ref{sec:partofbiggerprogram}). While the \textbf{\emph{Linkage Coder}} program specialises in the facilitation of coding linkages between incidents, the \emph{\textbf{Event Coder}} program can be used to assign attributes to incidents, and to identify networks of relationships that are indicated by the occurrence of incidents. In figure \ref{fig:expandedgraphdatabase} we added additional information to our database, based on codes assigned to our data set with the \textbf{\emph{Event Coder}} program.
+
+Once we have all this information in our graph database, it is easy to export files that we can use to create event graphs in Gephi, but now we can also include additional information about our incidents in the event graph. Figure \ref{fig:exportingneo4j} shows Cypher commands that we can use to export a node list and an edge list from our database, where we also include attributes that were assigned to our nodes (if more than one attribute was assigned per incident, you would need a more complex command). Figure \ref{fig:eventgraphtwo} shows an event graph that we could create with the information contained in these files. In this case we chose to highlight which types of activities occurred in response to each other.
+
+\begin{figure}[h!]
+  \centering
+  \caption{The graph database expanded with additional details.}
+  \includegraphics[width=100mm]{Screenshot_18.pdf}
+  \label{fig:expandedgraphdatabase}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \caption{Exporting our node and edge lists from the Neo4j database.}
+  \includegraphics[width=100mm]{Screenshot_20.pdf}
+  \label{fig:exportingneo4j}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \caption{Event graph with incident attributes.}
+  \includegraphics[width=100mm]{Diagram_5.pdf}
+  \label{fig:eventgraphtwo}
+\end{figure}
 
 There are many other possibilities with the Cypher query language. This does not actually tell you anything that you could do with these data in terms of analysis, but I hope it does make clear that it offers a lot of flexibility in how you store, present, and structure your data. Once you manage to put your data into a graph structure, it is easy to convert your data in the various forms required by different software packages.
-
-\section{Creating event graphs}
-\label{sec:creatingeventgraphs}
-
-Another program that I have recently created is the \emph{\textbf{Linkage Coder}} program. This program imports the exact same type of data sets as the \emph{\textbf{Event Coder}} program, but its purpose is different: Rather than being a tool for qualifying incidents (with attributes and relationships), the \textbf{\emph{Linkage Coder}} program can be used to identify relationships \emph{between} incidents. For example, certain activities in a given data set may have occurred \emph{in response to} other activities in that data set. The \emph{\textbf{Linkage Coder}} program is designed to identify such linkages between activities and make them explicit (through qualitative coding).
-
-The \textbf{\emph{Event Coder}} program and the \textbf{\emph{Linkage Coder}} program are intimately related. In fact, I plan to integrate both of them in a larger program in the future (see section \ref{sec:partofbiggerprogram}). I use the joint output of the programs to create \emph{event graphs}. These are graphs in which the nodes represent events, and the edges represent relationships between events\footnote{For an example of a publication in which event graphs are used, see Spekkink, W. A. H., \& Boons, F. A. A. (2016). The Emergence of Collaborations. \emph{Journal of Public Administration Research and Theory}, 26(4), 613–630.}. The \textbf{\emph{Linkage Coder}} program helps me to create the basic structure of event graphs, and the \textbf{\emph{Event Coder}} program helps me to qualify the events, for example, by identifying what types of activities these events represent.
-
-%Figure \ref{fig:eventgraph} shows a visualisation of an event graph that I recently used in a presentation. In this graph, the events are laid out from left to right based on the time of their occurrence. The colours represent different types of activities (something we could identify with the \emph{\textbf{Event Coder}} program), and the edges represent which activities occurred in response to which other activities (something we could identify with the \textbf{\emph{Linkage Coder}} program).
-
-% \begin{figure}[h!]
-%   \centering
-%   \caption{Example of event graph.}
-%   \includegraphics[width=80mm]{Diagram_6.png}
-%   \label{fig:eventgraph}
-% \end{figure}
-
 
 \chapter{Contact details}
 \label{chap:contactdetails}

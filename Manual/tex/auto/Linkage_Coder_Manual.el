@@ -57,11 +57,19 @@
     "fig:linkage"
     "fig:memo"
     "sec:exportingdata"
+    "fig:exportdialog"
     "sec:logfilesandexiting"
     "sec:comparingcodes"
+    "fig:codecomparisondialog"
+    "fig:comparedcodes"
+    "fig:screenshotresults"
     "chap:whatisnext"
-    "sec:graphdatabases"
-    "sec:creatingeventgraphs"
+    "fig:eventgraphone"
+    "sec:graphdatabasesandeventgraphs"
+    "fig:graphdatabaseexample"
+    "fig:expandedgraphdatabase"
+    "fig:exportingneo4j"
+    "fig:eventgraphtwo"
     "chap:contactdetails"))
  :latex)
 

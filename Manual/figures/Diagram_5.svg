@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+    "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+<svg contentScriptType="text/ecmascript" width="411.0"
+     xmlns:xlink="http://www.w3.org/1999/xlink" zoomAndPan="magnify"
+     contentStyleType="text/css"
+     viewBox="0.000000 -93.000000 411.000000 189.000000" height="189.0"
+     preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"
+     version="1.1">
+    <g id="edges">
+        <path fill="none" stroke-width="1.0"
+              d="M 91.748154,-49.862724 L 66.110741,-29.690279" class="2 1"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 239.977737,29.180067 L 169.567291,51.177662" class="5 3"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 292.462677,-15.134178 L 264.715729,11.776645" class="6 5"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 341.183563,4.194154 L 317.213043,-11.310565" class="7 6"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 389.567749,84.636421 L 170.367737,59.615746" class="8 3"
+              stroke-opacity="1.0" stroke="#000000"/>
+    </g>
+    <g id="arrows">
+        <polyline fill="#000000" fill-opacity="1.0" class="2 1"
+                  points="58.251842,-23.506615 63.018909,-33.619728 69.202576,-25.760830"
+                  stroke="none"/>
+        <polyline fill="#000000" fill-opacity="1.0" class="5 3"
+                  points="160.022263,54.159710 168.076263,46.405151 171.058319,55.950172"
+                  stroke="none"/>
+        <polyline fill="#000000" fill-opacity="1.0" class="6 5"
+                  points="257.537323,18.738728 261.234680,8.187445 268.196777,15.365845"
+                  stroke="none"/>
+        <polyline fill="#000000" fill-opacity="1.0" class="7 6"
+                  points="308.816437,-16.741688 319.928619,-15.508865 314.497467,-7.112265"
+                  stroke="none"/>
+        <polyline fill="#000000" fill-opacity="1.0" class="8 3"
+                  points="160.432251,58.481659 170.934784,54.648003 169.800690,64.583488"
+                  stroke="none"/>
+    </g>
+    <g id="nodes">
+        <circle fill-opacity="1.0" fill="#69c404" r="10.0" cx="50.0" class="1"
+                cy="-17.013765" stroke="#000000" stroke-opacity="1.0"
+                stroke-width="1.0"/>
+        <circle fill-opacity="1.0" fill="#fa9200" r="10.0" cx="100.0" class="2"
+                cy="-56.355576" stroke="#000000" stroke-opacity="1.0"
+                stroke-width="1.0"/>
+        <circle fill-opacity="1.0" fill="#00af87" r="10.0" cx="150.0" class="3"
+                cy="57.290863" stroke="#000000" stroke-opacity="1.0"
+                stroke-width="1.0"/>
+        <circle fill-opacity="1.0" fill="#00c7ff" r="10.0" cx="200.0" class="4"
+                cy="-82.25139" stroke="#000000" stroke-opacity="1.0"
+                stroke-width="1.0"/>
+        <circle fill-opacity="1.0" fill="#e28bff" r="10.0" cx="250.0" class="5"
+                cy="26.048914" stroke="#000000" stroke-opacity="1.0"
+                stroke-width="1.0"/>
+        <circle fill-opacity="1.0" fill="#806b68" r="10.0" cx="300.0" class="6"
+                cy="-22.444366" stroke="#000000" stroke-opacity="1.0"
+                stroke-width="1.0"/>
+        <circle fill-opacity="1.0" fill="#e28bff" r="10.0" cx="350.0" class="7"
+                cy="9.896835" stroke="#000000" stroke-opacity="1.0"
+                stroke-width="1.0"/>
+        <circle fill-opacity="1.0" fill="#ff5d85" r="10.0" cx="400.0" class="8"
+                cy="85.82722" stroke="#000000" stroke-opacity="1.0"
+                stroke-width="1.0"/>
+    </g>
+    <g id="node-labels">
+        <text font-size="24" x="50.0" y="-11.207125" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Dialog" class="1">
+            Letting out dog
+        </text>
+        <text font-size="24" x="100.0" y="-50.548935" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Dialog" class="2">
+            Moving
+        </text>
+        <text font-size="24" x="150.0" y="63.097504" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Dialog" class="3">
+            Spotting
+        </text>
+        <text font-size="24" x="200.0" y="-76.44475" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Dialog" class="4">
+            Meowing
+        </text>
+        <text font-size="24" x="250.0" y="31.855555" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Dialog" class="5">
+            Barking
+        </text>
+        <text font-size="24" x="300.0" y="-16.637726" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Dialog" class="6">
+            Hissing at dogs
+        </text>
+        <text font-size="24" x="350.0" y="15.703476" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Dialog" class="7">
+            Barking
+        </text>
+        <text font-size="24" x="400.0" y="91.63386" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Dialog" class="8">
+            Chasing cats
+        </text>
+    </g>
+</svg>
