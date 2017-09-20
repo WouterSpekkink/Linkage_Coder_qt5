@@ -137,7 +137,7 @@ void DataInterface::readFile(const QString &fileName, const QString &sep)
 	inTextField = true;
 	previousPos++;
 	stringLength--;
-      } else if (inTextField == true && buffer[i] == '"') {
+      } else if (inTextField == true && buffer[i] == '"' && (buffer[i + 1] == sepChar || i == buffer.length() - 1)) {
 	inTextField = false;
 	stringLength--;
       }
