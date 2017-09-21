@@ -108,14 +108,14 @@ MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
   sourceFlagLabel = new QLabel("");
   toggleSourceFlagButton = new QPushButton("Toggle flag for source");
   nextSourceFlagButton = new QPushButton("Next flagged source");
-  prevSourceFlagButton = new QPushButton("Previous flagged source");
+  prevSourceFlagButton = new QPushButton("Prev. flagged source");
   toggleSourceFlagButton->setEnabled(false);
   nextSourceFlagButton->setEnabled(false);
   prevSourceFlagButton->setEnabled(false);
   targetFlagLabel = new QLabel("");
   toggleTargetFlagButton = new QPushButton("Toggle flag for target");
   nextTargetFlagButton = new QPushButton("Next flagged target");
-  prevTargetFlagButton = new QPushButton("Previous flagged target");
+  prevTargetFlagButton = new QPushButton("Prev. flagged target");
   toggleTargetFlagButton->setEnabled(false);
   nextTargetFlagButton->setEnabled(false);
   prevTargetFlagButton->setEnabled(false);
@@ -147,6 +147,8 @@ MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
   rightSelector->addItem("");
   jumpToIndexesButton = new QPushButton(tr("Jump to..."));
   jumpToIndexesButton->setEnabled(false);
+  previousLinkedButton = new QPushButton(tr("Prev. linked"));
+  nextLinkedButton = new QPushButton(tr("Next Linked"));
   
   setWorkButtons(false);
 
@@ -235,8 +237,9 @@ MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
   // The next button allows the user to jump directly to some user-selected indexes.
   connect(jumpToIndexesButton, SIGNAL(clicked()), this, SLOT(jumpToIndexes()));
   // The next signal fires when the user changes something in the memo field.
-  connect(memoText, SIGNAL(textChanged(const QString &)), 
-	  this, SLOT(setMemo(const QString &)));
+  connect(memoText, SIGNAL(textChanged(const QString &)), this, SLOT(setMemo(const QString &)));
+  connect(previousLinkedButton, SIGNAL(clicked()), this, SLOT(previousLinked()));
+  connect(nextLinkedButton, SIGNAL(clicked()), this, SLOT(nextLinked()));
   /*
     Below the layout is created, which consists out of several building blocks.
     All the buttons and other widgets are layed out here.
@@ -288,7 +291,7 @@ MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
   QPointer<QHBoxLayout> tFLabelLeft = new QHBoxLayout;
   tFLabelLeft->addWidget(prevSourceButton);
   tFLabelLeft->addWidget(eventsLabelLeft);
-  eventsLabelLeft->setFixedWidth(120);
+  eventsLabelLeft->setFixedWidth(150);
   eventsLabelLeft->setAlignment(Qt::AlignCenter);
   tFLabelLeft->addWidget(sourceFlagLabel);
   sourceFlagLabel->setFixedWidth(20);
@@ -300,7 +303,7 @@ MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
   QPointer<QHBoxLayout> tFLabelRight = new QHBoxLayout;
   tFLabelRight->addWidget(prevTargetButton);
   tFLabelRight->addWidget(eventsLabelRight);
-  eventsLabelRight->setFixedWidth(120);
+  eventsLabelRight->setFixedWidth(150);
   eventsLabelRight->setAlignment(Qt::AlignCenter);
   tFLabelRight->addWidget(targetFlagLabel);
   targetFlagLabel->setFixedWidth(20);
@@ -331,9 +334,11 @@ MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
   flaggingLayout->addWidget(toggleSourceFlagButton);
   flaggingLayout->addWidget(prevSourceFlagButton);
   flaggingLayout->addWidget(nextSourceFlagButton);
+  flaggingLayout->addWidget(previousLinkedButton);
   QPointer<QFrame> flaggingSep = new QFrame();
   flaggingSep->setFrameShape(QFrame::HLine);
   flaggingLayout->addWidget(flaggingSep);
+  flaggingLayout->addWidget(nextLinkedButton);
   flaggingLayout->addWidget(toggleTargetFlagButton);
   flaggingLayout->addWidget(prevTargetFlagButton);
   flaggingLayout->addWidget(nextTargetFlagButton);
@@ -585,31 +590,33 @@ void MainDialog::processLoad(const QString &sourceIndex, const QString &targetIn
 
   // Then we do an altered version of the start coding process.
   eventSelector->setEnabled(false);
-  relationshipDirSelector->setEnabled(false);
   relationshipDescriber->setEnabled(false);
+  relationshipDirSelector->setEnabled(false);
   startCodingButton->setEnabled(false);
   updateTexts(); 
   updateIndexIndicators();
   leftSelector->clear();
   rightSelector->clear();
+  eventSelector->clear();
+  eventSelector->addItem(EVENTDEFAULT);
   std::vector<std::string>::iterator it;
   for (it = dataInterface->header.begin(); it != dataInterface->header.end(); it++) {
     QString currentHeader = QString::fromUtf8(it->c_str());
     leftSelector->addItem(currentHeader);
     rightSelector->addItem(currentHeader);
+    eventSelector->addItem(currentHeader);
   }
-
-  relationshipDirSelector = new QComboBox(this);
-  relationshipDirSelector->addItem(RELDEFAULT);
-  relationshipDirSelector->addItem(RELPAST);
-  relationshipDirSelector->addItem(RELFUTURE);
-  relationshipDirSelector->setEnabled(false);
 
   int tempIndex = relationshipDirSelector->findText(relationshipDirection);
   relationshipDirSelector->setCurrentIndex(tempIndex);
   relationshipDescriber->setText(relationshipDescription);
   QString relText = "--[" + relationshipDescription + "]-->";
   relationshipReporter->setText(relText);
+  selectedEventColumn = QString::fromStdString(dataInterface->header[columnIndex]);
+  tempIndex = eventSelector->findText(selectedEventColumn);
+  eventSelector->blockSignals(true);
+  eventSelector->setCurrentIndex(tempIndex);
+  eventSelector->blockSignals(false);
   
   setWorkButtons(true);
 
@@ -745,8 +752,8 @@ void MainDialog::navigatePreviousTarget() {
   } else if (relationshipDirection == RELFUTURE && targetRowIndex != 1 && targetRowIndex != sourceRowIndex + 1) {
     targetRowIndex--;
   } else if (relationshipDirection == RELFUTURE && targetRowIndex == sourceRowIndex + 1 && sourceRowIndex != 0) {
-    sourceRowIndex++; 
-    targetRowIndex = sourceRowIndex + 1;
+    sourceRowIndex--; 
+    targetRowIndex = dataInterface->rowData.size() - 1;
   }
   // If all the above if-statements fail, then nothing noticable happens, which is exactly what we want.
   updateTexts();
@@ -1111,9 +1118,20 @@ void MainDialog::updateTexts() {
   } else {
     targetFlagLabel->setText("");
   }
+  QString currentMemo = "";
+  std::vector <std::vector <std::string> >::iterator memIt;
+  for (memIt = dataInterface->memos.begin(); memIt != dataInterface->memos.end(); memIt++) {
+    std::vector <std::vector <std::string> >::size_type source;
+    std::vector <std::string>::size_type target;
 
-  QString currentMemo = 
-    QString::fromUtf8((dataInterface->memos[sourceRowIndex][targetRowIndex]).c_str());
+    std::stringstream ss(*memIt->begin());
+    std::stringstream ts(*(memIt->begin() + 1));
+    ss >> source;
+    ts >> target;
+    if (source == sourceRowIndex && target == targetRowIndex) {
+      currentMemo = QString::fromStdString(*(memIt->begin() + 2));
+    }
+  }
   memoText->blockSignals(true);
   memoText->setText(currentMemo);
   memoText->blockSignals(false);
@@ -1144,7 +1162,35 @@ void MainDialog::toggleLink() {
 }
 
 void MainDialog::setMemo(const QString &text) {
-  dataInterface->setMemo(text, sourceRowIndex, targetRowIndex);
+  std::stringstream ss;
+  std::stringstream ts;
+  ss << sourceRowIndex;
+  ts << targetRowIndex;
+  bool found = false;
+  std::vector <std::vector <std::string> >::iterator memIt;
+  if (text != "") {
+    for (memIt = dataInterface->memos.begin(); memIt != dataInterface->memos.end(); memIt++) {
+      if (*memIt->begin() == ss.str() && *(memIt->begin() + 1) == ts.str()) {
+	found = true;
+	*(memIt->begin() + 2) = text.toStdString();
+      }
+    }
+    if (!found) {
+      std::vector<std::string> tempMemo;
+      tempMemo.push_back(ss.str());
+      tempMemo.push_back(ts.str());
+      tempMemo.push_back(text.toStdString());
+      dataInterface->memos.push_back(tempMemo);
+    }
+  } else {
+    for (memIt = dataInterface->memos.begin(); memIt != dataInterface->memos.end();) {
+      if (*memIt->begin() == ss.str() && *(memIt->begin() + 1) == ts.str()) {
+	dataInterface->memos.erase(memIt);
+      } else {
+	memIt++;
+      }
+    }
+  }
 }
 
 // This sets  all the buttons in the main working section.
@@ -1171,6 +1217,8 @@ void MainDialog::setWorkButtons(const bool status) {
   importCodesButton->setEnabled(status);
   jumpToIndexesButton->setEnabled(status);
   writeLinkagesButton->setEnabled(status);
+  previousLinkedButton->setEnabled(status);
+  nextLinkedButton->setEnabled(status);
 }
 
 void MainDialog::writeLinkages() {
@@ -1275,6 +1323,50 @@ void MainDialog::jumpToIndexes() {
     QString::number(sourceRowIndex) + " and target: " + QString::number(targetRowIndex);
   logger->addToLog(newLog);
 
+}
+
+void MainDialog::previousLinked() {
+  std::vector<std::vector <bool> >::size_type source = sourceRowIndex;
+  std::vector<bool>::size_type target = targetRowIndex;
+  std::vector<bool>::size_type limit;
+  for (std::vector <std::vector <bool> >::size_type source = sourceRowIndex; source--;) {
+    if (source == sourceRowIndex) {
+      limit = targetRowIndex;
+    } else {
+      limit = dataInterface->rowData.size() - 1;
+    }
+    for (std::vector<bool>::size_type target = limit; target != 0; target--) {
+      if (dataInterface->linkages[source][target] == true && (source != sourceRowIndex && target != targetRowIndex)) {
+	sourceRowIndex = source;
+	targetRowIndex = target;
+	updateIndexIndicators();
+	updateTexts();
+	return;
+      }
+    }
+  }
+}
+
+void MainDialog::nextLinked() {
+  std::vector<std::vector <bool> >::size_type source = sourceRowIndex;
+  std::vector<bool>::size_type target = targetRowIndex;
+  std::vector<bool>::size_type start;
+  for (std::vector <std::vector <bool> >::size_type source = sourceRowIndex; source != dataInterface->rowData.size(); source++) {
+    if (source == sourceRowIndex) {
+      start = targetRowIndex;
+    } else {
+      start = 0;
+    }
+    for (std::vector<bool>::size_type target = start; target != dataInterface->rowData.size(); target++) {
+      if (dataInterface->linkages[source][target] == true && (source != sourceRowIndex && target != targetRowIndex)) {
+	sourceRowIndex = source;
+	targetRowIndex = target;
+	updateIndexIndicators();
+	updateTexts();
+	return;
+      }
+    }
+  }
 }
 
 void MainDialog::compareCoding() {

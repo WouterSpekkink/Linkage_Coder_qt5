@@ -106,6 +106,8 @@ private slots:
   void setMemo(const QString &text);
   void compareCoding();
   void jumpToIndexes();
+  void previousLinked();
+  void nextLinked();
   
 private:
   QPointer<DataInterface> dataInterface;
@@ -158,6 +160,8 @@ private:
   QPointer<QPushButton> writeLinkagesButton;
   QPointer<QPushButton> compareCodingButton;
   QPointer<QPushButton> jumpToIndexesButton;
+  QPointer<QPushButton> previousLinkedButton;
+  QPointer<QPushButton> nextLinkedButton;
   QPointer<QComboBox> sepSelector;
   QPointer<QComboBox> eventSelector;
   QPointer<QComboBox> relationshipDirSelector;

@@ -61,9 +61,6 @@ public:
   void readSave(const QString &fileName);
   void importCodes(const QString &fileName, const QString &relDirection, const QString &relDescription);
   void writeLinkages(const QString &relDescription, QVector<QString> &properties);
-  void setMemo(const QString &memo,
-	       std::vector<std::vector <std::string> >::size_type sourceRowIndex,
-	       std::vector<std::vector <std::string> >::size_type targetRowIndex);
   // The deconstructor.
   ~DataInterface() {}
   
