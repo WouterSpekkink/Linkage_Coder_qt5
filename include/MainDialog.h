@@ -108,6 +108,12 @@ private slots:
   void jumpToIndexes();
   void previousLinked();
   void nextLinked();
+  void setSourceFilter(const QString &text);
+  void setTargetFilter(const QString &text);
+  void previousSourceFiltered();
+  void nextSourceFiltered();
+  void previousTargetFiltered();
+  void nextTargetFiltered();
   
 private:
   QPointer<DataInterface> dataInterface;
@@ -162,6 +168,10 @@ private:
   QPointer<QPushButton> jumpToIndexesButton;
   QPointer<QPushButton> previousLinkedButton;
   QPointer<QPushButton> nextLinkedButton;
+  QPointer<QPushButton> previousSourceFilterButton;
+  QPointer<QPushButton> nextSourceFilterButton;
+  QPointer<QPushButton> previousTargetFilterButton;
+  QPointer<QPushButton> nextTargetFilterButton;
   QPointer<QComboBox> sepSelector;
   QPointer<QComboBox> eventSelector;
   QPointer<QComboBox> relationshipDirSelector;
@@ -173,11 +183,15 @@ private:
   QPointer<QTextEdit> otherColRight;
   QPointer<QLineEdit> memoText;
   QPointer<QLineEdit> relationshipDescriber;
+  QPointer<QLineEdit> sourceFilterField;
+  QPointer<QLineEdit> targetFilterField;
   QString fileName;
   QString selectedEventColumn;
   QString sep;
   QString relationshipDirection;
   QString relationshipDescription;
+  QString currentSourceFilter;
+  QString currentTargetFilter;
   static const QString SEPDEFAULT;
   static const QString EVENTDEFAULT;
   static const QString RELDEFAULT;

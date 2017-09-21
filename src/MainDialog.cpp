@@ -149,6 +149,15 @@ MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
   jumpToIndexesButton->setEnabled(false);
   previousLinkedButton = new QPushButton(tr("Prev. linked"));
   nextLinkedButton = new QPushButton(tr("Next Linked"));
+
+  previousSourceFilterButton = new QPushButton(tr("Prev. Filter"));
+  nextSourceFilterButton = new QPushButton(tr("Next Filter"));
+  previousTargetFilterButton = new QPushButton(tr("Prev. Filter"));
+  nextTargetFilterButton = new QPushButton(tr("Next Filter"));
+  sourceFilterField = new QLineEdit();
+  targetFilterField = new QLineEdit();
+  currentSourceFilter = "";
+  currentTargetFilter = "";
   
   setWorkButtons(false);
 
@@ -238,8 +247,15 @@ MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
   connect(jumpToIndexesButton, SIGNAL(clicked()), this, SLOT(jumpToIndexes()));
   // The next signal fires when the user changes something in the memo field.
   connect(memoText, SIGNAL(textChanged(const QString &)), this, SLOT(setMemo(const QString &)));
+
   connect(previousLinkedButton, SIGNAL(clicked()), this, SLOT(previousLinked()));
   connect(nextLinkedButton, SIGNAL(clicked()), this, SLOT(nextLinked()));
+  connect(sourceFilterField, SIGNAL(textChanged(const QString &)), this, SLOT(setSourceFilter(const QString &)));
+  connect(targetFilterField, SIGNAL(textChanged(const QString &)), this, SLOT(setTargetFilter(const QString &)));
+  connect(previousSourceFilterButton, SIGNAL(clicked()), this, SLOT(previousSourceFiltered()));
+  connect(nextSourceFilterButton, SIGNAL(clicked()), this, SLOT(nextSourceFiltered()));
+  connect(previousTargetFilterButton, SIGNAL(clicked()), this, SLOT(previousTargetFiltered()));
+  connect(nextTargetFilterButton, SIGNAL(clicked()), this, SLOT(nextTargetFiltered()));
   /*
     Below the layout is created, which consists out of several building blocks.
     All the buttons and other widgets are layed out here.
@@ -347,6 +363,20 @@ MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
   textFieldsMiddleLayout->addWidget(memoLabel);
   textFieldsMiddleLayout->addWidget(memoText);
 
+  QPointer<QHBoxLayout> filterLayout = new QHBoxLayout;
+  QPointer<QHBoxLayout> leftFilterLayout = new QHBoxLayout;
+  QPointer<QHBoxLayout> rightFilterLayout = new QHBoxLayout;
+  leftFilterLayout->addWidget(sourceFilterField);
+  leftFilterLayout->addWidget(previousSourceFilterButton);
+  leftFilterLayout->addWidget(nextSourceFilterButton);
+  rightFilterLayout->addWidget(previousTargetFilterButton);
+  rightFilterLayout->addWidget(nextTargetFilterButton);
+  rightFilterLayout->addWidget(targetFilterField);
+  filterLayout->addLayout(leftFilterLayout);
+  filterLayout->addLayout(rightFilterLayout);
+  leftFilterLayout->setContentsMargins(0,0,150,0);
+  rightFilterLayout->setContentsMargins(150,0,0,0);
+  
   QPointer<QHBoxLayout> textFieldsBottomLayout = new QHBoxLayout;
   textFieldsBottomLayout->addWidget(otherColLeft);
   QPointer<QVBoxLayout> extraButtonLayout = new QVBoxLayout;
@@ -386,6 +416,7 @@ MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
   workTextLayout->addWidget(textFieldsHorizontalSep);
   workTextLayout->addLayout(textFieldsMiddleLayout);
   workTextLayout->addWidget(textFieldsHorizontalSepTwo);
+  workTextLayout->addLayout(filterLayout);
   workTextLayout->addLayout(textFieldsBottomLayout);
       
   QPointer<QFrame> topLine = new QFrame();
@@ -483,6 +514,8 @@ void MainDialog::readNewData() {
   otherColRight->setText("");
   memoText->setText("");
   relationshipDescriber->setText("");
+  sourceFilterField->setText("");
+  targetFilterField->setText("");
 }
 
 /* 
@@ -587,6 +620,8 @@ void MainDialog::processLoad(const QString &sourceIndex, const QString &targetIn
   relationshipDirection = relDirection;
   relationshipDescription = relDescription;
   sep = separator;
+  sourceFilterField->setText("");
+  targetFilterField->setText("");
 
   // Then we do an altered version of the start coding process.
   eventSelector->setEnabled(false);
@@ -1219,6 +1254,10 @@ void MainDialog::setWorkButtons(const bool status) {
   writeLinkagesButton->setEnabled(status);
   previousLinkedButton->setEnabled(status);
   nextLinkedButton->setEnabled(status);
+  previousSourceFilterButton->setEnabled(status);
+  nextSourceFilterButton->setEnabled(status);
+  previousTargetFilterButton->setEnabled(status);
+  nextTargetFilterButton->setEnabled(status);
 }
 
 void MainDialog::writeLinkages() {
@@ -1326,16 +1365,16 @@ void MainDialog::jumpToIndexes() {
 }
 
 void MainDialog::previousLinked() {
-  std::vector<std::vector <bool> >::size_type source = sourceRowIndex;
-  std::vector<bool>::size_type target = targetRowIndex;
+  std::vector<std::vector <bool> >::size_type source;
+  std::vector<bool>::size_type target;
   std::vector<bool>::size_type limit;
-  for (std::vector <std::vector <bool> >::size_type source = sourceRowIndex; source--;) {
+  for (source = sourceRowIndex; source--;) {
     if (source == sourceRowIndex) {
       limit = targetRowIndex;
     } else {
       limit = dataInterface->rowData.size() - 1;
     }
-    for (std::vector<bool>::size_type target = limit; target != 0; target--) {
+    for (target = limit; target != 0; target--) {
       if (dataInterface->linkages[source][target] == true && (source != sourceRowIndex && target != targetRowIndex)) {
 	sourceRowIndex = source;
 	targetRowIndex = target;
@@ -1348,22 +1387,162 @@ void MainDialog::previousLinked() {
 }
 
 void MainDialog::nextLinked() {
-  std::vector<std::vector <bool> >::size_type source = sourceRowIndex;
-  std::vector<bool>::size_type target = targetRowIndex;
+  std::vector<std::vector <bool> >::size_type source;
+  std::vector<bool>::size_type target;
   std::vector<bool>::size_type start;
-  for (std::vector <std::vector <bool> >::size_type source = sourceRowIndex; source != dataInterface->rowData.size(); source++) {
+  for (source = sourceRowIndex; source != dataInterface->rowData.size(); source++) {
     if (source == sourceRowIndex) {
       start = targetRowIndex;
     } else {
       start = 0;
     }
-    for (std::vector<bool>::size_type target = start; target != dataInterface->rowData.size(); target++) {
+    for (target = start; target != dataInterface->rowData.size(); target++) {
       if (dataInterface->linkages[source][target] == true && (source != sourceRowIndex && target != targetRowIndex)) {
 	sourceRowIndex = source;
 	targetRowIndex = target;
 	updateIndexIndicators();
 	updateTexts();
 	return;
+      }
+    }
+  }
+}
+
+void MainDialog::setSourceFilter(const QString &text) {
+  currentSourceFilter = text;
+}
+
+void MainDialog::setTargetFilter(const QString &text) {
+  currentTargetFilter = text;
+}
+
+void MainDialog::previousSourceFiltered() {
+  if (currentSourceFilter != "") {
+    if (relationshipDirection == RELPAST) {
+      std::vector <std::vector <std::string> >::size_type source;
+      for (source = sourceRowIndex; source != 0; source--) {
+	if (source != sourceRowIndex) {
+	  std::size_t found = (dataInterface->rowData[source][leftColumnIndex]).find(currentSourceFilter.toStdString());
+	  if (found != std::string::npos) {
+	    sourceRowIndex = source;
+	    targetRowIndex = sourceRowIndex - 1;
+	    updateTexts();
+	    updateIndexIndicators();
+	    return;
+	  }
+	}
+      }
+    } else if (relationshipDirection == RELFUTURE) {
+      std::vector <std::vector <std::string> >::size_type source;
+      for (source = sourceRowIndex; source--;) {
+	if (source != sourceRowIndex) {
+	  std::size_t found = (dataInterface->rowData[source][leftColumnIndex]).find(currentSourceFilter.toStdString());
+	  if (found != std::string::npos) {
+	    sourceRowIndex = source;
+	    targetRowIndex = sourceRowIndex + 1;
+	    updateTexts();
+	    updateIndexIndicators();
+	    return;
+	  }
+	}
+      }
+    }
+  }
+}
+
+void MainDialog::nextSourceFiltered() {
+  if (currentSourceFilter != "") {
+    if (relationshipDirection == RELPAST) {
+      std::vector <std::vector <std::string> >::size_type source;
+      for (source = sourceRowIndex; source != dataInterface->rowData.size(); source++) {
+	if (source != sourceRowIndex) {
+	  std::size_t found = (dataInterface->rowData[source][leftColumnIndex]).find(currentSourceFilter.toStdString());
+	  if (found != std::string::npos) {
+	    sourceRowIndex = source;
+	    targetRowIndex = sourceRowIndex - 1;
+	    updateTexts();
+	    updateIndexIndicators();
+	    return;
+	  }
+	}
+      }
+    } else if (relationshipDirection == RELFUTURE) {
+      std::vector <std::vector <std::string> >::size_type source;
+      for (source = sourceRowIndex; source != dataInterface->rowData.size() - 1; source++) {
+	if (source != sourceRowIndex) {
+	  std::size_t found = (dataInterface->rowData[source][leftColumnIndex]).find(currentSourceFilter.toStdString());
+	  if (found != std::string::npos) {
+	    sourceRowIndex = source;
+	    targetRowIndex = sourceRowIndex + 1;
+	    updateTexts();
+	    updateIndexIndicators();
+	    return;
+	  }
+	}
+      }
+    }
+  }
+}
+
+void MainDialog::previousTargetFiltered() {
+  if (currentTargetFilter != "") {
+    if (relationshipDirection == RELPAST) {
+      std::vector <std::vector <std::string> >::size_type target;
+      for (target = targetRowIndex; target != sourceRowIndex; target++) {
+	if (target != targetRowIndex) {
+	  std::size_t found = (dataInterface->rowData[target][rightColumnIndex]).find(currentTargetFilter.toStdString());
+	  if (found != std::string::npos) {
+	    targetRowIndex = target;
+	    updateTexts();
+	    updateIndexIndicators();
+	    return;
+	  }
+	}
+      }
+    } else if (relationshipDirection == RELFUTURE) {
+      std::vector <std::vector <std::string> >::size_type target;
+      for (target = targetRowIndex; target != sourceRowIndex; target--) {
+	if (target != targetRowIndex) {
+	  std::size_t found = (dataInterface->rowData[target][rightColumnIndex]).find(currentTargetFilter.toStdString());
+	  if (found != std::string::npos) {
+	    targetRowIndex = target;
+	    updateTexts();
+	    updateIndexIndicators();
+	    return;
+	  }
+	}
+      }
+    }
+  }
+}
+
+void MainDialog::nextTargetFiltered() {
+  if (currentTargetFilter != "") {
+    if (relationshipDirection == RELPAST) {
+      std::vector <std::vector <std::string> >::size_type target;
+      for (target = targetRowIndex; target--;) {
+	if (target != targetRowIndex) {
+	  std::size_t found = (dataInterface->rowData[target][rightColumnIndex]).find(currentTargetFilter.toStdString());
+	  if (found != std::string::npos) {
+	    targetRowIndex = target;
+	    updateTexts();
+	    updateIndexIndicators();
+	    return;
+	  }
+	}
+      }
+    } else if (relationshipDirection == RELFUTURE) {
+      std::vector <std::vector <std::string> >::size_type target;
+      for (target = targetRowIndex; target != dataInterface->rowData.size(); target++) {
+	if (target != targetRowIndex) {
+	  std::size_t found = (dataInterface->rowData[target][rightColumnIndex]).find(currentTargetFilter.toStdString());
+	  if (found != std::string::npos) {
+	    targetRowIndex = target;
+	    updateTexts();
+	    updateIndexIndicators();
+	    return;
+	  }
+	}
       }
     }
   }
