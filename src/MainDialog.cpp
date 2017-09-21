@@ -813,20 +813,20 @@ void MainDialog::navigatePreviousSource() {
 
 void MainDialog::toggleTargetFlag() {
   std::vector<bool>::size_type currentRow = targetRowIndex;
-  dataInterface->targetFlagIndex[currentRow] = !dataInterface->targetFlagIndex[currentRow];
-  if (dataInterface->targetFlagIndex[currentRow] == true) {
+  dataInterface->flagIndex[currentRow] = !dataInterface->flagIndex[currentRow];
+  if (dataInterface->flagIndex[currentRow] == true) {
     targetFlagLabel->setText("(!)");
     QDateTime time = QDateTime::currentDateTime(); 
     QString timeText = time.toString(Qt::TextDate);
-    QString newLog = timeText + " - " + "target flag set at index (as seen by user): " +
-      eventsLabelLeft->text() + ", and as stored in machine: " +
+    QString newLog = timeText + " - " + "flag set at target index (as seen by user): " +
+      eventsLabelRight->text() + ", and as stored in machine: " +
       QString::number(currentRow);
     logger->addToLog(newLog);
-  } else if (dataInterface->targetFlagIndex[currentRow] == false) {
+  } else if (dataInterface->flagIndex[currentRow] == false) {
     targetFlagLabel->setText("");
     QDateTime time = QDateTime::currentDateTime();
     QString timeText = time.toString(Qt::TextDate);
-    QString newLog = timeText + " - " + "target flag removed at index (as seen by user): " +
+    QString newLog = timeText + " - " + "flag removed at target index (as seen by user): " +
       eventsLabelLeft->text() + ", and as stored in machine: " +
       QString::number(currentRow);
     logger->addToLog(newLog);
@@ -838,7 +838,7 @@ void MainDialog::navigateNextTargetFlag() {
   if (relationshipDirection == RELPAST && currentRow != 0) {
     bool indexFound = false;
     for (std::vector<bool>::size_type i = currentRow; i != 0; i--) {
-      if (dataInterface->targetFlagIndex[i] == true) {
+      if (dataInterface->flagIndex[i] == true) {
 	indexFound = true;
 	targetRowIndex = i;
 	if (i != currentRow) {
@@ -846,13 +846,13 @@ void MainDialog::navigateNextTargetFlag() {
 	}
       }
     }
-    if ((!indexFound && dataInterface->targetFlagIndex[0] == true) ||
-	(indexFound && targetRowIndex == currentRow && dataInterface->targetFlagIndex[0] == true)) {
+    if ((!indexFound && dataInterface->flagIndex[0] == true) ||
+	(indexFound && targetRowIndex == currentRow && dataInterface->flagIndex[0] == true)) {
       targetRowIndex = 0;
     }
-  } else if (relationshipDirection == RELFUTURE && currentRow != dataInterface->targetFlagIndex.size()) {
-    for (std::vector<bool>::size_type i = currentRow; i != dataInterface->targetFlagIndex.size(); i++) {
-      if (dataInterface->targetFlagIndex[i] == true) {
+  } else if (relationshipDirection == RELFUTURE && currentRow != dataInterface->flagIndex.size()) {
+    for (std::vector<bool>::size_type i = currentRow; i != dataInterface->flagIndex.size(); i++) {
+      if (dataInterface->flagIndex[i] == true) {
 	targetRowIndex = i;
 	if (i != currentRow) {
 	  break;
@@ -875,7 +875,7 @@ void MainDialog::navigatePreviousTargetFlag() {
   std::vector<bool>::size_type currentRow = targetRowIndex;
   if (relationshipDirection == RELPAST && currentRow != sourceRowIndex - 1) {
     for (std::vector<bool>::size_type i = currentRow; i != sourceRowIndex; i++) {
-      if (dataInterface->targetFlagIndex[i] == true) {
+      if (dataInterface->flagIndex[i] == true) {
 	targetRowIndex = i;
 	if (i != currentRow) {
 	  break;
@@ -884,7 +884,7 @@ void MainDialog::navigatePreviousTargetFlag() {
     }
   } else if (relationshipDirection == RELFUTURE && currentRow != 0) {
     for (std::vector<bool>::size_type i = currentRow; i != sourceRowIndex; i--) {
-      if (dataInterface->targetFlagIndex[i] == true) {
+      if (dataInterface->flagIndex[i] == true) {
 	targetRowIndex = i;
 	if (i != currentRow) {
 	  break;
@@ -905,20 +905,20 @@ void MainDialog::navigatePreviousTargetFlag() {
 
 void MainDialog::toggleSourceFlag() {
   std::vector<bool>::size_type currentRow = sourceRowIndex;
-  dataInterface->sourceFlagIndex[currentRow] = !dataInterface->sourceFlagIndex[currentRow];
-  if (dataInterface->sourceFlagIndex[currentRow] == true) {
+  dataInterface->flagIndex[currentRow] = !dataInterface->flagIndex[currentRow];
+  if (dataInterface->flagIndex[currentRow] == true) {
     sourceFlagLabel->setText("(!)");
     QDateTime time = QDateTime::currentDateTime(); 
     QString timeText = time.toString(Qt::TextDate);
-    QString newLog = timeText + " - " + "source flag set at index (as seen by user): " +
+    QString newLog = timeText + " - " + "flag set at source index (as seen by user): " +
       eventsLabelLeft->text() + ", and as stored in machine: " +
       QString::number(currentRow);
     logger->addToLog(newLog);
-  } else if (dataInterface->sourceFlagIndex[currentRow] == false) {
+  } else if (dataInterface->flagIndex[currentRow] == false) {
     sourceFlagLabel->setText("");
     QDateTime time = QDateTime::currentDateTime();
     QString timeText = time.toString(Qt::TextDate);
-    QString newLog = timeText + " - " + "source flag removed at index (as seen by user): " +
+    QString newLog = timeText + " - " + "flag removed at source index (as seen by user): " +
       eventsLabelLeft->text() + ", and as stored in machine: " +
       QString::number(currentRow);
     logger->addToLog(newLog);
@@ -928,8 +928,8 @@ void MainDialog::toggleSourceFlag() {
 void MainDialog::navigateNextSourceFlag() {
   std::vector<bool>::size_type currentRow = sourceRowIndex;
   if (relationshipDirection == RELPAST && currentRow != dataInterface->rowData.size() - 1) {
-    for (std::vector<bool>::size_type i = currentRow; i != dataInterface->sourceFlagIndex.size(); i++) {
-      if (dataInterface->sourceFlagIndex[i] == true) {
+    for (std::vector<bool>::size_type i = currentRow; i != dataInterface->flagIndex.size(); i++) {
+      if (dataInterface->flagIndex[i] == true) {
 	sourceRowIndex = i;
 	targetRowIndex = sourceRowIndex - 1;
 	if (i != currentRow) {
@@ -937,9 +937,9 @@ void MainDialog::navigateNextSourceFlag() {
 	}
       }
     }
-  } else if (relationshipDirection == RELFUTURE && currentRow != dataInterface->sourceFlagIndex.size()) {
-    for (std::vector<bool>::size_type i = currentRow; i != dataInterface->sourceFlagIndex.size(); i++) {
-      if (dataInterface->sourceFlagIndex[i] == true) {
+  } else if (relationshipDirection == RELFUTURE && currentRow != dataInterface->flagIndex.size()) {
+    for (std::vector<bool>::size_type i = currentRow; i != dataInterface->flagIndex.size(); i++) {
+      if (dataInterface->flagIndex[i] == true && i != dataInterface->flagIndex.size() - 1) {
 	sourceRowIndex = i;
 	targetRowIndex = sourceRowIndex + 1;
 	if (i != currentRow) {
@@ -962,8 +962,8 @@ void MainDialog::navigateNextSourceFlag() {
 void MainDialog::navigatePreviousSourceFlag() {
   std::vector<bool>::size_type currentRow = sourceRowIndex;
   if (relationshipDirection == RELPAST && currentRow != 1) {
-    for (std::vector<bool>::size_type i = currentRow; i != dataInterface->sourceFlagIndex.size(); i--) {
-      if (dataInterface->sourceFlagIndex[i] == true) {
+    for (std::vector<bool>::size_type i = currentRow; i != dataInterface->flagIndex.size(); i--) {
+      if (dataInterface->flagIndex[i] == true && i != 0) {
 	sourceRowIndex = i;
 	targetRowIndex = sourceRowIndex - 1;
 	if (i != currentRow) {
@@ -974,7 +974,7 @@ void MainDialog::navigatePreviousSourceFlag() {
   } else if (relationshipDirection == RELFUTURE && currentRow != 0) {
     bool indexFound = false;
     for (std::vector<bool>::size_type i = currentRow; i != 0; i--) {
-      if (dataInterface->sourceFlagIndex[i] == true) {
+      if (dataInterface->flagIndex[i] == true) {
 	indexFound = true;
 	sourceRowIndex = i;
 	targetRowIndex = sourceRowIndex + 1;
@@ -983,8 +983,8 @@ void MainDialog::navigatePreviousSourceFlag() {
 	}
       }
     }
-    if ((!indexFound && dataInterface->sourceFlagIndex[0] == true) ||
-	(indexFound && sourceRowIndex == currentRow && dataInterface->sourceFlagIndex[0] == true)) {
+    if ((!indexFound && dataInterface->flagIndex[0] == true) ||
+	(indexFound && sourceRowIndex == currentRow && dataInterface->flagIndex[0] == true)) {
       sourceRowIndex = 0;
       targetRowIndex = sourceRowIndex + 1;
     }
@@ -1107,13 +1107,13 @@ void MainDialog::updateTexts() {
     linkLabel->setText("");
   }
   std::vector<bool>::size_type currentRow = sourceRowIndex;
-  if (dataInterface->sourceFlagIndex[currentRow] == true) {
+  if (dataInterface->flagIndex[currentRow] == true) {
     sourceFlagLabel->setText("(!)");
   } else {
     sourceFlagLabel->setText("");
   }
   currentRow = targetRowIndex;
-  if (dataInterface->targetFlagIndex[currentRow] == true) {
+  if (dataInterface->flagIndex[currentRow] == true) {
     targetFlagLabel->setText("(!)");
   } else {
     targetFlagLabel->setText("");

@@ -62,10 +62,8 @@ const std::string DataInterface::CODED_END = "</coded_linkages>"; // LAST ONE SO
 const std::string DataInterface::ROW_PART_2 = "<row_";
 const std::string DataInterface::MEMOS_BEGIN = "<memos>";
 const std::string DataInterface::MEMOS_END = "</memos>";
-const std::string DataInterface::SOURCEFLAGS_BEGIN = "<source_flags>";
-const std::string DataInterface::SOURCEFLAGS_END = "</source_flags>";
-const std::string DataInterface::TARGETFLAGS_BEGIN = "<target_flags>";
-const std::string DataInterface::TARGETFLAGS_END = "</target_flags>";
+const std::string DataInterface::FLAGS_BEGIN = "<flags>";
+const std::string DataInterface::FLAGS_END = "</flags>";
 
 // Constructor for this class.
 DataInterface::DataInterface()  
@@ -80,8 +78,7 @@ void DataInterface::readFile(const QString &fileName, const QString &sep)
   rowData.clear();
   linkages.clear();
   memos.clear();
-  sourceFlagIndex.clear();
-  targetFlagIndex.clear();
+  flagIndex.clear();
   relDir = "";
   relDesc = "";
   
@@ -201,8 +198,7 @@ void DataInterface::readFile(const QString &fileName, const QString &sep)
 
   // And we set all entries of the flag indexes to false.
   for (std::vector <std::vector <std::string> >::size_type i = 0; i != rowData.size(); i++) {
-    sourceFlagIndex.push_back(false);
-    targetFlagIndex.push_back(false);
+    flagIndex.push_back(false);
   }
   
   emit importFinished();
@@ -330,10 +326,10 @@ void DataInterface::writeSave(const QString &fileName,
   
   fileOut << MEMOS_END << "\n"; 
   
-  fileOut << SOURCEFLAGS_BEGIN << "\n";
+  fileOut << FLAGS_BEGIN << "\n";
   std::vector<bool>::iterator flagIt;
-  for (flagIt = sourceFlagIndex.begin(); flagIt != sourceFlagIndex.end(); flagIt++) {
-    if (flagIt != sourceFlagIndex.end() - 1) {
+  for (flagIt = flagIndex.begin(); flagIt != flagIndex.end(); flagIt++) {
+    if (flagIt != flagIndex.end() - 1) {
       if (*flagIt == true) {
 	fileOut << "1;"; 
       } else if (*flagIt == false) {
@@ -348,25 +344,7 @@ void DataInterface::writeSave(const QString &fileName,
     }
   }
   
-  fileOut << SOURCEFLAGS_END << "\n";
-
-  fileOut << TARGETFLAGS_BEGIN << "\n";
-  for (flagIt = targetFlagIndex.begin(); flagIt != targetFlagIndex.end(); flagIt++) {
-    if (flagIt != targetFlagIndex.end() - 1) {
-      if (*flagIt == true) {
-	fileOut << "1;"; 
-      } else if (*flagIt == false) {
-	fileOut << "0;";
-      }
-    } else {
-      if (*flagIt == true) {
-	fileOut << "1\n"; 
-      } else if (*flagIt == false) {
-	fileOut << "0\n";
-      }
-    }
-  }
-  fileOut << TARGETFLAGS_END; // No newline needed here as we have reached the end of the file.
+  fileOut << FLAGS_END; // No newline needed, because we are at the end of the file.
 }
 
 void DataInterface::readSave(const QString &fileName) {
@@ -391,7 +369,7 @@ void DataInterface::readSave(const QString &fileName) {
   std::ifstream myFile (loadFile.c_str());
   
   // We use this to identify the field that we are in.
-  enum FieldStatus {none, imported, source, target, column, reldir, reldesc, sep, coded, memosfield, sourceflagsfield, targetflagsfield};
+  enum FieldStatus {none, imported, source, target, column, reldir, reldesc, sep, coded, memosfield, flagsfield};
   FieldStatus field = none;
 
   /* 
@@ -453,13 +431,9 @@ void DataInterface::readSave(const QString &fileName) {
       field = memosfield;
     } else if (buffer == MEMOS_END) {
       field = none;
-    } else if (buffer == SOURCEFLAGS_BEGIN) {
-      field = sourceflagsfield;
-    } else if (buffer == SOURCEFLAGS_END) {
-      field = none;
-    } else if (buffer == TARGETFLAGS_BEGIN) {
-      field = targetflagsfield;
-    } else if (buffer == TARGETFLAGS_END) {
+    } else if (buffer == FLAGS_BEGIN) {
+      field = flagsfield;
+    } else if (buffer == FLAGS_END) {
       field = none;
     }
 
@@ -578,7 +552,7 @@ void DataInterface::readSave(const QString &fileName) {
 	}
 	break;
       }
-    case sourceflagsfield:
+    case flagsfield:
       {
 	std::istringstream stringStream(buffer);
 	std::vector<std::string> currentRow;
@@ -587,25 +561,9 @@ void DataInterface::readSave(const QString &fileName) {
 	  std::string s;
 	  if (!getline(stringStream, s, ';')) break;
 	  if (s == "1") {
-	    sourceFlagIndex.push_back(true);
+	    flagIndex.push_back(true);
 	  } else if (s == "0") {
-	    sourceFlagIndex.push_back(false);
-	  }
-	}
-	break;
-      }
-    case targetflagsfield:
-      {
-	std::istringstream stringStream(buffer);
-	std::vector<std::string> currentRow;
-	
-	while(stringStream) {
-	  std::string s;
-	  if (!getline(stringStream, s, ';')) break;
-	  if (s == "1") {
-	    targetFlagIndex.push_back(true);
-	  } else if (s == "0") {
-	    targetFlagIndex.push_back(false);
+	    flagIndex.push_back(false);
 	  }
 	}
 	break;
@@ -643,10 +601,7 @@ void DataInterface::importCodes(const QString &fileName, const QString &relDirec
   relDesc = relDescription.toStdString();
 
   std::vector<bool>::iterator flagIt;
-  for (flagIt = sourceFlagIndex.begin(); flagIt != sourceFlagIndex.end(); flagIt++) {
-    *flagIt = false;
-  }
-  for (flagIt = targetFlagIndex.begin(); flagIt != targetFlagIndex.end(); flagIt++) {
+  for (flagIt = flagIndex.begin(); flagIt != flagIndex.end(); flagIt++) {
     *flagIt = false;
   }
 
@@ -1088,8 +1043,7 @@ void DataInterface::importCodes(const QString &fileName, const QString &relDirec
 	}
       }
       if (rowFound == false) {
-	sourceFlagIndex[i] = true;
-	targetFlagIndex[i] = true;
+	flagIndex[i] = true;
       } else {
 	rowFound = false;
       }

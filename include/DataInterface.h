@@ -78,8 +78,7 @@ private:
   std::vector<std::vector <std::string> > rowData; // This will hold the data in the file.
   std::vector<std::vector <bool> > linkages; // We use this to store linkages that the user has created.
   std::vector<std::vector <std::string> > memos; // we use this to store memos on the linkages.
-  std::vector<bool> sourceFlagIndex; // we use this to store user flags for source events.
-  std::vector<bool> targetFlagIndex; // we use this to store user flags for target events.
+  std::vector<bool> flagIndex; // we use this to store user flags for events.
   std::string relDir;
   std::string relDesc;
 
@@ -105,10 +104,8 @@ private:
   const static std::string ROW_PART_2;
   const static std::string MEMOS_BEGIN;
   const static std::string MEMOS_END;
-  const static std::string SOURCEFLAGS_BEGIN;
-  const static std::string SOURCEFLAGS_END;
-  const static std::string TARGETFLAGS_BEGIN;
-  const static std::string TARGETFLAGS_END;
+  const static std::string FLAGS_BEGIN;
+  const static std::string FLAGS_END;
   
 };
 #endif
