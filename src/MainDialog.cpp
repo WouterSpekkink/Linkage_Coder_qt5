@@ -1372,14 +1372,15 @@ void MainDialog::previousLinked() {
   QString timeText = time.toString(Qt::TextDate);
   QString newLog = timeText + " - " + "attempting to jump to previous linked";
   logger->addToLog(newLog);
-  for (source = sourceRowIndex; source--;) {
+  bool cont = true;
+  for (source = sourceRowIndex; cont == true;source--) {
     if (source == sourceRowIndex) {
       limit = targetRowIndex;
     } else {
       limit = dataInterface->rowData.size() - 1;
     }
     for (target = limit; target != 0; target--) {
-      if (dataInterface->linkages[source][target] == true && (source != sourceRowIndex && target != targetRowIndex)) {
+      if (dataInterface->linkages[source][target] == true && !(source == sourceRowIndex && target == targetRowIndex)) {
 	sourceRowIndex = source;
 	targetRowIndex = target;
 	QDateTime time = QDateTime::currentDateTime();
@@ -1392,6 +1393,9 @@ void MainDialog::previousLinked() {
 	updateTexts();
 	return;
       }
+    }
+    if (source == 0) {
+      cont = false;
     }
   }
 }
@@ -1411,7 +1415,7 @@ void MainDialog::nextLinked() {
       start = 0;
     }
     for (target = start; target != dataInterface->rowData.size(); target++) {
-      if (dataInterface->linkages[source][target] == true && (source != sourceRowIndex && target != targetRowIndex)) {
+      if (dataInterface->linkages[source][target] == true && !(source == sourceRowIndex && target == targetRowIndex)) {
 	sourceRowIndex = source;
 	targetRowIndex = target;
 	QDateTime time = QDateTime::currentDateTime();
