@@ -34,6 +34,7 @@
 #define DATAINTERFACE_H
 
 #include "../include/ImportCodesDialog.h"
+#include "../include/ProgressBar.h"
 #include <QObject>
 #include <string>
 #include <vector>
@@ -81,6 +82,8 @@ private:
   std::vector<bool> flagIndex; // we use this to store user flags for events.
   std::string relDir;
   std::string relDesc;
+
+  ProgressBar *loadProgress;
 
   // We set some constant static strings that we will use more when saving and loading files.
   const static std::string IMPORTED_BEGIN;

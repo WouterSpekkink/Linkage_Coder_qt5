@@ -55,13 +55,15 @@ SOURCES       = main.cpp \
 		src/ImportCodesDialog.cpp \
 		src/IndexDialog.cpp \
 		src/Logger.cpp \
-		src/MainDialog.cpp moc_CodeDialog.cpp \
+		src/MainDialog.cpp \
+		src/ProgressBar.cpp moc_CodeDialog.cpp \
 		moc_DataInterface.cpp \
 		moc_ExportDialog.cpp \
 		moc_ImportCodesDialog.cpp \
 		moc_IndexDialog.cpp \
 		moc_Logger.cpp \
-		moc_MainDialog.cpp
+		moc_MainDialog.cpp \
+		moc_ProgressBar.cpp
 OBJECTS       = main.o \
 		CodeDialog.o \
 		DataInterface.o \
@@ -70,13 +72,15 @@ OBJECTS       = main.o \
 		IndexDialog.o \
 		Logger.o \
 		MainDialog.o \
+		ProgressBar.o \
 		moc_CodeDialog.o \
 		moc_DataInterface.o \
 		moc_ExportDialog.o \
 		moc_ImportCodesDialog.o \
 		moc_IndexDialog.o \
 		moc_Logger.o \
-		moc_MainDialog.o
+		moc_MainDialog.o \
+		moc_ProgressBar.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -139,14 +143,16 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		include/ImportCodesDialog.h \
 		include/IndexDialog.h \
 		include/Logger.h \
-		include/MainDialog.h main.cpp \
+		include/MainDialog.h \
+		include/ProgressBar.h main.cpp \
 		src/CodeDialog.cpp \
 		src/DataInterface.cpp \
 		src/ExportDialog.cpp \
 		src/ImportCodesDialog.cpp \
 		src/IndexDialog.cpp \
 		src/Logger.cpp \
-		src/MainDialog.cpp
+		src/MainDialog.cpp \
+		src/ProgressBar.cpp
 QMAKE_TARGET  = Linkage_Coder_qt5
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = Linkage_Coder_qt5
@@ -312,8 +318,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents include/CodeDialog.h include/DataInterface.h include/ExportDialog.h include/ImportCodesDialog.h include/IndexDialog.h include/Logger.h include/MainDialog.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp src/CodeDialog.cpp src/DataInterface.cpp src/ExportDialog.cpp src/ImportCodesDialog.cpp src/IndexDialog.cpp src/Logger.cpp src/MainDialog.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents include/CodeDialog.h include/DataInterface.h include/ExportDialog.h include/ImportCodesDialog.h include/IndexDialog.h include/Logger.h include/MainDialog.h include/ProgressBar.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp src/CodeDialog.cpp src/DataInterface.cpp src/ExportDialog.cpp src/ImportCodesDialog.cpp src/IndexDialog.cpp src/Logger.cpp src/MainDialog.cpp src/ProgressBar.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -336,20 +342,23 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_CodeDialog.cpp moc_DataInterface.cpp moc_ExportDialog.cpp moc_ImportCodesDialog.cpp moc_IndexDialog.cpp moc_Logger.cpp moc_MainDialog.cpp
+compiler_moc_header_make_all: moc_CodeDialog.cpp moc_DataInterface.cpp moc_ExportDialog.cpp moc_ImportCodesDialog.cpp moc_IndexDialog.cpp moc_Logger.cpp moc_MainDialog.cpp moc_ProgressBar.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_CodeDialog.cpp moc_DataInterface.cpp moc_ExportDialog.cpp moc_ImportCodesDialog.cpp moc_IndexDialog.cpp moc_Logger.cpp moc_MainDialog.cpp
+	-$(DEL_FILE) moc_CodeDialog.cpp moc_DataInterface.cpp moc_ExportDialog.cpp moc_ImportCodesDialog.cpp moc_IndexDialog.cpp moc_Logger.cpp moc_MainDialog.cpp moc_ProgressBar.cpp
 moc_CodeDialog.cpp: include/DataInterface.h \
 		include/ImportCodesDialog.h \
+		include/ProgressBar.h \
 		include/CodeDialog.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/mcmonty/Programming/Linkage_Coder/Linkage_Coder_qt5 -I/home/mcmonty/Programming/Linkage_Coder/Linkage_Coder_qt5 -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include include/CodeDialog.h -o moc_CodeDialog.cpp
 
 moc_DataInterface.cpp: include/ImportCodesDialog.h \
+		include/ProgressBar.h \
 		include/DataInterface.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/mcmonty/Programming/Linkage_Coder/Linkage_Coder_qt5 -I/home/mcmonty/Programming/Linkage_Coder/Linkage_Coder_qt5 -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include include/DataInterface.h -o moc_DataInterface.cpp
 
 moc_ExportDialog.cpp: include/DataInterface.h \
 		include/ImportCodesDialog.h \
+		include/ProgressBar.h \
 		include/ExportDialog.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/mcmonty/Programming/Linkage_Coder/Linkage_Coder_qt5 -I/home/mcmonty/Programming/Linkage_Coder/Linkage_Coder_qt5 -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include include/ExportDialog.h -o moc_ExportDialog.cpp
 
@@ -364,12 +373,16 @@ moc_Logger.cpp: include/Logger.h
 
 moc_MainDialog.cpp: include/DataInterface.h \
 		include/ImportCodesDialog.h \
+		include/ProgressBar.h \
 		include/Logger.h \
 		include/CodeDialog.h \
 		include/IndexDialog.h \
 		include/ExportDialog.h \
 		include/MainDialog.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/mcmonty/Programming/Linkage_Coder/Linkage_Coder_qt5 -I/home/mcmonty/Programming/Linkage_Coder/Linkage_Coder_qt5 -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include include/MainDialog.h -o moc_MainDialog.cpp
+
+moc_ProgressBar.cpp: include/ProgressBar.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/mcmonty/Programming/Linkage_Coder/Linkage_Coder_qt5 -I/home/mcmonty/Programming/Linkage_Coder/Linkage_Coder_qt5 -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include include/ProgressBar.h -o moc_ProgressBar.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -388,6 +401,7 @@ compiler_clean: compiler_moc_header_clean
 main.o: main.cpp include/MainDialog.h \
 		include/DataInterface.h \
 		include/ImportCodesDialog.h \
+		include/ProgressBar.h \
 		include/Logger.h \
 		include/CodeDialog.h \
 		include/IndexDialog.h \
@@ -396,16 +410,19 @@ main.o: main.cpp include/MainDialog.h \
 
 CodeDialog.o: src/CodeDialog.cpp include/CodeDialog.h \
 		include/DataInterface.h \
-		include/ImportCodesDialog.h
+		include/ImportCodesDialog.h \
+		include/ProgressBar.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o CodeDialog.o src/CodeDialog.cpp
 
 DataInterface.o: src/DataInterface.cpp include/DataInterface.h \
-		include/ImportCodesDialog.h
+		include/ImportCodesDialog.h \
+		include/ProgressBar.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o DataInterface.o src/DataInterface.cpp
 
 ExportDialog.o: src/ExportDialog.cpp include/ExportDialog.h \
 		include/DataInterface.h \
-		include/ImportCodesDialog.h
+		include/ImportCodesDialog.h \
+		include/ProgressBar.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ExportDialog.o src/ExportDialog.cpp
 
 ImportCodesDialog.o: src/ImportCodesDialog.cpp include/ImportCodesDialog.h
@@ -420,11 +437,15 @@ Logger.o: src/Logger.cpp include/Logger.h
 MainDialog.o: src/MainDialog.cpp include/MainDialog.h \
 		include/DataInterface.h \
 		include/ImportCodesDialog.h \
+		include/ProgressBar.h \
 		include/Logger.h \
 		include/CodeDialog.h \
 		include/IndexDialog.h \
 		include/ExportDialog.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MainDialog.o src/MainDialog.cpp
+
+ProgressBar.o: src/ProgressBar.cpp include/ProgressBar.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ProgressBar.o src/ProgressBar.cpp
 
 moc_CodeDialog.o: moc_CodeDialog.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_CodeDialog.o moc_CodeDialog.cpp
@@ -446,6 +467,9 @@ moc_Logger.o: moc_Logger.cpp
 
 moc_MainDialog.o: moc_MainDialog.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_MainDialog.o moc_MainDialog.cpp
+
+moc_ProgressBar.o: moc_ProgressBar.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_ProgressBar.o moc_ProgressBar.cpp
 
 ####### Install
 

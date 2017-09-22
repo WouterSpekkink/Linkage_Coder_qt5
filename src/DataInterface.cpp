@@ -40,6 +40,7 @@
 #include <QtWidgets/QMessageBox>
 #include <QPointer>
 #include "../include/DataInterface.h"
+#include "../include/ProgressBar.h"
 
 const std::string DataInterface::IMPORTED_BEGIN = "<imported_data>";
 const std::string DataInterface::IMPORTED_END = "</imported_data>";
@@ -916,7 +917,16 @@ void DataInterface::importCodes(const QString &fileName, const QString &relDirec
   int target = 0;
   bool foundSource = false;
   bool foundTarget = false;
-       
+
+  int step = 1;
+  int max = tempLinkages.size();
+  
+  loadProgress = new ProgressBar(0, 1, max);
+  loadProgress->setAttribute(Qt::WA_DeleteOnClose);
+  loadProgress->setModal(true);
+  loadProgress->show();
+
+  
   for (std::vector <std::vector <int> >::size_type i = 0; i != tempLinkages.size(); i++) {
     std::vector <bool> currentRow = tempLinkages[i];
     for (std::vector <int>::size_type j = 0; j != currentRow.size(); j++) {
@@ -952,7 +962,12 @@ void DataInterface::importCodes(const QString &fileName, const QString &relDirec
 	}
       }
     }
+    loadProgress->setProgress(step);
+    qApp->processEvents();
+    step++;
   }
+  loadProgress->close();
+  delete loadProgress;
 
   bool rowFound = false;
   std::vector <std::vector <std::string> > eventPairs;
