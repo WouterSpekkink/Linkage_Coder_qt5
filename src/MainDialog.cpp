@@ -148,7 +148,7 @@ MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
   jumpToIndexesButton = new QPushButton(tr("Jump to..."));
   jumpToIndexesButton->setEnabled(false);
   previousLinkedButton = new QPushButton(tr("Prev. linked"));
-  nextLinkedButton = new QPushButton(tr("Next Linked"));
+  nextLinkedButton = new QPushButton(tr("Next linked"));
 
   previousSourceFilterButton = new QPushButton(tr("Prev. Filter"));
   nextSourceFilterButton = new QPushButton(tr("Next Filter"));
@@ -1368,6 +1368,10 @@ void MainDialog::previousLinked() {
   std::vector<std::vector <bool> >::size_type source;
   std::vector<bool>::size_type target;
   std::vector<bool>::size_type limit;
+  QDateTime time = QDateTime::currentDateTime();
+  QString timeText = time.toString(Qt::TextDate);
+  QString newLog = timeText + " - " + "attempting to jump to previous linked";
+  logger->addToLog(newLog);
   for (source = sourceRowIndex; source--;) {
     if (source == sourceRowIndex) {
       limit = targetRowIndex;
@@ -1378,6 +1382,12 @@ void MainDialog::previousLinked() {
       if (dataInterface->linkages[source][target] == true && (source != sourceRowIndex && target != targetRowIndex)) {
 	sourceRowIndex = source;
 	targetRowIndex = target;
+	QDateTime time = QDateTime::currentDateTime();
+	QString timeText = time.toString(Qt::TextDate);
+	QString newLog = timeText + " - " + "new indexes (as seen by user): " +
+	  eventsLabelLeft->text() + " and " + eventsLabelRight->text() +
+	  ", and new indexes (as stored in machine): " + "source: " +
+	  QString::number(sourceRowIndex) + " and target: " + QString::number(targetRowIndex);
 	updateIndexIndicators();
 	updateTexts();
 	return;
@@ -1390,6 +1400,10 @@ void MainDialog::nextLinked() {
   std::vector<std::vector <bool> >::size_type source;
   std::vector<bool>::size_type target;
   std::vector<bool>::size_type start;
+  QDateTime time = QDateTime::currentDateTime();
+  QString timeText = time.toString(Qt::TextDate);
+  QString newLog = timeText + " - " + "attempting to jump to next linked";
+  logger->addToLog(newLog);
   for (source = sourceRowIndex; source != dataInterface->rowData.size(); source++) {
     if (source == sourceRowIndex) {
       start = targetRowIndex;
@@ -1400,6 +1414,12 @@ void MainDialog::nextLinked() {
       if (dataInterface->linkages[source][target] == true && (source != sourceRowIndex && target != targetRowIndex)) {
 	sourceRowIndex = source;
 	targetRowIndex = target;
+	QDateTime time = QDateTime::currentDateTime();
+	QString timeText = time.toString(Qt::TextDate);
+	QString newLog = timeText + " - " + "new indexes (as seen by user): " +
+	  eventsLabelLeft->text() + " and " + eventsLabelRight->text() +
+	  ", and new indexes (as stored in machine): " + "source: " +
+	  QString::number(sourceRowIndex) + " and target: " + QString::number(targetRowIndex);
 	updateIndexIndicators();
 	updateTexts();
 	return;
@@ -1418,6 +1438,11 @@ void MainDialog::setTargetFilter(const QString &text) {
 
 void MainDialog::previousSourceFiltered() {
   if (currentSourceFilter != "") {
+    QDateTime time = QDateTime::currentDateTime();
+    QString timeText = time.toString(Qt::TextDate);
+    QString newLog = timeText + " - " + "attempting to jump to previous source with string \"" +
+      currentSourceFilter + "\" in column \"" + QString::fromStdString(dataInterface->header[leftColumnIndex]) + "\"";
+    logger->addToLog(newLog);
     if (relationshipDirection == RELPAST) {
       std::vector <std::vector <std::string> >::size_type source;
       for (source = sourceRowIndex; source != 0; source--) {
@@ -1428,6 +1453,13 @@ void MainDialog::previousSourceFiltered() {
 	    targetRowIndex = sourceRowIndex - 1;
 	    updateTexts();
 	    updateIndexIndicators();
+	    QDateTime time = QDateTime::currentDateTime();
+	    QString timeText = time.toString(Qt::TextDate);
+	    QString newLog = timeText + " - " + "new indexes (as seen by user): " +
+	      eventsLabelLeft->text() + " and " + eventsLabelRight->text() +
+	      ", and new indexes (as stored in machine): " + "source: " +
+	      QString::number(sourceRowIndex) + " and target: " + QString::number(targetRowIndex);
+	    logger->addToLog(newLog);
 	    return;
 	  }
 	}
@@ -1442,6 +1474,13 @@ void MainDialog::previousSourceFiltered() {
 	    targetRowIndex = sourceRowIndex + 1;
 	    updateTexts();
 	    updateIndexIndicators();
+	    QDateTime time = QDateTime::currentDateTime();
+	    QString timeText = time.toString(Qt::TextDate);
+	    QString newLog = timeText + " - " + "new indexes (as seen by user): " +
+	      eventsLabelLeft->text() + " and " + eventsLabelRight->text() +
+	      ", and new indexes (as stored in machine): " + "source: " +
+	      QString::number(sourceRowIndex) + " and target: " + QString::number(targetRowIndex);
+	    logger->addToLog(newLog);
 	    return;
 	  }
 	}
@@ -1452,6 +1491,11 @@ void MainDialog::previousSourceFiltered() {
 
 void MainDialog::nextSourceFiltered() {
   if (currentSourceFilter != "") {
+    QDateTime time = QDateTime::currentDateTime();
+    QString timeText = time.toString(Qt::TextDate);
+    QString newLog = timeText + " - " + "attempting to jump to next source with string \"" + currentSourceFilter +
+      "\" in column \"" + QString::fromStdString(dataInterface->header[leftColumnIndex]) + "\"";
+    logger->addToLog(newLog);
     if (relationshipDirection == RELPAST) {
       std::vector <std::vector <std::string> >::size_type source;
       for (source = sourceRowIndex; source != dataInterface->rowData.size(); source++) {
@@ -1462,6 +1506,13 @@ void MainDialog::nextSourceFiltered() {
 	    targetRowIndex = sourceRowIndex - 1;
 	    updateTexts();
 	    updateIndexIndicators();
+	    QDateTime time = QDateTime::currentDateTime();
+	    QString timeText = time.toString(Qt::TextDate);
+	    QString newLog = timeText + " - " + "new indexes (as seen by user): " +
+	      eventsLabelLeft->text() + " and " + eventsLabelRight->text() +
+	      ", and new indexes (as stored in machine): " + "source: " +
+	      QString::number(sourceRowIndex) + " and target: " + QString::number(targetRowIndex);
+	    logger->addToLog(newLog);
 	    return;
 	  }
 	}
@@ -1476,6 +1527,13 @@ void MainDialog::nextSourceFiltered() {
 	    targetRowIndex = sourceRowIndex + 1;
 	    updateTexts();
 	    updateIndexIndicators();
+	    QDateTime time = QDateTime::currentDateTime();
+	    QString timeText = time.toString(Qt::TextDate);
+	    QString newLog = timeText + " - " + "new indexes (as seen by user): " +
+	      eventsLabelLeft->text() + " and " + eventsLabelRight->text() +
+	      ", and new indexes (as stored in machine): " + "source: " +
+	      QString::number(sourceRowIndex) + " and target: " + QString::number(targetRowIndex);
+	    logger->addToLog(newLog);
 	    return;
 	  }
 	}
@@ -1486,6 +1544,11 @@ void MainDialog::nextSourceFiltered() {
 
 void MainDialog::previousTargetFiltered() {
   if (currentTargetFilter != "") {
+    QDateTime time = QDateTime::currentDateTime();
+    QString timeText = time.toString(Qt::TextDate);
+    QString newLog = timeText + " - " + "attempting to jump to previous target with string \"" + currentTargetFilter +
+      "\" in column \"" + QString::fromStdString(dataInterface->header[rightColumnIndex]) + "\"";
+    logger->addToLog(newLog);
     if (relationshipDirection == RELPAST) {
       std::vector <std::vector <std::string> >::size_type target;
       for (target = targetRowIndex; target != sourceRowIndex; target++) {
@@ -1495,6 +1558,13 @@ void MainDialog::previousTargetFiltered() {
 	    targetRowIndex = target;
 	    updateTexts();
 	    updateIndexIndicators();
+	    QDateTime time = QDateTime::currentDateTime();
+	    QString timeText = time.toString(Qt::TextDate);
+	    QString newLog = timeText + " - " + "new indexes (as seen by user): " +
+	      eventsLabelLeft->text() + " and " + eventsLabelRight->text() +
+	      ", and new indexes (as stored in machine): " + "source: " +
+	      QString::number(sourceRowIndex) + " and target: " + QString::number(targetRowIndex);
+	    logger->addToLog(newLog);
 	    return;
 	  }
 	}
@@ -1508,6 +1578,13 @@ void MainDialog::previousTargetFiltered() {
 	    targetRowIndex = target;
 	    updateTexts();
 	    updateIndexIndicators();
+	    QDateTime time = QDateTime::currentDateTime();
+	    QString timeText = time.toString(Qt::TextDate);
+	    QString newLog = timeText + " - " + "new indexes (as seen by user): " +
+	      eventsLabelLeft->text() + " and " + eventsLabelRight->text() +
+	      ", and new indexes (as stored in machine): " + "source: " +
+	      QString::number(sourceRowIndex) + " and target: " + QString::number(targetRowIndex);
+	    logger->addToLog(newLog);
 	    return;
 	  }
 	}
@@ -1518,6 +1595,11 @@ void MainDialog::previousTargetFiltered() {
 
 void MainDialog::nextTargetFiltered() {
   if (currentTargetFilter != "") {
+    QDateTime time = QDateTime::currentDateTime();
+    QString timeText = time.toString(Qt::TextDate);
+    QString newLog = timeText + " - " + "attempting to jump to next target with string \"" + currentTargetFilter +
+      "\" in column \"" + QString::fromStdString(dataInterface->header[rightColumnIndex]) + "\"";
+    logger->addToLog(newLog);
     if (relationshipDirection == RELPAST) {
       std::vector <std::vector <std::string> >::size_type target;
       for (target = targetRowIndex; target--;) {
@@ -1527,6 +1609,13 @@ void MainDialog::nextTargetFiltered() {
 	    targetRowIndex = target;
 	    updateTexts();
 	    updateIndexIndicators();
+	    QDateTime time = QDateTime::currentDateTime();
+	    QString timeText = time.toString(Qt::TextDate);
+	    QString newLog = timeText + " - " + "new indexes (as seen by user): " +
+	      eventsLabelLeft->text() + " and " + eventsLabelRight->text() +
+	      ", and new indexes (as stored in machine): " + "source: " +
+	      QString::number(sourceRowIndex) + " and target: " + QString::number(targetRowIndex);
+	    logger->addToLog(newLog);
 	    return;
 	  }
 	}
@@ -1540,6 +1629,13 @@ void MainDialog::nextTargetFiltered() {
 	    targetRowIndex = target;
 	    updateTexts();
 	    updateIndexIndicators();
+	    QDateTime time = QDateTime::currentDateTime();
+	    QString timeText = time.toString(Qt::TextDate);
+	    QString newLog = timeText + " - " + "new indexes (as seen by user): " +
+	      eventsLabelLeft->text() + " and " + eventsLabelRight->text() +
+	      ", and new indexes (as stored in machine): " + "source: " +
+	      QString::number(sourceRowIndex) + " and target: " + QString::number(targetRowIndex);
+	    logger->addToLog(newLog);
 	    return;
 	  }
 	}

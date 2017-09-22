@@ -282,6 +282,15 @@ You will see an extra pair of fields in the bottom of the screen (see figure \re
   \label{fig:extrafields}
 \end{figure}
 
+Above the extra fields, you will also find two smaller text fields, accompanied by two \textbf{Prev. Filter} and \textbf{Next Filter} buttons. These fields and buttons allow you to navigate to other \textbf{source} or \textbf{target} incidents based on the contents of their data columns. If you enter text in the left field, and then click the \textbf{Prev. Filter} or \textbf{Next Filter} button, then the program will navigate to the previous/next incident that includes that text in the currently selected column. For example, if we set the \textbf{left additional column} to the column with incident descriptions, and we type the word ``dog'' in the left field, then we can quickly navigate to other incidents that have this word in the same column (see figure \ref{fig:filternext}). The same can be done with the \textbf{target} incidents by using the corresponding field and navigation buttons. These controls can be useful when coding larger data sets: Rather than exploring all pairs potential \textbf{source} and \textbf{target} incidents (which will increase exponentially!), it may be more practical to identify potentially linked pairs of incidents by searching for key words in their descriptions.
+
+\begin{figure}[h!]
+  \centering
+  \caption{Jumping to the next incident with the word ``dog'' in the incident description.}
+  \includegraphics[width=100mm]{Screenshot_22.pdf}
+  \label{fig:filternext}
+\end{figure}
+
 Typically, you will want to consider assigning a linkage between the current pair of incidents, and then move on to another pair. Indications of the incidents' place in the chronological order of the data set are shown with indexes located above the two main fields (see figure \ref{fig:indexes}). The indexes are formatted as \textbf{([Current source(target)] / [Total possible sources(targets)])}. The total number of possible \textbf{source} incidents is always the total number of incidents in the data set minus one. The total number of possible \textbf{target} incidents indicated in the index depends on the currently selected index of the \textbf{source} incident. For example, in figure \ref{fig:indexes}, we have set the linkage direction to ``Present to past''. The currently selected \textbf{source} incident comes second in the chronological order of the complete data set, but the index is shown as (\(1 / 7\)), because the first incident in the data set cannot have a linkage to any other incident in the data set, given the currently selected linkage direction. The currently selected \textbf{target} incident comes first in the chronological order of the complete data set. Its index is shown as (\(1 / 1\)), because this incident is the only incident in the data set that the currently selected \textbf{source} incident could have a linkage to.    
 
 \begin{figure}[h!]
@@ -307,7 +316,7 @@ In the area demarcated in figure \ref{fig:flagoptions}, you will find several bu
   \label{fig:flagoptions}
 \end{figure}
 
-If you later want to return to a flagged \textbf{source} incident or a flagged \textbf{target incident}, you can use the \textbf{Previous flagged source/target} or the \textbf{Next flagged source/target} buttons. These buttons work similar to the \textbf{Previous source/target} and the \textbf{Next source/target} buttons, but they will skip all incidents that are not flagged. This should allow you to relatively easily find incidents that you flagged earlier.
+If you later want to return to a flagged \textbf{source} incident or a flagged \textbf{target incident}, you can use the \textbf{Prev. flagged source/target} or the \textbf{Next flagged source/target} buttons. These buttons work similar to the \textbf{Prev. source/target} and the \textbf{Next source/target} buttons, but they will skip all incidents that are not flagged. This should allow you to relatively easily find incidents that you flagged earlier.
 
 \begin{figure}[h!]
   \centering
@@ -335,6 +344,16 @@ Indeed, the main purpose of the program is to code for linkages between the inci
   \includegraphics[width=40mm]{Screenshot_10.pdf}
   \label{fig:linkage}
 \end{figure}
+
+Once you have coded linkages, it also becomes possible to quickly navigate between them, using the \textbf{Prev. linked} and \textbf{Next linked} buttons (see figure \ref{fig:linkedbuttons}). Clicking one of this buttons will tell the program to jump to the previous or the next linkage that you assigned in this session respectively.
+
+\begin{figure}[h!]
+  \centering
+  \caption{Navigating based on linkages.}
+  \includegraphics[width=100mm]{Screenshot_21.pdf}
+  \label{fig:linkedbuttons}
+\end{figure}
+
 
 Below the two main text fields you will find another text field called \textbf{Memo} (see figure \ref{fig:memo}). This field can be used to record any memos that you would like to add to the current pair of incidents. Whatever you type here will be instantly saved. If you want to remove a memo, simply delete the text. When you export your coded data (see \ref{sec:exportingdata}), the memos will also be included with all linkages that you have created (i.e., memos for pairs of incidents that have no linkage will not be exported). 
 
