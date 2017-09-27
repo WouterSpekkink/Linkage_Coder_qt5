@@ -48,7 +48,7 @@ class IndexDialog : public QDialog {
   Q_OBJECT
 
 public:
-  IndexDialog(QWidget *parent = 0);
+  IndexDialog(QWidget *parent = 0, std::vector <std::vector <std::string> >::size_type size = 0, const QString direction = "EMPTY");
   ~IndexDialog() {};
 
 private slots:
@@ -70,6 +70,14 @@ private:
   QPointer<QPushButton> cancelButton;
   std::string sourceText;
   std::string targetText;
+
+  QString submittedDir;
+  
+  std::vector <std::vector <std::string> >::size_type max;
+  std::vector <std::vector <std::string> >::size_type submittedSize;
+  
+  static const QString RELPAST;
+  static const QString RELFUTURE;
   
 };
 

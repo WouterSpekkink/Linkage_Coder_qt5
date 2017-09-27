@@ -1305,7 +1305,7 @@ void MainDialog::importCodes() {
 // This function opens a dialog that allows the user to select indexes to jump to.
 void MainDialog::jumpToIndexes() {
   // We create a dialog that the user can use to select an index.
-  IndexDialog *indexer = new IndexDialog(0); // A dialog where these columns will be selected.
+  IndexDialog *indexer = new IndexDialog(this, dataInterface->rowData.size() - 1, relationshipDirection); // A dialog where these columns will be selected.
   indexer->deleteLater(); // We need to be able to access this after closure.
   indexer->exec(); // Open te dialog.
 
@@ -1365,68 +1365,130 @@ void MainDialog::jumpToIndexes() {
 }
 
 void MainDialog::previousLinked() {
-  std::vector<std::vector <bool> >::size_type source;
-  std::vector<bool>::size_type target;
+  std::vector<std::vector <bool> >::size_type source = sourceRowIndex;
+  std::vector<bool>::size_type target = targetRowIndex;
   std::vector<bool>::size_type limit;
   QDateTime time = QDateTime::currentDateTime();
   QString timeText = time.toString(Qt::TextDate);
   QString newLog = timeText + " - " + "attempting to jump to previous linked";
   logger->addToLog(newLog);
-  bool cont = true;
-  for (source = sourceRowIndex; cont == true;source--) {
-    if (source == sourceRowIndex) {
-      limit = targetRowIndex;
-    } else {
-      limit = dataInterface->rowData.size() - 1;
-    }
-    for (target = limit; target != 0; target--) {
-      if (dataInterface->linkages[source][target] == true && !(source == sourceRowIndex && target == targetRowIndex)) {
-	sourceRowIndex = source;
-	targetRowIndex = target;
-	QDateTime time = QDateTime::currentDateTime();
-	QString timeText = time.toString(Qt::TextDate);
-	QString newLog = timeText + " - " + "new indexes (as seen by user): " +
-	  eventsLabelLeft->text() + " and " + eventsLabelRight->text() +
-	  ", and new indexes (as stored in machine): " + "source: " +
-	  QString::number(sourceRowIndex) + " and target: " + QString::number(targetRowIndex);
-	updateIndexIndicators();
-	updateTexts();
-	return;
+  if (relationshipDirection == RELPAST) {
+    for (source = sourceRowIndex; source != 0; source--) {
+      if (source == sourceRowIndex && target == targetRowIndex) {
+	limit = targetRowIndex;
+      } else {
+	limit = 0;
+      }
+      for (target = limit; target != source; target++) {
+	if (dataInterface->linkages[source][target] == true &&
+	    !(source == sourceRowIndex && target == targetRowIndex)) {
+	  sourceRowIndex = source;
+	  targetRowIndex = target;
+	  QDateTime time = QDateTime::currentDateTime();
+	  QString timeText = time.toString(Qt::TextDate);
+	  QString newLog = timeText + " - " + "new indexes (as seen by user): " +
+	    eventsLabelLeft->text() + " and " + eventsLabelRight->text() +
+	    ", and new indexes (as stored in machine): " + "source: " +
+	    QString::number(sourceRowIndex) + " and target: " + QString::number(targetRowIndex);
+	  updateIndexIndicators();
+	  updateTexts();
+	  return;
+	}
       }
     }
-    if (source == 0) {
-      cont = false;
+  } else if (relationshipDirection == RELFUTURE) {
+    bool contSource = true;
+    for (source = sourceRowIndex; contSource == true; source--) {
+      if (source == sourceRowIndex) {
+	limit = targetRowIndex;
+      } else {
+	limit = dataInterface->rowData.size() - 1;
+      }
+      bool contTarget = true;
+      for (target = limit; contTarget == true; target--) {
+	if (dataInterface->linkages[source][target] == true &&
+	    !(source == sourceRowIndex && target == targetRowIndex)) {
+	  sourceRowIndex = source;
+	  targetRowIndex = target;
+	  QDateTime time = QDateTime::currentDateTime();
+	  QString timeText = time.toString(Qt::TextDate);
+	  QString newLog = timeText + " - " + "new indexes (as seen by user): " +
+	    eventsLabelLeft->text() + " and " + eventsLabelRight->text() +
+	    ", and new indexes (as stored in machine): " + "source: " +
+	    QString::number(sourceRowIndex) + " and target: " + QString::number(targetRowIndex);
+	  updateIndexIndicators();
+	  updateTexts();
+	  return;
+	}
+	if (target == 0) {
+	  contTarget = false;
+	}
+      }
+      if (source == 0) {
+	contSource = false;
+      }
     }
   }
 }
 
 void MainDialog::nextLinked() {
-  std::vector<std::vector <bool> >::size_type source;
-  std::vector<bool>::size_type target;
+  std::vector<std::vector <bool> >::size_type source = sourceRowIndex;
+  std::vector<bool>::size_type target = targetRowIndex;
   std::vector<bool>::size_type start;
   QDateTime time = QDateTime::currentDateTime();
   QString timeText = time.toString(Qt::TextDate);
   QString newLog = timeText + " - " + "attempting to jump to next linked";
   logger->addToLog(newLog);
-  for (source = sourceRowIndex; source != dataInterface->rowData.size(); source++) {
-    if (source == sourceRowIndex) {
-      start = targetRowIndex;
-    } else {
-      start = 0;
+  if (relationshipDirection == RELPAST) {
+    for (source = sourceRowIndex; source != dataInterface->rowData.size(); source++) {
+      if (source == sourceRowIndex && target == targetRowIndex) {
+	start = targetRowIndex;
+      } else {
+	start = source - 1;
+      }
+      bool contTarget = true;
+      for (target = start; contTarget == true; target--) {
+	if (dataInterface->linkages[source][target] == true &&
+	    !(source == sourceRowIndex && target == targetRowIndex)) {
+	  sourceRowIndex = source;
+	  targetRowIndex = target;
+	  QDateTime time = QDateTime::currentDateTime();
+	  QString timeText = time.toString(Qt::TextDate);
+	  QString newLog = timeText + " - " + "new indexes (as seen by user): " +
+	    eventsLabelLeft->text() + " and " + eventsLabelRight->text() +
+	    ", and new indexes (as stored in machine): " + "source: " +
+	    QString::number(sourceRowIndex) + " and target: " + QString::number(targetRowIndex);
+	  updateIndexIndicators();
+	  updateTexts();
+	  return;
+	}
+	if (target == 0) {
+	  contTarget = false;
+	}
+      }
     }
-    for (target = start; target != dataInterface->rowData.size(); target++) {
-      if (dataInterface->linkages[source][target] == true && !(source == sourceRowIndex && target == targetRowIndex)) {
-	sourceRowIndex = source;
-	targetRowIndex = target;
-	QDateTime time = QDateTime::currentDateTime();
-	QString timeText = time.toString(Qt::TextDate);
-	QString newLog = timeText + " - " + "new indexes (as seen by user): " +
-	  eventsLabelLeft->text() + " and " + eventsLabelRight->text() +
-	  ", and new indexes (as stored in machine): " + "source: " +
-	  QString::number(sourceRowIndex) + " and target: " + QString::number(targetRowIndex);
-	updateIndexIndicators();
+  } else if (relationshipDirection == RELFUTURE) {
+    for (source = sourceRowIndex; source != dataInterface->rowData.size(); source++) {
+      if (source == sourceRowIndex) {
+	start = targetRowIndex;
+      } else {
+	start = 0;
+      }
+      for (target = start; target != dataInterface->rowData.size(); target++) {
+	if (dataInterface->linkages[source][target] == true
+	    && !(source == sourceRowIndex && target == targetRowIndex)) {
+	  sourceRowIndex = source;
+	  targetRowIndex = target;
+	  QDateTime time = QDateTime::currentDateTime();
+	  QString timeText = time.toString(Qt::TextDate);
+	  QString newLog = timeText + " - " + "new indexes (as seen by user): " +
+	    eventsLabelLeft->text() + " and " + eventsLabelRight->text() +
+	    ", and new indexes (as stored in machine): " + "source: " +
+	    QString::number(sourceRowIndex) + " and target: " + QString::number(targetRowIndex);
+	  updateIndexIndicators();
 	updateTexts();
 	return;
+	}
       }
     }
   }
@@ -1470,7 +1532,8 @@ void MainDialog::previousSourceFiltered() {
       }
     } else if (relationshipDirection == RELFUTURE) {
       std::vector <std::vector <std::string> >::size_type source;
-      for (source = sourceRowIndex; source--;) {
+      bool contSource = true;
+      for (source = sourceRowIndex; contSource == true; source--) {
 	if (source != sourceRowIndex) {
 	  std::size_t found = (dataInterface->rowData[source][leftColumnIndex]).find(currentSourceFilter.toStdString());
 	  if (found != std::string::npos) {
@@ -1487,6 +1550,9 @@ void MainDialog::previousSourceFiltered() {
 	    logger->addToLog(newLog);
 	    return;
 	  }
+	}
+	if (source == 0) {
+	  contSource = false;
 	}
       }
     }
@@ -1606,7 +1672,8 @@ void MainDialog::nextTargetFiltered() {
     logger->addToLog(newLog);
     if (relationshipDirection == RELPAST) {
       std::vector <std::vector <std::string> >::size_type target;
-      for (target = targetRowIndex; target--;) {
+      bool contTarget = true;
+      for (target = targetRowIndex; contTarget == true; target--) {
 	if (target != targetRowIndex) {
 	  std::size_t found = (dataInterface->rowData[target][rightColumnIndex]).find(currentTargetFilter.toStdString());
 	  if (found != std::string::npos) {
@@ -1622,6 +1689,9 @@ void MainDialog::nextTargetFiltered() {
 	    logger->addToLog(newLog);
 	    return;
 	  }
+	}
+	if (target == 0) {
+	  contTarget = false;
 	}
       }
     } else if (relationshipDirection == RELFUTURE) {

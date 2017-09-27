@@ -31,9 +31,16 @@
 */
 
 #include "../include/IndexDialog.h"
+#include <QIntValidator>
+#include <sstream>
 
-IndexDialog::IndexDialog(QWidget *parent) : QDialog(parent) {
+// Initialize some constants
+const QString IndexDialog::RELPAST = QString("Present to past");
+const QString IndexDialog::RELFUTURE = QString("Past to present");
+
+IndexDialog::IndexDialog(QWidget *parent, std::vector <std::vector <std::string> >::size_type size, const QString direction) : QDialog(parent) {
   // First we construct our dialog's entities.
+  submittedDir = direction;
   informativeLabel = new QLabel(tr("Select the source and target index to jump to:"));
   sourceLabel = new QLabel(tr("Source:"));
   targetLabel = new QLabel(tr("Target:"));
@@ -41,6 +48,10 @@ IndexDialog::IndexDialog(QWidget *parent) : QDialog(parent) {
   targetText = "";
   sourceField = new QLineEdit();
   targetField = new QLineEdit();
+  max = 1;
+  submittedSize = size;
+  sourceField->setValidator(new QIntValidator(1, submittedSize, this));
+  targetField->setValidator(new QIntValidator(1, 1, this));
   goButton = new QPushButton(tr("Go"));
   goButton->setEnabled(false); // We only activate this button if there is something in the fields.
   cancelButton = new QPushButton(tr("Cancel"));
@@ -80,6 +91,15 @@ IndexDialog::IndexDialog(QWidget *parent) : QDialog(parent) {
 void IndexDialog::setSourceText(const QString newSource) {
   sourceText = newSource.toStdString();
   // Let us immediately check if we should active the go Button.
+  if (submittedDir == RELPAST) {
+    std::istringstream ss(sourceText);
+    ss >> max;
+    targetField->setValidator(new QIntValidator(1, max, this));
+  } else if (submittedDir == RELFUTURE) {
+    std::istringstream ss(sourceText);
+    ss >> max;
+    targetField->setValidator(new QIntValidator(1, submittedSize - max + 1, this));
+  }
   evaluateIndexes();
 }
 
