@@ -53,6 +53,7 @@ public:
   // Then we have functions for reading, saving and loading files.
   void readFile(const QString &fileName, const QString &sep);
   void writeSave(const QString &fileName,
+		 const QString &type,
 		 std::vector<std::vector <std::string> >::size_type sourceRowIndex,
 		 std::vector<std::vector <std::string> >::size_type targetRowIndex,
 		 std::vector<std::string>::size_type columnIndex,
@@ -72,7 +73,8 @@ signals:
 		    const QString &colIndex,
 		    const QString &relDirection,
 		    const QString &relDescription,
-		    const QString &separator);
+		    const QString &separator,
+		    const QString &type);
 		       
 private:
   std::vector<std::string> header; // This will hold the column names of the input data file.
@@ -102,6 +104,8 @@ private:
   const static std::string RELDESC_END;
   const static std::string SEP_BEGIN;
   const static std::string SEP_END;
+  const static std::string CODINGTYPE_BEGIN;
+  const static std::string CODINGTYPE_END;
   const static std::string CODED_BEGIN;
   const static std::string CODED_END;
   const static std::string ROW_PART_2;
@@ -109,6 +113,5 @@ private:
   const static std::string MEMOS_END;
   const static std::string FLAGS_BEGIN;
   const static std::string FLAGS_END;
-  
 };
 #endif

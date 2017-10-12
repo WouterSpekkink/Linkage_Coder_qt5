@@ -75,6 +75,7 @@ private slots:
   void setRelationshipDirection(const QString &selection);
   void checkRelationshipDescription(const QString &text);
   void startCoding();
+  void startAssistedCoding();
   void setWorkButtons(const bool status);
   void navigateNextTarget();
   void navigatePreviousTarget();
@@ -94,13 +95,15 @@ private slots:
   void scrollRightColBackward();
   void setLeftColumn(const QString &selection);
   void setRightColumn(const QString &selection);
-  void toggleLink();
+  void setLink();
+  void unsetLink();
   void processLoad(const QString &sourceIndex,
 		   const QString &targetIndex,
 		   const QString &colIndex,
 		   const QString &relDirection,
 		   const QString &relDescription,
-		   const QString &separator);
+		   const QString &separator,
+		   const QString &type);
   void finalBusiness();
   void writeLinkages();
   void setMemo(const QString &text);
@@ -143,6 +146,7 @@ private:
   QPointer<QLabel> targetFlagLabel;
   QPointer<QPushButton> openFile;
   QPointer<QPushButton> startCodingButton;
+  QPointer<QPushButton> startAssistedCodingButton;
   QPointer<QPushButton> saveSessionButton;
   QPointer<QPushButton> loadSessionButton;
   QPointer<QPushButton> importCodesButton;
@@ -150,7 +154,8 @@ private:
   QPointer<QPushButton> importFile;
   QPointer<QPushButton> nextTargetButton;
   QPointer<QPushButton> prevTargetButton;
-  QPointer<QPushButton> toggleLinkButton;
+  QPointer<QPushButton> setLinkButton;
+  QPointer<QPushButton> unsetLinkButton;
   QPointer<QPushButton> nextSourceButton;
   QPointer<QPushButton> prevSourceButton;
   QPointer<QPushButton> toggleSourceFlagButton;
@@ -192,11 +197,14 @@ private:
   QString relationshipDescription;
   QString currentSourceFilter;
   QString currentTargetFilter;
+  QString codingType;
   static const QString SEPDEFAULT;
   static const QString EVENTDEFAULT;
   static const QString RELDEFAULT;
   static const QString RELPAST;
   static const QString RELFUTURE;
+  static const QString MANUAL;
+  static const QString ASSISTED;
   
   std::vector<std::string>::size_type columnIndex;
   std::vector<std::string>::size_type leftColumnIndex;

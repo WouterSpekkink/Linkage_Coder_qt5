@@ -36,6 +36,8 @@
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMessageBox>
 #include <sstream>
+#include <thread>
+#include <chrono>
 
 // Initializing some constants
 const QString MainDialog::SEPDEFAULT = QString("-Select delimiter-");
@@ -43,6 +45,8 @@ const QString MainDialog::EVENTDEFAULT = QString("-Select column-");
 const QString MainDialog::RELDEFAULT = QString("-Select direction-");
 const QString MainDialog::RELPAST = QString("Present to past");
 const QString MainDialog::RELFUTURE = QString("Past to present");
+const QString MainDialog::MANUAL = QString("Manual");
+const QString MainDialog::ASSISTED = QString("Assisted");
 
 // This is the constructor for this class
 MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
@@ -100,8 +104,10 @@ MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
   relationshipDescription = "";
   relationshipInfoLabel = new QLabel(tr("<b>Linkage type:<b>"));
   relationshipReporter = new QLabel("");
-  startCodingButton = new QPushButton(tr("Start coding")); // Selected if user starts new session.
+  startCodingButton = new QPushButton(tr("Manual coding")); // Selected if user starts new session.
   startCodingButton->setEnabled(false); // This is initially disabled.
+  startAssistedCodingButton = new QPushButton(tr("Assisted coding")); 
+  startAssistedCodingButton->setEnabled(false);  
   eventsLabelLeft = new QLabel(tr("<b>Source<b>"));
   eventsLabelMiddle = new QLabel(tr("<b>Incidents to be linked<b>"));
   eventsLabelRight = new QLabel(tr("<b>Target<b>"));
@@ -131,7 +137,10 @@ MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
   otherColRight->setReadOnly(true);
   nextTargetButton = new QPushButton(tr("Next target"));
   prevTargetButton = new QPushButton(tr("Previous target"));
-  toggleLinkButton = new QPushButton(tr("Toggle Link"));
+  setLinkButton = new QPushButton(tr("Linked"));
+  setLinkButton->setEnabled(false);
+  unsetLinkButton = new QPushButton(tr("Not linked"));
+  unsetLinkButton->setEnabled(false);
   linkLabel = new QLabel(tr(""));
   nextSourceButton = new QPushButton(tr("Next Source"));
   prevSourceButton = new QPushButton(tr("Previous Source"));
@@ -158,6 +167,8 @@ MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
   targetFilterField = new QLineEdit();
   currentSourceFilter = "";
   currentTargetFilter = "";
+
+  codingType = "";
   
   setWorkButtons(false);
 
@@ -186,9 +197,11 @@ MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
   connect(importCodesButton, SIGNAL(clicked()), this, SLOT(importCodes()));
   // The functions that process loaded data.
   connect(dataInterface, SIGNAL(loadFinished(const QString &, const QString &, const QString &,
-					     const QString &, const QString &, const QString &)),
+					     const QString &, const QString &, const QString &,
+					     const QString &)),
 	  this, SLOT(processLoad(const QString &, const QString &, const QString &,
-				 const QString &, const QString &, const QString &)));
+				 const QString &, const QString &, const QString &,
+				 const QString &)));
   connect(saveSessionButton, SIGNAL(clicked()), this, SLOT(saveSession()));
   // The load session button signal to load a previous session.
   connect(loadSessionButton, SIGNAL(clicked()), this, SLOT(loadSession()));
@@ -210,6 +223,9 @@ MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
 	  this, SLOT(checkRelationshipDescription(const QString &)));
   // Clicking the startCodingButton should set in motion the process of coding.
   connect(startCodingButton, SIGNAL(clicked()), this, SLOT(startCoding()));
+
+  connect(startAssistedCodingButton, SIGNAL(clicked()), this, SLOT(startAssistedCoding()));
+  
   // This button navigates to the next target event.
   connect(nextTargetButton, SIGNAL(clicked()), this, SLOT(navigateNextTarget()));
   // And this button navigates to the previous target.
@@ -229,8 +245,11 @@ MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
   connect(rightSelector, SIGNAL(currentIndexChanged(const QString &)),
 	  this, SLOT(setRightColumn(const QString &)));
   // The next button toggles the link for the current pair of events.
-  connect(toggleLinkButton, SIGNAL(clicked()), this, SLOT(toggleLink()));
+  connect(setLinkButton, SIGNAL(clicked()), this, SLOT(setLink()));
   // We need to do some final business before the program exits.
+
+  connect(unsetLinkButton, SIGNAL(clicked()), this, SLOT(unsetLink()));
+  
   connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(finalBusiness()));
   // The next button starts the process for writing linkages to a file.
   connect(writeLinkagesButton, SIGNAL(clicked()), this, SLOT(writeLinkages()));
@@ -302,6 +321,7 @@ MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
   optionsLayoutTop->addWidget(relationshipDescLabel);
   optionsLayoutTop->addWidget(relationshipDescriber);
   optionsLayoutTop->addWidget(startCodingButton);
+  optionsLayoutTop->addWidget(startAssistedCodingButton);
   optionsLayoutTop->setAlignment(Qt::AlignLeft);
   QPointer<QHBoxLayout> textFieldsLabelLayout = new QHBoxLayout;
   QPointer<QHBoxLayout> tFLabelLeft = new QHBoxLayout;
@@ -339,8 +359,8 @@ MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
   linkButtonLayout->addWidget(linkLabel);
   linkLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
   linkLabel->setStyleSheet("color: blue");
-  linkButtonLayout->addWidget(toggleLinkButton);
-  linkButtonLayout->addWidget(jumpToIndexesButton);
+  linkButtonLayout->addWidget(setLinkButton);
+  linkButtonLayout->addWidget(unsetLinkButton);
   linkButtonLayout->setContentsMargins(0,10,0,10);
   linkButtonLayout->setAlignment(Qt::AlignHCenter);
   textFieldsTopLayout->addLayout(linkButtonLayout);
@@ -351,9 +371,7 @@ MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
   flaggingLayout->addWidget(prevSourceFlagButton);
   flaggingLayout->addWidget(nextSourceFlagButton);
   flaggingLayout->addWidget(previousLinkedButton);
-  QPointer<QFrame> flaggingSep = new QFrame();
-  flaggingSep->setFrameShape(QFrame::HLine);
-  flaggingLayout->addWidget(flaggingSep);
+  flaggingLayout->addWidget(jumpToIndexesButton);
   flaggingLayout->addWidget(nextLinkedButton);
   flaggingLayout->addWidget(toggleTargetFlagButton);
   flaggingLayout->addWidget(prevTargetFlagButton);
@@ -542,6 +560,7 @@ void MainDialog::enableOptions() {
   importFile->setEnabled(false);
   eventSelector->setEnabled(true);
   startCodingButton->setEnabled(false);
+  startAssistedCodingButton->setEnabled(false);
   setWorkButtons(false);
   sourceEvent->setText("");
   targetEvent->setText("");
@@ -560,7 +579,7 @@ void MainDialog::saveSession() {
     if (!QsaveFile.endsWith(".sav")) {
       QsaveFile.append(".sav");
     }
-    dataInterface->writeSave(QsaveFile, sourceRowIndex, targetRowIndex,
+    dataInterface->writeSave(QsaveFile, codingType, sourceRowIndex, targetRowIndex,
 			     columnIndex, relationshipDirection,
 			     relationshipDescription, sep);
     QDateTime time = QDateTime::currentDateTime();
@@ -607,8 +626,9 @@ void MainDialog::loadSession() {
 
 void MainDialog::processLoad(const QString &sourceIndex, const QString &targetIndex,
 			     const QString &colIndex, const QString &relDirection,
-			     const QString &relDescription, const QString &separator) {
-  // Let's first set the appropriate variables.
+			     const QString &relDescription, const QString &separator,
+			     const QString &type) {
+// Let's first set the appropriate variables.
   int sI = sourceIndex.toInt();
   int tI = targetIndex.toInt();
   int cI = colIndex.toInt();
@@ -620,14 +640,21 @@ void MainDialog::processLoad(const QString &sourceIndex, const QString &targetIn
   relationshipDirection = relDirection;
   relationshipDescription = relDescription;
   sep = separator;
+  codingType = type;
   sourceFilterField->setText("");
   targetFilterField->setText("");
 
   // Then we do an altered version of the start coding process.
   eventSelector->setEnabled(false);
   relationshipDescriber->setEnabled(false);
-  relationshipDirSelector->setEnabled(false);
-  startCodingButton->setEnabled(false);
+  relationshipDirSelector->setEnabled(false); 
+  if (codingType == MANUAL) {
+    startCodingButton->setEnabled(false);
+    startAssistedCodingButton->setEnabled(false);
+  } else if (codingType == ASSISTED) {
+    setLinkButton->setEnabled(true);
+    unsetLinkButton->setEnabled(true);
+  }
   updateTexts(); 
   updateIndexIndicators();
   leftSelector->clear();
@@ -652,7 +679,6 @@ void MainDialog::processLoad(const QString &sourceIndex, const QString &targetIn
   eventSelector->blockSignals(true);
   eventSelector->setCurrentIndex(tempIndex);
   eventSelector->blockSignals(false);
-  
   setWorkButtons(true);
 
   QDateTime time = QDateTime::currentDateTime();
@@ -675,11 +701,13 @@ void MainDialog::setEventColumn(const QString &selection) {
     }
     if (relationshipDescription != "") {
       startCodingButton->setEnabled(true);
+      startAssistedCodingButton->setEnabled(true);
     }
   } else {
     relationshipDirSelector->setEnabled(false);
     relationshipDescriber->setEnabled(false);
     startCodingButton->setEnabled(false);
+    startAssistedCodingButton->setEnabled(false);
   }
 }
 
@@ -690,6 +718,7 @@ void MainDialog::setRelationshipDirection(const QString &selection) {
   } else {
     relationshipDescriber->setEnabled(false);
     startCodingButton->setEnabled(false);
+    startAssistedCodingButton->setEnabled(false);
   }
 }
 
@@ -700,13 +729,16 @@ void MainDialog::checkRelationshipDescription(const QString &text) {
     QString relText = "--[" + relationshipDescription + "]-->";
     relationshipReporter->setText(relText);
     startCodingButton->setEnabled(true);
+    startAssistedCodingButton->setEnabled(true);
   } else {
     startCodingButton->setEnabled(false);
+    startAssistedCodingButton->setEnabled(false);
     relationshipReporter->setText("");
   }
 }
 
 void MainDialog::startCoding() {
+  codingType = MANUAL;
   /* 
      We first deactivate some controls that should not be changed during the coding process.
      This means, unfortunately, that the user has to start over when (s)he wishes to change something.
@@ -716,6 +748,10 @@ void MainDialog::startCoding() {
   relationshipDirSelector->setEnabled(false);
   relationshipDescriber->setEnabled(false);
   startCodingButton->setEnabled(false);
+  setLinkButton->setEnabled(true);
+  if (codingType == ASSISTED) {
+    unsetLinkButton->setEnabled(true);
+  }
   // Let's initialize some of the indexes we are working with.
   leftColumnIndex = 0;
   rightColumnIndex = 0;
@@ -744,7 +780,48 @@ void MainDialog::startCoding() {
   setWorkButtons(true);
   QDateTime time = QDateTime::currentDateTime();
   QString timeText = time.toString(Qt::TextDate);
-  QString newLog = timeText + " - " + "started new session with [" + relationshipDirection + "], and " + "[" + relationshipDescription + "]" ;
+  QString newLog = timeText + " - " + "started new fully manual session with [" + relationshipDirection + "], and " + "[" + relationshipDescription + "]" ;
+  logger->addToLog(newLog);
+}
+
+void MainDialog::startAssistedCoding() {
+  codingType = ASSISTED;
+  eventSelector->setEnabled(false);
+  relationshipDirSelector->setEnabled(false);
+  relationshipDescriber->setEnabled(false);
+  startCodingButton->setEnabled(false);
+  // Let's initialize some of the indexes we are working with.
+  leftColumnIndex = 0;
+  rightColumnIndex = 0;
+  sourceRowIndex = 0;
+  targetRowIndex = 0;
+  // The column index can be set immediately.
+  for (std::vector <std::string>::size_type i = 0; i != dataInterface->header.size(); i++) {
+    if (dataInterface->header[i] == selectedEventColumn.toStdString()) {
+      columnIndex = i;
+      break;
+    }
+  }
+  // What follows should depend on the direction of the relationship that was set.
+  if (relationshipDirection == RELPAST) {
+    // First we set the indexes of the source and target events
+    sourceRowIndex = 1; // Should be the second event.
+    targetRowIndex = 0; // Should be the first event.
+  } else if (relationshipDirection == RELFUTURE && codingType == MANUAL) {
+    // The sourceRowIndex is already set to 0, and we need to be at the beginning, so no change is required.
+    targetRowIndex = sourceRowIndex + 1;
+  } else if (relationshipDirection == RELFUTURE && codingType == ASSISTED) {
+    sourceRowIndex = dataInterface->rowData.size() - 2;
+    targetRowIndex = sourceRowIndex + 1;
+  }
+  updateTexts(); // We update all text
+  updateIndexIndicators(); // We also update the indicators (for users) of where in the dataset we are.
+  // Labels of columns with additional info.
+  // Now we want to give the user control over what happens next.
+  setWorkButtons(true);
+  QDateTime time = QDateTime::currentDateTime();
+  QString timeText = time.toString(Qt::TextDate);
+  QString newLog = timeText + " - " + "started new assisted session with [" + relationshipDirection + "], and " + "[" + relationshipDescription + "]" ;
   logger->addToLog(newLog);
 }
 
@@ -1138,8 +1215,16 @@ void MainDialog::updateTexts() {
   rightSelector->setCurrentIndex(index);
   if (dataInterface->linkages[sourceRowIndex][targetRowIndex] == true) {
     linkLabel->setText("<b>Linked</b>");
+    if (codingType == MANUAL) {
+      setLinkButton->setEnabled(false);
+      unsetLinkButton->setEnabled(true);
+    }
   } else {
     linkLabel->setText("");
+    if (codingType == MANUAL) {
+      setLinkButton->setEnabled(true);
+      unsetLinkButton->setEnabled(false);
+    }
   }
   std::vector<bool>::size_type currentRow = sourceRowIndex;
   if (dataInterface->flagIndex[currentRow] == true) {
@@ -1172,27 +1257,95 @@ void MainDialog::updateTexts() {
   memoText->blockSignals(false);
 }
 
-void MainDialog::toggleLink() {
+void MainDialog::setLink() {
   std::vector<std::vector <bool> >::size_type linkRow = sourceRowIndex;
   std::vector <bool>::size_type linkCol = targetRowIndex;
-  dataInterface->linkages[sourceRowIndex][targetRowIndex] =
-    !dataInterface->linkages[sourceRowIndex][targetRowIndex];
-  if (dataInterface->linkages[sourceRowIndex][targetRowIndex] == true) {
-    linkLabel->setText("<b>Linked</b>");
-    QDateTime time = QDateTime::currentDateTime();
-    QString timeText = time.toString(Qt::TextDate);
-    QString newLog = timeText + " - " + "new link created between (as seen by user): " +
-      eventsLabelLeft->text() + " and " + eventsLabelRight->text() + ", and as stored in machine: " +
-      "source: " + QString::number(sourceRowIndex) + " and target: " + QString::number(targetRowIndex);
+  if (codingType ==  MANUAL) {
+    setLinkButton->setEnabled(false);
+    unsetLinkButton->setEnabled(true);
+  }
+  dataInterface->linkages[sourceRowIndex][targetRowIndex] = true;
+  linkLabel->setText("<b>Linked</b>");
+  QDateTime time = QDateTime::currentDateTime();
+  QString timeText = time.toString(Qt::TextDate);
+  QString newLog = timeText + " - " + "new link created between (as seen by user): " +
+    eventsLabelLeft->text() + " and " + eventsLabelRight->text() + ", and as stored in machine: " +
+    "source: " + QString::number(sourceRowIndex) + " and target: " + QString::number(targetRowIndex);
   logger->addToLog(newLog);
-  } else {
-    linkLabel->setText("");
-    QDateTime time = QDateTime::currentDateTime();
-    QString timeText = time.toString(Qt::TextDate);
-    QString newLog = timeText + " - " + "link removed between (as seen by user): " +
-      eventsLabelLeft->text() + " and " + eventsLabelRight->text() + ", and as stored in machine: " +
-      "source: " + QString::number(sourceRowIndex) + " and target: " + QString::number(targetRowIndex);
-    logger->addToLog(newLog);
+  qApp->processEvents();
+  if (codingType == ASSISTED && relationshipDirection == RELPAST) {
+    // TODO
+  } else if (codingType == ASSISTED && relationshipDirection == RELFUTURE) {
+    std::vector<std::vector <bool> >::size_type currentTarget = targetRowIndex;
+    if (currentTarget != dataInterface->rowData.size() - 1) {
+      for (std::vector<std::vector <bool> >::size_type i = currentTarget + 1; i != dataInterface->rowData.size() - 1; i++) {
+	if (dataInterface->linkages[currentTarget][i] == false) {
+	  for (std::vector
+	  targetRowIndex = i;
+	  std::chrono::milliseconds timespan(500); 
+	  std::this_thread::sleep_for(timespan);
+	  updateIndexIndicators();
+	  updateTexts();
+	  return;
+	} 
+      }
+      if (sourceRowIndex != 0) {
+	std::chrono::milliseconds timespan(500); 
+	std::this_thread::sleep_for(timespan);
+	sourceRowIndex--;
+	targetRowIndex = sourceRowIndex + 1;
+	updateIndexIndicators();
+	updateTexts();
+      }
+    } else {
+      if (sourceRowIndex != 0) {
+	std::chrono::milliseconds timespan(500); 
+	std::this_thread::sleep_for(timespan);
+	sourceRowIndex--;
+	targetRowIndex = sourceRowIndex + 1;
+	updateIndexIndicators();
+	updateTexts();
+      }
+    }
+  } 
+}
+
+void MainDialog::unsetLink() {
+  std::vector<std::vector <bool> >::size_type linkRow = sourceRowIndex;
+  std::vector <bool>::size_type linkCol = targetRowIndex;
+
+  if (codingType == MANUAL) {
+    setLinkButton->setEnabled(true);
+    unsetLinkButton->setEnabled(false);
+  }
+  dataInterface->linkages[sourceRowIndex][targetRowIndex] = false;
+  linkLabel->setText("");
+  QDateTime time = QDateTime::currentDateTime();
+  QString timeText = time.toString(Qt::TextDate);
+  QString newLog = timeText + " - " + "link removed between (as seen by user): " +
+    eventsLabelLeft->text() + " and " + eventsLabelRight->text() + ", and as stored in machine: " +
+    "source: " + QString::number(sourceRowIndex) + " and target: " + QString::number(targetRowIndex);
+  logger->addToLog(newLog);
+  if (codingType == ASSISTED && relationshipDirection == RELPAST) {
+    // TODO
+  } else if (codingType == ASSISTED && relationshipDirection == RELFUTURE) {
+    std::vector<std::vector <bool> >::size_type currentTarget = targetRowIndex;
+    if (currentTarget != dataInterface->rowData.size() - 1) {
+      targetRowIndex++;
+      std::chrono::milliseconds timespan(500); 
+      std::this_thread::sleep_for(timespan);
+      updateIndexIndicators();
+      updateTexts();
+      return;
+    }  
+    if (sourceRowIndex != 0) {
+      std::chrono::milliseconds timespan(500); 
+      std::this_thread::sleep_for(timespan);
+      sourceRowIndex--;
+      targetRowIndex = sourceRowIndex + 1;
+      updateIndexIndicators();
+      updateTexts();
+    } 
   }
 }
 
@@ -1233,7 +1386,6 @@ void MainDialog::setWorkButtons(const bool status) {
   saveSessionButton->setEnabled(status);
   nextTargetButton->setEnabled(status);
   prevTargetButton->setEnabled(status);
-  toggleLinkButton->setEnabled(status);
   nextSourceButton->setEnabled(status);
   prevSourceButton->setEnabled(status);
   prevLeftColumnButton->setEnabled(status);

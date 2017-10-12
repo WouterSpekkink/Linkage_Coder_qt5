@@ -58,6 +58,8 @@ const std::string DataInterface::RELDESC_BEGIN = "<relationship_description>";
 const std::string DataInterface::RELDESC_END = "</relationship_description>";
 const std::string DataInterface::SEP_BEGIN = "<sep>";
 const std::string DataInterface::SEP_END = "</sep>";
+const std::string DataInterface::CODINGTYPE_BEGIN = "<coding_type>";
+const std::string DataInterface::CODINGTYPE_END = "</coding_type>";
 const std::string DataInterface::CODED_BEGIN = "<coded_linkages>";
 const std::string DataInterface::CODED_END = "</coded_linkages>"; // LAST ONE SO NO NEWLINE
 const std::string DataInterface::ROW_PART_2 = "<row_";
@@ -207,6 +209,7 @@ void DataInterface::readFile(const QString &fileName, const QString &sep)
 }
 
 void DataInterface::writeSave(const QString &fileName,
+			      const QString &type,
 			      std::vector<std::vector <std::string> >::size_type sourceRowIndex,
 			      std::vector<std::vector <std::string> >::size_type targetRowIndex,
 			      std::vector<std::string>::size_type columnIndex,
@@ -228,6 +231,7 @@ void DataInterface::writeSave(const QString &fileName,
   const std::string relDirection = relationshipDirection.toStdString();
   const std::string relDescription = relationshipDescription.toStdString();
   const std::string separator = sep.toStdString();
+  const std::string codingType = type.toStdString();
 
   // Let's then set up our save file.
   std::ofstream fileOut(saveFile.c_str());
@@ -277,6 +281,7 @@ void DataInterface::writeSave(const QString &fileName,
   fileOut << RELDIR_BEGIN << "\n" << relDirection << "\n" << RELDIR_END << "\n";
   fileOut << RELDESC_BEGIN << "\n" << relDescription << "\n" << RELDESC_END << "\n";
   fileOut << SEP_BEGIN << "\n" << separator << "\n" << SEP_END << "\n";
+  fileOut << CODINGTYPE_BEGIN << "\n" << codingType << "\n" << CODINGTYPE_END << "\n";
 							       
   // Next, we will write the linkages that the user has coded so far.
   fileOut << CODED_BEGIN << "\n";
@@ -365,12 +370,13 @@ void DataInterface::readSave(const QString &fileName) {
   std::string relDirection;
   std::string relDescription;
   std::string separator;
+  std::string type;
 
   // Set up an file instream for the input file.
   std::ifstream myFile (loadFile.c_str());
   
   // We use this to identify the field that we are in.
-  enum FieldStatus {none, imported, source, target, column, reldir, reldesc, sep, coded, memosfield, flagsfield};
+  enum FieldStatus {none, imported, source, target, column, reldir, reldesc, sep, codingtype, coded, memosfield, flagsfield};
   FieldStatus field = none;
 
   /* 
@@ -423,6 +429,10 @@ void DataInterface::readSave(const QString &fileName) {
     } else if (buffer == SEP_BEGIN) {
       field = sep;
     } else if (buffer == SEP_END) {
+      field = none;
+    } else if (buffer == CODINGTYPE_BEGIN) {
+      field = codingtype;
+    } else if (buffer == CODINGTYPE_END) {
       field = none;
     } else if (buffer == CODED_BEGIN) {
       field = coded;
@@ -509,6 +519,10 @@ void DataInterface::readSave(const QString &fileName) {
 	if (buffer != SEP_BEGIN) separator = buffer;
 	break;
       }
+    case codingtype:
+      {
+	if (buffer != CODINGTYPE_BEGIN) type = buffer;
+      }
     case coded:
       {
 	if (buffer[0] == '<' && buffer.substr(0,2) != "</") {
@@ -589,8 +603,9 @@ void DataInterface::readSave(const QString &fileName) {
     QString rDi = QString::fromStdString(relDirection);
     QString rDe = QString::fromStdString(relDescription);
     QString qS = QString::fromStdString(separator);
+    QString cT = QString::fromStdString(type);
     
-    emit loadFinished(sI, tI, cI, rDi, rDe, qS); 
+    emit loadFinished(sI, tI, cI, rDi, rDe, qS, cT); 
   }
 }
 
