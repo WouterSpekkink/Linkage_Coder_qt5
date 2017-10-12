@@ -85,7 +85,7 @@ MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
   writeLinkagesButton = new QPushButton(tr("Export linkages"));
   writeLinkagesButton->setEnabled(false);
   compareCodingButton = new QPushButton(tr("Compare coding"));
-  eventSelectorLabel = new QLabel(tr("Column with incident descriptions:"));
+  eventSelectorLabel = new QLabel(tr("Incident descriptions:"));
   eventSelector = new QComboBox(this); // Combobox to select the column with the event descriptions.
   eventSelector->addItem(EVENTDEFAULT); // The other options will be added later.
   eventSelector->setEnabled(false); // This is initially disabled.
@@ -749,9 +749,6 @@ void MainDialog::startCoding() {
   relationshipDescriber->setEnabled(false);
   startCodingButton->setEnabled(false);
   setLinkButton->setEnabled(true);
-  if (codingType == ASSISTED) {
-    unsetLinkButton->setEnabled(true);
-  }
   // Let's initialize some of the indexes we are working with.
   leftColumnIndex = 0;
   rightColumnIndex = 0;
@@ -795,6 +792,9 @@ void MainDialog::startAssistedCoding() {
   rightColumnIndex = 0;
   sourceRowIndex = 0;
   targetRowIndex = 0;
+  setLinkButton->setEnabled(true);
+  unsetLinkButton->setEnabled(true);
+
   // The column index can be set immediately.
   for (std::vector <std::string>::size_type i = 0; i != dataInterface->header.size(); i++) {
     if (dataInterface->header[i] == selectedEventColumn.toStdString()) {
@@ -1275,41 +1275,64 @@ void MainDialog::setLink() {
   qApp->processEvents();
   if (codingType == ASSISTED && relationshipDirection == RELPAST) {
     // TODO
+
+    // I NEED SOMETHING THAT CAN LOOK AT COMPLETE CHAINS.
   } else if (codingType == ASSISTED && relationshipDirection == RELFUTURE) {
-    std::vector<std::vector <bool> >::size_type currentTarget = targetRowIndex;
-    if (currentTarget != dataInterface->rowData.size() - 1) {
-      for (std::vector<std::vector <bool> >::size_type i = currentTarget + 1; i != dataInterface->rowData.size() - 1; i++) {
-	if (dataInterface->linkages[currentTarget][i] == false) {
-	  for (std::vector
-	  targetRowIndex = i;
-	  std::chrono::milliseconds timespan(500); 
-	  std::this_thread::sleep_for(timespan);
-	  updateIndexIndicators();
-	  updateTexts();
-	  return;
-	} 
-      }
-      if (sourceRowIndex != 0) {
-	std::chrono::milliseconds timespan(500); 
-	std::this_thread::sleep_for(timespan);
-	sourceRowIndex--;
-	targetRowIndex = sourceRowIndex + 1;
-	updateIndexIndicators();
-	updateTexts();
+    std::vector<std::vector<bool>::size_type> ignore;
+    if (targetRowIndex != dataInterface->rowData.size() - 1) {
+      findFuturePaths(&ignore, targetRowIndex);
+      std::vector<std::vector<bool>::size_type>::iterator it;
+      for (std::vector<bool>::size_type i = targetRowIndex + 1; i != dataInterface->rowData.size(); i++) {
+	bool found = false;
+	for (it = ignore.begin(); it != ignore.end(); it++) {
+	  if (*it == i) {
+	    found = true;
+	  }
+	}
+	if (!found) {
+	  if (targetRowIndex != dataInterface->rowData.size() - 1) {
+	    targetRowIndex = i;
+	    std::chrono::milliseconds timespan(500); 
+	    std::this_thread::sleep_for(timespan);
+	    updateIndexIndicators();
+	    updateTexts();
+	    return;
+	  } else {
+	    if (sourceRowIndex != 0) {
+	      sourceRowIndex--;
+	      targetRowIndex = sourceRowIndex + 1;
+	      std::chrono::milliseconds timespan(500); 
+	      std::this_thread::sleep_for(timespan);
+	      updateIndexIndicators();
+	      updateTexts();
+	      return;
+	    }
+	  }
+	} else {
+	  if (sourceRowIndex != 0) {
+	    sourceRowIndex--;
+	    targetRowIndex = sourceRowIndex + 1;
+	    std::chrono::milliseconds timespan(500); 
+	    std::this_thread::sleep_for(timespan);
+	    updateIndexIndicators();
+	    updateTexts();
+	    return;
+	  }
+	}
       }
     } else {
       if (sourceRowIndex != 0) {
-	std::chrono::milliseconds timespan(500); 
-	std::this_thread::sleep_for(timespan);
 	sourceRowIndex--;
 	targetRowIndex = sourceRowIndex + 1;
+	std::chrono::milliseconds timespan(500); 
+	std::this_thread::sleep_for(timespan);
 	updateIndexIndicators();
 	updateTexts();
       }
     }
-  } 
+  }
 }
-
+ 
 void MainDialog::unsetLink() {
   std::vector<std::vector <bool> >::size_type linkRow = sourceRowIndex;
   std::vector <bool>::size_type linkCol = targetRowIndex;
@@ -1329,23 +1352,70 @@ void MainDialog::unsetLink() {
   if (codingType == ASSISTED && relationshipDirection == RELPAST) {
     // TODO
   } else if (codingType == ASSISTED && relationshipDirection == RELFUTURE) {
-    std::vector<std::vector <bool> >::size_type currentTarget = targetRowIndex;
-    if (currentTarget != dataInterface->rowData.size() - 1) {
-      targetRowIndex++;
-      std::chrono::milliseconds timespan(500); 
-      std::this_thread::sleep_for(timespan);
-      updateIndexIndicators();
-      updateTexts();
-      return;
-    }  
-    if (sourceRowIndex != 0) {
-      std::chrono::milliseconds timespan(500); 
-      std::this_thread::sleep_for(timespan);
-      sourceRowIndex--;
-      targetRowIndex = sourceRowIndex + 1;
-      updateIndexIndicators();
-      updateTexts();
-    } 
+    std::vector<std::vector<bool>::size_type> ignore;
+    if (targetRowIndex != dataInterface->rowData.size() - 1) {
+      findFuturePaths(&ignore, sourceRowIndex);
+      std::vector<std::vector<bool>::size_type>::iterator it;
+      for (std::vector<bool>::size_type i = targetRowIndex + 1; i != dataInterface->rowData.size(); i++) {
+	bool found = false;
+	for (it = ignore.begin(); it != ignore.end(); it++) {
+	  if (*it == i) {
+	    found = true;
+	  }
+	}
+	if (!found) {
+	  if (targetRowIndex != dataInterface->rowData.size() - 1) {
+	    targetRowIndex = i;
+	    std::chrono::milliseconds timespan(500); 
+	    std::this_thread::sleep_for(timespan);
+	    updateIndexIndicators();
+	    updateTexts();
+	    return;
+	  } else {
+	    if (sourceRowIndex != 0) {
+	      sourceRowIndex--;
+	      targetRowIndex = sourceRowIndex + 1;
+	      std::chrono::milliseconds timespan(500); 
+	      std::this_thread::sleep_for(timespan);
+	      updateIndexIndicators();
+	      updateTexts();
+	      return;
+	    }
+	  }
+	} else {
+	  if (sourceRowIndex != 0) {
+	    sourceRowIndex--;
+	    targetRowIndex = sourceRowIndex + 1;
+	    std::chrono::milliseconds timespan(500); 
+	    std::this_thread::sleep_for(timespan);
+	    updateIndexIndicators();
+	    updateTexts();
+	    return;
+	  }
+	}
+      }
+    } else {
+      if (sourceRowIndex != 0) {
+	sourceRowIndex--;
+	targetRowIndex = sourceRowIndex + 1;
+	std::chrono::milliseconds timespan(500); 
+	std::this_thread::sleep_for(timespan);
+	updateIndexIndicators();
+	updateTexts();
+      }
+    }
+  }
+}
+
+// I should write a recursive function that finds the existing chains
+void MainDialog::findFuturePaths (std::vector<std::vector<bool>::size_type> *pIgnore,  std::vector<bool>::size_type currentEvent) {
+  for (std::vector<bool>::size_type i = currentEvent + 1; i != dataInterface->rowData.size(); i++) {
+    if (dataInterface->linkages[currentEvent][i] == true) {
+      pIgnore->push_back(i);
+      if (i != dataInterface->rowData.size() - 1) {
+	findFuturePaths(pIgnore, i);
+      }
+    }
   }
 }
 
