@@ -650,10 +650,12 @@ void MainDialog::processLoad(const QString &sourceIndex, const QString &targetIn
   relationshipDirSelector->setEnabled(false); 
   if (codingType == MANUAL) {
     startCodingButton->setEnabled(false);
-    startAssistedCodingButton->setEnabled(false);
+    startAssistedCodingButton->setEnabled(true);
   } else if (codingType == ASSISTED) {
     setLinkButton->setEnabled(true);
     unsetLinkButton->setEnabled(true);
+    startCodingButton->setEnabled(true);
+    startAssistedCodingButton->setEnabled(false);
   }
   updateTexts(); 
   updateIndexIndicators();
@@ -679,6 +681,17 @@ void MainDialog::processLoad(const QString &sourceIndex, const QString &targetIn
   eventSelector->blockSignals(true);
   eventSelector->setCurrentIndex(tempIndex);
   eventSelector->blockSignals(false);
+
+  if (codingType == MANUAL) {
+    startCodingButton->setEnabled(false);
+    startAssistedCodingButton->setEnabled(true);
+  } else if (codingType == ASSISTED) {
+    setLinkButton->setEnabled(true);
+    unsetLinkButton->setEnabled(true);
+    startCodingButton->setEnabled(true);
+    startAssistedCodingButton->setEnabled(false);
+  }
+
   setWorkButtons(true);
 
   QDateTime time = QDateTime::currentDateTime();
@@ -688,7 +701,6 @@ void MainDialog::processLoad(const QString &sourceIndex, const QString &targetIn
     eventsLabelLeft->text() + " and " + eventsLabelRight->text() + ", and with indexes (as stored in machine): " +
     "source: " + QString::number(sourceRowIndex) + " and target: " + QString::number(targetRowIndex);
   logger->addToLog(newLog);
-  
 }
 
 void MainDialog::setEventColumn(const QString &selection) {
@@ -737,6 +749,27 @@ void MainDialog::checkRelationshipDescription(const QString &text) {
   }
 }
 
+void MainDialog::switchToManual() {
+  codingType = MANUAL;
+  startCodingButton->setEnabled(false);
+  startAssistedCodingButton->setEnabled(true);
+  if (dataInterface->linkages[sourceRowIndex][targetRowIndex] == true) {
+    setLinkButton->setEnabled(false);
+    unsetLinkButton->setEnabled(true);
+  } else {
+    setLinkButton->setEnabled(true);
+    unsetLinkButton->setEnabled(false);
+  }
+}
+
+void MainDialog::switchToAssisted() {
+  codingType = ASSISTED;
+  startCodingButton->setEnabled(true);
+  startAssistedCodingButton->setEnabled(false);
+  setLinkButton->setEnabled(true);
+  unsetLinkButton->setEnabled(true);
+}
+
 void MainDialog::startCoding() {
   codingType = MANUAL;
   /* 
@@ -748,6 +781,11 @@ void MainDialog::startCoding() {
   relationshipDirSelector->setEnabled(false);
   relationshipDescriber->setEnabled(false);
   startCodingButton->setEnabled(false);
+  startAssistedCodingButton->setEnabled(true);
+  startCodingButton->disconnect();
+  startAssistedCodingButton->disconnect();
+  connect(startCodingButton, SIGNAL(clicked()), this, SLOT(switchToManual()));
+  connect(startAssistedCodingButton, SIGNAL(clicked()), this, SLOT(switchToAssisted()));
   setLinkButton->setEnabled(true);
   // Let's initialize some of the indexes we are working with.
   leftColumnIndex = 0;
@@ -786,7 +824,8 @@ void MainDialog::startAssistedCoding() {
   eventSelector->setEnabled(false);
   relationshipDirSelector->setEnabled(false);
   relationshipDescriber->setEnabled(false);
-  startCodingButton->setEnabled(false);
+  startCodingButton->setEnabled(true);
+  startAssistedCodingButton->setEnabled(false);
   // Let's initialize some of the indexes we are working with.
   leftColumnIndex = 0;
   rightColumnIndex = 0;
@@ -794,7 +833,11 @@ void MainDialog::startAssistedCoding() {
   targetRowIndex = 0;
   setLinkButton->setEnabled(true);
   unsetLinkButton->setEnabled(true);
-
+  startCodingButton->disconnect();
+  startAssistedCodingButton->disconnect();
+  connect(startCodingButton, SIGNAL(clicked()), this, SLOT(switchToManual()));
+  connect(startAssistedCodingButton, SIGNAL(clicked()), this, SLOT(switchToAssisted()));
+  
   // The column index can be set immediately.
   for (std::vector <std::string>::size_type i = 0; i != dataInterface->header.size(); i++) {
     if (dataInterface->header[i] == selectedEventColumn.toStdString()) {
@@ -1305,6 +1348,18 @@ void MainDialog::setLink() {
 	      return;
 	    }
 	  }
+	} else {
+	  if (i == 0) {
+	    if (sourceRowIndex != dataInterface->rowData.size() - 1) {
+	      sourceRowIndex++;
+	      targetRowIndex = sourceRowIndex - 1;
+	      std::chrono::milliseconds timespan(500); 
+	      std::this_thread::sleep_for(timespan);
+	      updateIndexIndicators();
+	      updateTexts();
+	      return;
+	    }
+	  }
 	}
 	if (i == 0) {
 	  finished = true;
@@ -1342,6 +1397,18 @@ void MainDialog::setLink() {
 	    updateTexts();
 	    return;
 	  } else {
+	    if (sourceRowIndex != 0) {
+	      sourceRowIndex--;
+	      targetRowIndex = sourceRowIndex + 1;
+	      std::chrono::milliseconds timespan(500); 
+	      std::this_thread::sleep_for(timespan);
+	      updateIndexIndicators();
+	      updateTexts();
+	      return;
+	    }
+	  }
+	} else {
+	  if (i == dataInterface->rowData.size() - 1) {
 	    if (sourceRowIndex != 0) {
 	      sourceRowIndex--;
 	      targetRowIndex = sourceRowIndex + 1;
