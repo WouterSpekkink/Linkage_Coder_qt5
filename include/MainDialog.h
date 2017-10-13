@@ -118,6 +118,7 @@ private slots:
   void previousTargetFiltered();
   void nextTargetFiltered();
   void findFuturePaths(std::vector<std::vector<bool>::size_type> *pIgnore, std::vector<bool>::size_type currentEvent);
+  void findPastPaths(std::vector<std::vector<bool>::size_type> *pIgnore, std::vector<bool>::size_type currentEvent);
   
 private:
   QPointer<DataInterface> dataInterface;

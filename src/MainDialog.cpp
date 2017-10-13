@@ -112,16 +112,16 @@ MainDialog::MainDialog(QWidget *parent) : QDialog(parent) {
   eventsLabelMiddle = new QLabel(tr("<b>Incidents to be linked<b>"));
   eventsLabelRight = new QLabel(tr("<b>Target<b>"));
   sourceFlagLabel = new QLabel("");
-  toggleSourceFlagButton = new QPushButton("Toggle flag for source");
-  nextSourceFlagButton = new QPushButton("Next flagged source");
-  prevSourceFlagButton = new QPushButton("Prev. flagged source");
+  toggleSourceFlagButton = new QPushButton("Toggle flag");
+  nextSourceFlagButton = new QPushButton("Next flagged");
+  prevSourceFlagButton = new QPushButton("Prev. flagged");
   toggleSourceFlagButton->setEnabled(false);
   nextSourceFlagButton->setEnabled(false);
   prevSourceFlagButton->setEnabled(false);
   targetFlagLabel = new QLabel("");
-  toggleTargetFlagButton = new QPushButton("Toggle flag for target");
-  nextTargetFlagButton = new QPushButton("Next flagged target");
-  prevTargetFlagButton = new QPushButton("Prev. flagged target");
+  toggleTargetFlagButton = new QPushButton("Toggle flag");
+  nextTargetFlagButton = new QPushButton("Next flagged");
+  prevTargetFlagButton = new QPushButton("Prev. flagged");
   toggleTargetFlagButton->setEnabled(false);
   nextTargetFlagButton->setEnabled(false);
   prevTargetFlagButton->setEnabled(false);
@@ -1274,9 +1274,53 @@ void MainDialog::setLink() {
   logger->addToLog(newLog);
   qApp->processEvents();
   if (codingType == ASSISTED && relationshipDirection == RELPAST) {
-    // TODO
-
-    // I NEED SOMETHING THAT CAN LOOK AT COMPLETE CHAINS.
+    std::vector<std::vector<bool>::size_type> ignore;
+    if (targetRowIndex != 0) {
+      findPastPaths(&ignore, targetRowIndex);
+      std::vector<std::vector<bool>::size_type>::iterator it;
+      bool finished = false;
+      for (std::vector<bool>::size_type i = targetRowIndex - 1; !finished; i--) {
+	bool found = false;
+	for (it = ignore.begin(); it != ignore.end(); it++) {
+	  if (*it == i) {
+	    found = true;
+	  }
+	}
+	if (!found) {
+	  if (targetRowIndex != 0) {
+	    targetRowIndex = i;
+	    std::chrono::milliseconds timespan(500); 
+	    std::this_thread::sleep_for(timespan);
+	    updateIndexIndicators();
+	    updateTexts();
+	    return;
+	  } else {
+	    if (sourceRowIndex != dataInterface->rowData.size() - 1) {
+	      sourceRowIndex++;
+	      targetRowIndex = sourceRowIndex - 1;
+	      std::chrono::milliseconds timespan(500); 
+	      std::this_thread::sleep_for(timespan);
+	      updateIndexIndicators();
+	      updateTexts();
+	      return;
+	    }
+	  }
+	}
+	if (i == 0) {
+	  finished = true;
+	}
+      }
+    } else {
+      if (sourceRowIndex != dataInterface->rowData.size() - 1) {
+	sourceRowIndex++;
+	targetRowIndex = sourceRowIndex - 1;
+	std::chrono::milliseconds timespan(500); 
+	std::this_thread::sleep_for(timespan);
+	updateIndexIndicators();
+	updateTexts();
+	return;
+      } 
+    }
   } else if (codingType == ASSISTED && relationshipDirection == RELFUTURE) {
     std::vector<std::vector<bool>::size_type> ignore;
     if (targetRowIndex != dataInterface->rowData.size() - 1) {
@@ -1308,16 +1352,6 @@ void MainDialog::setLink() {
 	      return;
 	    }
 	  }
-	} else {
-	  if (sourceRowIndex != 0) {
-	    sourceRowIndex--;
-	    targetRowIndex = sourceRowIndex + 1;
-	    std::chrono::milliseconds timespan(500); 
-	    std::this_thread::sleep_for(timespan);
-	    updateIndexIndicators();
-	    updateTexts();
-	    return;
-	  }
 	}
       }
     } else {
@@ -1336,7 +1370,6 @@ void MainDialog::setLink() {
 void MainDialog::unsetLink() {
   std::vector<std::vector <bool> >::size_type linkRow = sourceRowIndex;
   std::vector <bool>::size_type linkCol = targetRowIndex;
-
   if (codingType == MANUAL) {
     setLinkButton->setEnabled(true);
     unsetLinkButton->setEnabled(false);
@@ -1350,7 +1383,63 @@ void MainDialog::unsetLink() {
     "source: " + QString::number(sourceRowIndex) + " and target: " + QString::number(targetRowIndex);
   logger->addToLog(newLog);
   if (codingType == ASSISTED && relationshipDirection == RELPAST) {
-    // TODO
+    std::vector<std::vector<bool>::size_type> ignore;
+    if (targetRowIndex != 0) {
+      findPastPaths(&ignore, sourceRowIndex);
+      std::vector<std::vector<bool>::size_type>::iterator it;
+      bool finished = false;
+      for (std::vector<bool>::size_type i = targetRowIndex - 1; !finished; i--) {
+	bool found = false;
+	for (it = ignore.begin(); it != ignore.end(); it++) {
+	  if (*it == i) {
+	    found = true;
+	  }
+	}
+	if (!found) {
+	  if (targetRowIndex != 0) {
+	    targetRowIndex = i;
+	    std::chrono::milliseconds timespan(500); 
+	    std::this_thread::sleep_for(timespan);
+	    updateIndexIndicators();
+	    updateTexts();
+	    return;
+	  } else {
+	    if (sourceRowIndex != dataInterface->rowData.size() - 1) {
+	      sourceRowIndex++;
+	      targetRowIndex = sourceRowIndex - 1;
+	      std::chrono::milliseconds timespan(500); 
+	      std::this_thread::sleep_for(timespan);
+	      updateIndexIndicators();
+	      updateTexts();
+	      return;
+	    }
+	  }
+	} else {
+	  if (sourceRowIndex != dataInterface->rowData.size() - 1) {
+	    sourceRowIndex++;
+	    targetRowIndex = sourceRowIndex - 1;
+	    std::chrono::milliseconds timespan(500); 
+	    std::this_thread::sleep_for(timespan);
+	    updateIndexIndicators();
+	    updateTexts();
+	    return;
+	  }
+	}
+	if (i == 0) {
+	  finished = true;
+	}
+      }
+    } else {
+      if (sourceRowIndex != dataInterface->rowData.size() - 1) {
+	sourceRowIndex++;
+	targetRowIndex = sourceRowIndex - 1;
+	std::chrono::milliseconds timespan(500); 
+	std::this_thread::sleep_for(timespan);
+	updateIndexIndicators();
+	updateTexts();
+	return;
+      }
+    }
   } else if (codingType == ASSISTED && relationshipDirection == RELFUTURE) {
     std::vector<std::vector<bool>::size_type> ignore;
     if (targetRowIndex != dataInterface->rowData.size() - 1) {
@@ -1408,13 +1497,28 @@ void MainDialog::unsetLink() {
 }
 
 // I should write a recursive function that finds the existing chains
-void MainDialog::findFuturePaths (std::vector<std::vector<bool>::size_type> *pIgnore,  std::vector<bool>::size_type currentEvent) {
+void MainDialog::findFuturePaths(std::vector<std::vector<bool>::size_type> *pIgnore,  std::vector<bool>::size_type currentEvent) {
   for (std::vector<bool>::size_type i = currentEvent + 1; i != dataInterface->rowData.size(); i++) {
     if (dataInterface->linkages[currentEvent][i] == true) {
       pIgnore->push_back(i);
       if (i != dataInterface->rowData.size() - 1) {
 	findFuturePaths(pIgnore, i);
       }
+    }
+  }
+}
+
+void MainDialog::findPastPaths(std::vector<std::vector<bool>::size_type> *pIgnore, std::vector<bool>::size_type currentEvent) {
+  bool finished = false;
+  for (std::vector<bool>::size_type i = currentEvent - 1; !finished; i--) {
+    if (dataInterface->linkages[currentEvent][i] == true) {
+      pIgnore->push_back(i);
+      if (i != 0) {
+	findPastPaths(pIgnore, i);
+      }
+    }
+    if (i == 0) {
+      finished = true;
     }
   }
 }
