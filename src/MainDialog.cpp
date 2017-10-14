@@ -760,6 +760,10 @@ void MainDialog::switchToManual() {
     setLinkButton->setEnabled(true);
     unsetLinkButton->setEnabled(false);
   }
+  QDateTime time = QDateTime::currentDateTime();
+  QString timeText = time.toString(Qt::TextDate);
+  QString newLog = timeText + " - " + "switched to manual coding";
+  logger->addToLog(newLog);
 }
 
 void MainDialog::switchToAssisted() {
@@ -768,6 +772,10 @@ void MainDialog::switchToAssisted() {
   startAssistedCodingButton->setEnabled(false);
   setLinkButton->setEnabled(true);
   unsetLinkButton->setEnabled(true);
+  QDateTime time = QDateTime::currentDateTime();
+  QString timeText = time.toString(Qt::TextDate);
+  QString newLog = timeText + " - " + "switched to assisted coding";
+  logger->addToLog(newLog);
 }
 
 void MainDialog::startCoding() {
