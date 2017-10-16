@@ -534,6 +534,14 @@ void MainDialog::readNewData() {
   relationshipDescriber->setText("");
   sourceFilterField->setText("");
   targetFilterField->setText("");
+  relationshipDirection = RELDEFAULT;
+  relationshipDirSelector->blockSignals(true);
+  relationshipDirSelector->setCurrentIndex(0);
+  relationshipDirSelector->blockSignals(false);
+  startCodingButton->disconnect();
+  startAssistedCodingButton->disconnect();
+  connect(startCodingButton, SIGNAL(clicked()), this, SLOT(startCoding()));
+  connect(startAssistedCodingButton, SIGNAL(clicked()), this, SLOT(startAssistedCoding()));
 }
 
 /* 

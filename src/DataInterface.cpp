@@ -1202,13 +1202,19 @@ void DataInterface::writeLinkages(const QString &relDescription, QVector<QString
 	std::stringstream ss2;
 	ss2 << counter;
 	counter++;
+	std::string currentR = "r" + ss2.str();
 	std::string currentS = "s" + ss2.str();
 	std::string currentT = "t" + ss2.str();
+	std::string currentLabel = currentS + "---[" + description + "]-->" + currentT;
 
-	cypherOut << "WITH " << ss2.str() << " AS Dummy\n" 
-		  << "MATCH (" << currentS << ":Incident {id: " << i + 1 << "}), ("<< currentT << ":Incident {id: " << j + 1  << "})\n"
-		  << "MERGE (" << currentS << ")-[:HAS_LINKAGE_TO {type: \"" << description << "\", memo: \"" << memo
-		  << "\"}]->(" << currentT << ")\n";
+	cypherOut << "CREATE (" << currentR << ":Incident_Relationship {id: \"" << currentLabel
+		  << "\", type: \"" << description << "\", memo: \"" << memo << "\"})\n\n";
+	
+	cypherOut << "WITH " << currentR << "\n"
+		  << "MATCH (" << currentS << ":Incident {id: " << i + 1 << "}), ("
+		  << currentT << ":Incident {id: " << j + 1  << "})\n"
+		  << "MERGE (" << currentS << ")-[:IS_SOURCE_IN]->(" << currentR << ")\n" 
+		  << "MERGE (" << currentT << ")-[:IS_TARGET_IN]->(" << currentR << ")\n\n";
       }
     }
   }
