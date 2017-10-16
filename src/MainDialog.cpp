@@ -874,8 +874,8 @@ void MainDialog::startAssistedCoding() {
     // The sourceRowIndex is already set to 0, and we need to be at the beginning, so no change is required.
     targetRowIndex = sourceRowIndex + 1;
   } else if (relationshipDirection == RELFUTURE && codingType == ASSISTED) {
-    sourceRowIndex = dataInterface->rowData.size() - 2;
-    targetRowIndex = sourceRowIndex + 1;
+    sourceRowIndex = 0;
+    targetRowIndex = 1;
   }
   updateTexts(); // We update all text
   updateIndexIndicators(); // We also update the indicators (for users) of where in the dataset we are.
@@ -1402,11 +1402,12 @@ void MainDialog::setLink() {
       } 
     }
   } else if (codingType == ASSISTED && relationshipDirection == RELFUTURE) {
-    std::vector<std::vector<bool>::size_type> ignore;
-    if (targetRowIndex != dataInterface->rowData.size() - 1) {
-      findFuturePaths(&ignore, targetRowIndex);
-      std::vector<std::vector<bool>::size_type>::iterator it;
-      for (std::vector<bool>::size_type i = targetRowIndex + 1; i != dataInterface->rowData.size(); i++) {
+    std::vector<std::vector<std::vector<bool>>::size_type> ignore;
+    if (sourceRowIndex != 0) {
+      findFuturePaths(&ignore, sourceRowIndex);
+      std::vector<std::vector<std::vector<bool>>::size_type>::iterator it;
+      bool finished = false;
+      for (std::vector<std::vector<bool>>::size_type i = sourceRowIndex - 1; !finished; i--) {
 	bool found = false;
 	for (it = ignore.begin(); it != ignore.end(); it++) {
 	  if (*it == i) {
@@ -1414,27 +1415,16 @@ void MainDialog::setLink() {
 	  }
 	}
 	if (!found) {
-	  if (targetRowIndex != dataInterface->rowData.size() - 1) {
-	    targetRowIndex = i;
-	    pause(500);
-	    updateIndexIndicators();
-	    updateTexts();
-	    return;
-	  } else {
-	    if (sourceRowIndex != 0) {
-	      sourceRowIndex--;
-	      targetRowIndex = sourceRowIndex + 1;
-	      pause(500);
-	      updateIndexIndicators();
-	      updateTexts();
-	      return;
-	    }
-	  }
+	  sourceRowIndex = i;
+	  pause(500);
+	  updateIndexIndicators();
+	  updateTexts();
+	  return;
 	} else {
-	  if (i == dataInterface->rowData.size() - 1) {
-	    if (sourceRowIndex != 0) {
-	      sourceRowIndex--;
-	      targetRowIndex = sourceRowIndex + 1;
+	  if (i == 0) {
+	    if (targetRowIndex != dataInterface->rowData.size() - 1) {
+	      targetRowIndex++;
+	      sourceRowIndex = targetRowIndex - 1;
 	      pause(500);
 	      updateIndexIndicators();
 	      updateTexts();
@@ -1442,15 +1432,17 @@ void MainDialog::setLink() {
 	    }
 	  }
 	}
+	if (i == 0) {
+	  finished = true;
+	}
       }
     } else {
-      if (sourceRowIndex != 0) {
-	sourceRowIndex--;
-	targetRowIndex = sourceRowIndex + 1;
-	pause(500);
-	updateIndexIndicators();
-	updateTexts();
-      }
+      targetRowIndex++;
+      sourceRowIndex = targetRowIndex - 1;
+      pause(500);
+      updateIndexIndicators();
+      updateTexts();
+      return;
     }
   }
 }
@@ -1525,11 +1517,12 @@ void MainDialog::unsetLink() {
       }
     }
   } else if (codingType == ASSISTED && relationshipDirection == RELFUTURE) {
-    std::vector<std::vector<bool>::size_type> ignore;
-    if (targetRowIndex != dataInterface->rowData.size() - 1) {
-      findFuturePaths(&ignore, sourceRowIndex);
-      std::vector<std::vector<bool>::size_type>::iterator it;
-      for (std::vector<bool>::size_type i = targetRowIndex + 1; i != dataInterface->rowData.size(); i++) {
+   std::vector<std::vector<std::vector<bool>>::size_type> ignore;
+    if (sourceRowIndex != 0) {
+      findFuturePaths(&ignore, targetRowIndex);
+      std::vector<std::vector<std::vector<bool>>::size_type>::iterator it;
+      bool finished = false;
+      for (std::vector<std::vector<bool>>::size_type i = sourceRowIndex - 1; !finished; i--) {
 	bool found = false;
 	for (it = ignore.begin(); it != ignore.end(); it++) {
 	  if (*it == i) {
@@ -1537,53 +1530,48 @@ void MainDialog::unsetLink() {
 	  }
 	}
 	if (!found) {
-	  if (targetRowIndex != dataInterface->rowData.size() - 1) {
-	    targetRowIndex = i;
-	    pause(500);
-	    updateIndexIndicators();
-	    updateTexts();
-	    return;
-	  } else {
-	    if (sourceRowIndex != 0) {
-	      sourceRowIndex--;
-	      targetRowIndex = sourceRowIndex + 1;
-	      pause(500);
-	      updateIndexIndicators();
-	      updateTexts();
-	      return;
-	    }
-	  }
+	  sourceRowIndex = i;
+	  pause(500);
+	  updateIndexIndicators();
+	  updateTexts();
+	  return;
 	} else {
-	  if (sourceRowIndex != 0) {
-	    sourceRowIndex--;
-	    targetRowIndex = sourceRowIndex + 1;
+	  if (targetRowIndex != dataInterface->rowData.size() - 1) {
+	    targetRowIndex++;
+	    sourceRowIndex = targetRowIndex - 1;
 	    pause(500);
 	    updateIndexIndicators();
 	    updateTexts();
 	    return;
 	  }
 	}
+	if (i == 0) {
+	  finished = true;
+	}
       }
     } else {
-      if (sourceRowIndex != 0) {
-	sourceRowIndex--;
-	targetRowIndex = sourceRowIndex + 1;
-	pause(500);
-	updateIndexIndicators();
-	updateTexts();
-      }
+      targetRowIndex++;
+      sourceRowIndex = targetRowIndex - 1;
+      pause(500);
+      updateIndexIndicators();
+      updateTexts();
+      return;
     }
   }
 }
 
 // I should write a recursive function that finds the existing chains
-void MainDialog::findFuturePaths(std::vector<std::vector<bool>::size_type> *pIgnore,  std::vector<bool>::size_type currentEvent) {
-  for (std::vector<bool>::size_type i = currentEvent + 1; i != dataInterface->rowData.size(); i++) {
-    if (dataInterface->linkages[currentEvent][i] == true) {
+void MainDialog::findFuturePaths(std::vector<std::vector<std::vector<bool>>::size_type> *pIgnore, std::vector<std::vector<bool>>::size_type currentEvent) {
+  bool finished = false;
+  for (std::vector<std::vector<bool>>::size_type i = currentEvent - 1; !finished; i--) {
+    if (dataInterface->linkages[i][currentEvent] == true) {
       pIgnore->push_back(i);
-      if (i != dataInterface->rowData.size() - 1) {
+      if (i != 0) {
 	findFuturePaths(pIgnore, i);
       }
+    }
+    if (i == 0) {
+      finished = true;
     }
   }
 }

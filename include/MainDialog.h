@@ -117,7 +117,7 @@ private slots:
   void nextSourceFiltered();
   void previousTargetFiltered();
   void nextTargetFiltered();
-  void findFuturePaths(std::vector<std::vector<bool>::size_type> *pIgnore, std::vector<bool>::size_type currentEvent);
+  void findFuturePaths(std::vector<std::vector<std::vector<bool>>::size_type> *pIgnore, std::vector<std::vector<bool>>::size_type currentEvent);
   void findPastPaths(std::vector<std::vector<bool>::size_type> *pIgnore, std::vector<bool>::size_type currentEvent);
   void switchToManual();
   void switchToAssisted();
