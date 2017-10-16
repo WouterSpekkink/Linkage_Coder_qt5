@@ -39,6 +39,10 @@
 #include <thread>
 #include <chrono>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 // Initializing some constants
 const QString MainDialog::SEPDEFAULT = QString("-Select delimiter-");
 const QString MainDialog::EVENTDEFAULT = QString("-Select column-");
@@ -1316,6 +1320,15 @@ void MainDialog::updateTexts() {
   memoText->blockSignals(false);
 }
 
+void MainDialog::pause(int time) {
+#ifdef __linux__ 
+  std::chrono::milliseconds timespan(time); 
+  std::this_thread::sleep_for(timespan);
+#elif _WIN32
+  Sleep(time);
+#endif
+}
+
 void MainDialog::setLink() {
   std::vector<std::vector <bool> >::size_type linkRow = sourceRowIndex;
   std::vector <bool>::size_type linkCol = targetRowIndex;
@@ -1348,8 +1361,7 @@ void MainDialog::setLink() {
 	if (!found) {
 	  if (targetRowIndex != 0) {
 	    targetRowIndex = i;
-	    std::chrono::milliseconds timespan(500); 
-	    std::this_thread::sleep_for(timespan);
+	    pause(500);
 	    updateIndexIndicators();
 	    updateTexts();
 	    return;
@@ -1357,8 +1369,7 @@ void MainDialog::setLink() {
 	    if (sourceRowIndex != dataInterface->rowData.size() - 1) {
 	      sourceRowIndex++;
 	      targetRowIndex = sourceRowIndex - 1;
-	      std::chrono::milliseconds timespan(500); 
-	      std::this_thread::sleep_for(timespan);
+	      pause(500);
 	      updateIndexIndicators();
 	      updateTexts();
 	      return;
@@ -1369,8 +1380,7 @@ void MainDialog::setLink() {
 	    if (sourceRowIndex != dataInterface->rowData.size() - 1) {
 	      sourceRowIndex++;
 	      targetRowIndex = sourceRowIndex - 1;
-	      std::chrono::milliseconds timespan(500); 
-	      std::this_thread::sleep_for(timespan);
+	      pause(500);
 	      updateIndexIndicators();
 	      updateTexts();
 	      return;
@@ -1385,8 +1395,7 @@ void MainDialog::setLink() {
       if (sourceRowIndex != dataInterface->rowData.size() - 1) {
 	sourceRowIndex++;
 	targetRowIndex = sourceRowIndex - 1;
-	std::chrono::milliseconds timespan(500); 
-	std::this_thread::sleep_for(timespan);
+	pause(500);
 	updateIndexIndicators();
 	updateTexts();
 	return;
@@ -1407,8 +1416,7 @@ void MainDialog::setLink() {
 	if (!found) {
 	  if (targetRowIndex != dataInterface->rowData.size() - 1) {
 	    targetRowIndex = i;
-	    std::chrono::milliseconds timespan(500); 
-	    std::this_thread::sleep_for(timespan);
+	    pause(500);
 	    updateIndexIndicators();
 	    updateTexts();
 	    return;
@@ -1416,8 +1424,7 @@ void MainDialog::setLink() {
 	    if (sourceRowIndex != 0) {
 	      sourceRowIndex--;
 	      targetRowIndex = sourceRowIndex + 1;
-	      std::chrono::milliseconds timespan(500); 
-	      std::this_thread::sleep_for(timespan);
+	      pause(500);
 	      updateIndexIndicators();
 	      updateTexts();
 	      return;
@@ -1428,8 +1435,7 @@ void MainDialog::setLink() {
 	    if (sourceRowIndex != 0) {
 	      sourceRowIndex--;
 	      targetRowIndex = sourceRowIndex + 1;
-	      std::chrono::milliseconds timespan(500); 
-	      std::this_thread::sleep_for(timespan);
+	      pause(500);
 	      updateIndexIndicators();
 	      updateTexts();
 	      return;
@@ -1441,8 +1447,7 @@ void MainDialog::setLink() {
       if (sourceRowIndex != 0) {
 	sourceRowIndex--;
 	targetRowIndex = sourceRowIndex + 1;
-	std::chrono::milliseconds timespan(500); 
-	std::this_thread::sleep_for(timespan);
+	pause(500);
 	updateIndexIndicators();
 	updateTexts();
       }
@@ -1481,8 +1486,7 @@ void MainDialog::unsetLink() {
 	if (!found) {
 	  if (targetRowIndex != 0) {
 	    targetRowIndex = i;
-	    std::chrono::milliseconds timespan(500); 
-	    std::this_thread::sleep_for(timespan);
+	    pause(500);
 	    updateIndexIndicators();
 	    updateTexts();
 	    return;
@@ -1490,8 +1494,7 @@ void MainDialog::unsetLink() {
 	    if (sourceRowIndex != dataInterface->rowData.size() - 1) {
 	      sourceRowIndex++;
 	      targetRowIndex = sourceRowIndex - 1;
-	      std::chrono::milliseconds timespan(500); 
-	      std::this_thread::sleep_for(timespan);
+	      pause(500);
 	      updateIndexIndicators();
 	      updateTexts();
 	      return;
@@ -1501,8 +1504,7 @@ void MainDialog::unsetLink() {
 	  if (sourceRowIndex != dataInterface->rowData.size() - 1) {
 	    sourceRowIndex++;
 	    targetRowIndex = sourceRowIndex - 1;
-	    std::chrono::milliseconds timespan(500); 
-	    std::this_thread::sleep_for(timespan);
+	    pause(500);
 	    updateIndexIndicators();
 	    updateTexts();
 	    return;
@@ -1516,8 +1518,7 @@ void MainDialog::unsetLink() {
       if (sourceRowIndex != dataInterface->rowData.size() - 1) {
 	sourceRowIndex++;
 	targetRowIndex = sourceRowIndex - 1;
-	std::chrono::milliseconds timespan(500); 
-	std::this_thread::sleep_for(timespan);
+	pause(500);
 	updateIndexIndicators();
 	updateTexts();
 	return;
@@ -1538,8 +1539,7 @@ void MainDialog::unsetLink() {
 	if (!found) {
 	  if (targetRowIndex != dataInterface->rowData.size() - 1) {
 	    targetRowIndex = i;
-	    std::chrono::milliseconds timespan(500); 
-	    std::this_thread::sleep_for(timespan);
+	    pause(500);
 	    updateIndexIndicators();
 	    updateTexts();
 	    return;
@@ -1547,8 +1547,7 @@ void MainDialog::unsetLink() {
 	    if (sourceRowIndex != 0) {
 	      sourceRowIndex--;
 	      targetRowIndex = sourceRowIndex + 1;
-	      std::chrono::milliseconds timespan(500); 
-	      std::this_thread::sleep_for(timespan);
+	      pause(500);
 	      updateIndexIndicators();
 	      updateTexts();
 	      return;
@@ -1558,8 +1557,7 @@ void MainDialog::unsetLink() {
 	  if (sourceRowIndex != 0) {
 	    sourceRowIndex--;
 	    targetRowIndex = sourceRowIndex + 1;
-	    std::chrono::milliseconds timespan(500); 
-	    std::this_thread::sleep_for(timespan);
+	    pause(500);
 	    updateIndexIndicators();
 	    updateTexts();
 	    return;
@@ -1570,8 +1568,7 @@ void MainDialog::unsetLink() {
       if (sourceRowIndex != 0) {
 	sourceRowIndex--;
 	targetRowIndex = sourceRowIndex + 1;
-	std::chrono::milliseconds timespan(500); 
-	std::this_thread::sleep_for(timespan);
+	pause(500);
 	updateIndexIndicators();
 	updateTexts();
       }

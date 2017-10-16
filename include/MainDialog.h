@@ -121,6 +121,7 @@ private slots:
   void findPastPaths(std::vector<std::vector<bool>::size_type> *pIgnore, std::vector<bool>::size_type currentEvent);
   void switchToManual();
   void switchToAssisted();
+  void pause(int time);
   
 private:
   QPointer<DataInterface> dataInterface;
