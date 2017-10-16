@@ -8,16 +8,16 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    contentScriptType="text/ecmascript"
-   width="883.77692"
+   width="1292.5897"
    zoomAndPan="magnify"
    contentStyleType="text/css"
-   viewBox="0 -137 883.77692 303.78815"
-   height="303.78815"
+   viewBox="0 -466 1292.5897 611.05243"
+   height="611.05243"
    preserveAspectRatio="xMidYMid meet"
    version="1.1"
    id="svg2"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="Diagram_5.svg">
+   sodipodi:docname="Diagram_6.svg">
   <metadata
      id="metadata68">
     <rdf:RDF>
@@ -45,52 +45,52 @@
      inkscape:window-height="1056"
      id="namedview64"
      showgrid="false"
-     fit-margin-top="5"
-     fit-margin-left="5"
-     fit-margin-right="5"
-     fit-margin-bottom="5"
-     inkscape:zoom="1.0392987"
-     inkscape:cx="526.17145"
-     inkscape:cy="94.211085"
+     fit-margin-top="20"
+     fit-margin-left="20"
+     fit-margin-right="20"
+     fit-margin-bottom="20"
+     inkscape:zoom="0.58656309"
+     inkscape:cx="1043.4555"
+     inkscape:cy="458.31662"
      inkscape:window-x="65"
      inkscape:window-y="24"
      inkscape:window-maximized="1"
      inkscape:current-layer="node-labels" />
   <g
      id="edges"
-     transform="translate(0.59513855,32.754272)">
+     transform="translate(468.34978,19.674713)">
     <path
-       d="M 189.79668,21.810921 119.92079,4.838566"
+       d="M 95.505127,-4.045763 58.775696,73.494949"
        class="id_2 id_1"
        id="path5"
        inkscape:connector-curvature="0"
        style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1" />
     <path
-       d="M 490.10709,-3.517412 319.31473,-64.262276"
+       d="m 241.06006,-230.17061 -73.60588,45.34148"
        class="id_5 id_3"
        id="path7"
        inkscape:connector-curvature="0"
        style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1" />
     <path
-       d="M 492.27091,7.10825 415.09018,78.077736"
+       d="m 246.16864,-225.90161 -38.68837,98.71645"
        class="id_5 id_4"
        id="path9"
        inkscape:connector-curvature="0"
        style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1" />
     <path
-       d="m 591.51398,-66.683067 -74.94599,54.611473"
+       d="m 295.76251,-339.42767 -37.48932,84.99357"
        class="id_6 id_5"
        id="path11"
        inkscape:connector-curvature="0"
        style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1" />
     <path
-       d="M 691.51398,-6.18232 616.56799,-60.793907"
+       d="m 345.52533,-445.6759 -36.78909,78.09597"
        class="id_7 id_6"
        id="path13"
        inkscape:connector-curvature="0"
        style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1" />
     <path
-       d="M 789.86023,-123.92323 619.79669,-78.190323"
+       d="m 390.74609,-300.3818 -72.67898,-38.96628"
        class="id_8 id_6"
        id="path15"
        inkscape:connector-curvature="0"
@@ -98,156 +98,156 @@
   </g>
   <g
      id="arrows"
-     transform="translate(0.59513855,32.754272)">
+     transform="translate(468.34978,19.674713)">
     <polyline
        class="id_2 id_1"
-       points="110.203331,2.478264 121.100945,-0.020163 118.740639,9.697294"
+       points="54.494869,82.532341 54.256996,71.354538 63.294395,75.635361"
        id="polyline18"
        style="fill:#000000;fill-opacity:1;stroke:none" />
     <polyline
        class="id_5 id_3"
-       points="309.892914,-67.613289 320.990234,-68.973183 317.639221,-59.551365"
+       points="158.939941,-179.584335 164.831787,-189.086243 170.076569,-180.572021"
        id="polyline20"
        style="fill:#000000;fill-opacity:1;stroke:none" />
     <polyline
        class="id_5 id_4"
-       points="407.729126,84.846397 411.705841,74.397209 418.474518,81.758263"
+       points="203.831360,-117.874657 202.825012,-129.009613 212.135529,-125.360703"
        id="polyline22"
        style="fill:#000000;fill-opacity:1;stroke:none" />
     <polyline
        class="id_6 id_5"
-       points="508.486053,-6.182450 513.623413,-16.112572 519.512573,-8.030617"
+       points="254.237488,-245.284607 253.698456,-256.451935 262.847931,-252.416245"
        id="polyline24"
        style="fill:#000000;fill-opacity:1;stroke:none" />
     <polyline
        class="id_7 id_6"
-       points="608.486023,-66.683060 619.512573,-64.834885 613.623413,-56.752934"
+       points="304.474670,-358.533447 304.212982,-369.710724 313.259491,-365.449127"
        id="polyline26"
        style="fill:#000000;fill-opacity:1;stroke:none" />
     <polyline
        class="id_8 id_6"
-       points="610.139771,-75.593422 618.498230,-83.018784 621.095154,-73.361862"
+       points="309.253906,-344.073242 320.429688,-343.754700 315.704529,-334.941467"
        id="polyline28"
        style="fill:#000000;fill-opacity:1;stroke:none" />
   </g>
   <g
      id="nodes"
-     transform="translate(0.59513855,32.754272)">
+     transform="translate(468.34978,19.674713)">
+    <circle
+       r="10"
+       cx="50"
+       class="id_1"
+       cy="92.021606"
+       id="circle31"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1" />
     <circle
        r="10"
        cx="100"
-       class="id_1"
-       cy="-5.2496795e-05"
-       id="circle31"
-       style="fill:#69c404;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+       class="id_2"
+       cy="-13.535028"
+       id="circle33"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <circle
+       r="10"
+       cx="150"
+       class="id_3"
+       cy="-174.0773"
+       id="circle35"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1" />
     <circle
        r="10"
        cx="200"
-       class="id_2"
-       cy="24.289238"
-       id="circle33"
-       style="fill:#806b68;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+       class="id_4"
+       cy="-108.09863"
+       id="circle37"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <circle
+       r="10"
+       cx="250"
+       class="id_5"
+       cy="-235.67764"
+       id="circle39"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1" />
     <circle
        r="10"
        cx="300"
-       class="id_3"
-       cy="-71.131851"
-       id="circle35"
-       style="fill:#00af87;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+       class="id_6"
+       cy="-349.03464"
+       id="circle41"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <circle
+       r="10"
+       cx="350"
+       class="id_7"
+       cy="-455.17471"
+       id="circle43"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1" />
     <circle
        r="10"
        cx="400"
-       class="id_4"
-       cy="91.953499"
-       id="circle37"
-       style="fill:#00c7ff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1" />
-    <circle
-       r="10"
-       cx="700"
-       class="id_7"
-       cy="0.0012882609"
-       id="circle39"
-       style="fill:#e28bff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1" />
-    <circle
-       r="10"
-       cx="500"
-       class="id_5"
-       cy="0.0011511683"
-       id="circle41"
-       style="fill:#e28bff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1" />
-    <circle
-       r="10"
-       cx="600"
-       class="id_6"
-       cy="-72.866669"
-       id="circle43"
-       style="fill:#fa9200;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1" />
-    <circle
-       r="10"
-       cx="800"
        class="id_8"
-       cy="-126.64998"
+       cy="-295.42041"
        id="circle45"
-       style="fill:#ff5d85;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1" />
   </g>
   <g
      id="node-labels"
-     transform="translate(0.59513855,32.754272)">
+     transform="translate(468.34978,19.674713)">
     <text
        font-size="24"
-       x="93.76033"
-       y="-13.134655"
+       x="429.32834"
+       y="100.38551"
        style="font-size:24px;font-family:Dialog;text-anchor:middle;fill:#000000"
        class="id_1"
-       id="text48">Letting dog out</text>
+       id="text48">The owner lets his dog out of the house, to play in the yard.</text>
     <text
        font-size="24"
-       x="210.11751"
-       y="55.415249"
+       x="341.23578"
+       y="-4.3186951"
        style="font-size:24px;font-family:Dialog;text-anchor:middle;fill:#000000"
        class="id_2"
-       id="text50">Moving</text>
+       id="text50">The dog enters the yard at his house.</text>
     <text
        font-size="24"
-       x="293.76035"
-       y="-87.153015"
+       x="-157.72478"
+       y="-163.15613"
        style="font-size:24px;font-family:Dialog;text-anchor:middle;fill:#000000"
        class="id_3"
-       id="text52">Spotting</text>
+       id="text52">The dog spots 5 cats that are sitting in the yard.</text>
     <text
        font-size="24"
-       x="397.60907"
-       y="124.0417"
+       x="403.72916"
+       y="-96.782059"
        style="font-size:24px;font-family:Dialog;text-anchor:middle;fill:#000000"
        class="id_4"
-       id="text54">Meowing</text>
+       id="text54">One of the cats (cat 1) meows.</text>
     <text
        font-size="24"
-       x="715.89062"
-       y="32.089485"
-       style="font-size:24px;font-family:Dialog;text-anchor:middle;fill:#000000"
-       class="id_7"
-       id="text56">Barking</text>
-    <text
-       font-size="24"
-       x="541.86969"
-       y="31.127163"
+       x="437.53311"
+       y="-226.4613"
        style="font-size:24px;font-family:Dialog;text-anchor:middle;fill:#000000"
        class="id_5"
-       id="text58">Barking</text>
+       id="text56">The dog barks at the 5 cats.</text>
     <text
        font-size="24"
-       x="588.9494"
-       y="-91.774391"
+       x="560.84149"
+       y="-349.19495"
        style="font-size:24px;font-family:Dialog;text-anchor:middle;fill:#000000"
        class="id_6"
-       id="text60">Hissing</text>
+       id="text58">One of the cats (cat 2) hisses at the dog.</text>
     <text
        font-size="24"
-       x="802.42004"
-       y="-146.5199"
+       x="500.87894"
+       y="-445.10596"
+       style="font-size:24px;font-family:Dialog;text-anchor:middle;fill:#000000"
+       class="id_7"
+       id="text60">The dog barks at cat 2.</text>
+    <text
+       font-size="24"
+       x="609.69611"
+       y="-286.20407"
        style="font-size:24px;font-family:Dialog;text-anchor:middle;fill:#000000"
        class="id_8"
-       id="text62">Chasing cats</text>
+       id="text62">The dog starts chasing the cats.</text>
   </g>
 </svg>

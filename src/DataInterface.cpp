@@ -1196,7 +1196,7 @@ void DataInterface::writeLinkages(const QString &relDescription, QVector<QString
 	    memo = *(memIt->begin() + 2);
 	  }
 	}
-	edgesOut << i + 1 << "," << j + 1 << "," << "Directed" << "," << "1" << "," << "Directed"
+	edgesOut << i + 1 << "," << j + 1 << "," << "Directed" << "," << "1"  
 		 << ",\"" << description << "\",\"" <<  memo << "\"\n";
 
 	std::stringstream ss2;
@@ -1205,7 +1205,11 @@ void DataInterface::writeLinkages(const QString &relDescription, QVector<QString
 	std::string currentR = "r" + ss2.str();
 	std::string currentS = "s" + ss2.str();
 	std::string currentT = "t" + ss2.str();
-	std::string currentLabel = currentS + "---[" + description + "]-->" + currentT;
+	std::stringstream sN;
+	sN << (i + 1);
+	std::stringstream tN;
+	tN << (j + 1);
+	std::string currentLabel = "Incident" + sN.str() + "---[" + description + "]-->" + "Incident" + tN.str();
 
 	cypherOut << "CREATE (" << currentR << ":Incident_Relationship {id: \"" << currentLabel
 		  << "\", type: \"" << description << "\", memo: \"" << memo << "\"})\n\n";

@@ -250,7 +250,7 @@ Figure \ref{fig:settings} shows where the settings are located. The left most dr
 
 Finally, a brief description (or label) of the linkage should be given. This description will be shown throughout the coding process, to remind the coder what type of linkage is being considered.
 
-If all these settings have been chosen, then the \textbf{Start coding} button will be enabled. Clicking this button will start the coding process. \textbf{After this, if the user wants to change any settings (s)he will have to restart the entire process.''}
+If all these settings have been chosen, then the \textbf{Manual coding} and \textbf{Assisted coding} buttons will be enabled. Clicking one of these buttons will start the coding process in one of the two available coding modes (the differences between the two coding modes are described in section \ref{sec:codinglinkages}). \textbf{After this, if the user wants to change any settings with regard to relationship type and direction (s)he will have to restart the entire process.}
 
 \begin{figure}[h!]
   \centering
@@ -300,14 +300,14 @@ Typically, you will want to consider assigning a linkage between the current pai
   \label{fig:indexes}
 \end{figure}
 
-Most of the time, it makes sense to consider several (if not all) possible \textbf{target} incidents for each \textbf{source incident}. Once the user has decided whether or not the current pair of incidents should be linked (see section \ref{sec:codinglinkages}), then the user will probably want to move on to the next \textbf{target} incident, or \textbf{source} incident. Changing the currently selected incident can be done using the buttons to the left and right of the incident indexes (see figure \ref{fig:indexes}). The current \textbf{source} incident can be changed with the \textbf{Next source} and \textbf{Previous source} buttons, and the current \textbf{target} incident can be changed with the \textbf{Next target} and \textbf{Previous target} buttons.
+Although the \textbf{Assisted coding} mode will help the user navigate through the data set (see \ref{sec:codinglinkages}), it is always possible to move to other incidents manually, using one of the navigation buttons, which are located to the left and right of the incident indexes (see figure \ref{fig:indexes}). The current \textbf{source} incident can be changed with the \textbf{Next source} and \textbf{Previous source} buttons, and the current \textbf{target} incident can be changed with the \textbf{Next target} and \textbf{Previous target} buttons.
 
-In between the two main fields you will see a button named \textbf{Jump to}. Clicking this button will open a small dialog that allows you to type index numbers for a \textbf{source} incident and a \textbf{target} incident (both always have to be entered). If you then click the \textbf{Go} button, the program will jump to the incidents with the selected indexes. If you select an ``illegal'' index for the \textbf{source} incident, nothing will happen. If you select a ``legal'' index for the \textbf{source} incident, but an ``illegal'' index for the target incident, then the program will jump to the selected \textbf{source} incident, and to the first available \textbf{target} incident.
+Below the two main fields you will find a collection of additional navigation buttons. In the middle you will find a button named \textbf{Jump to}. Clicking this button will open a small dialog that allows you to type index numbers for a \textbf{source} incident and a \textbf{target} incident (both always have to be entered). If you then click the \textbf{Go} button, the program will jump to the incidents with the selected indexes. If you select an ``illegal'' index for the \textbf{source} incident, nothing will happen. If you select a ``legal'' index for the \textbf{source} incident, but an ``illegal'' index for the target incident, then the program will jump to the selected \textbf{source} incident, and to the first available \textbf{target} incident.
 
 \section{Marking incidents}
 \label{sec:markingincidents}
 
-In the area demarcated in figure \ref{fig:flagoptions}, you will find several buttons that refer to flagged incidents (\textbf{Toggle flag for source}, \textbf{Toggle flag for target}, \textbf{Previous flagged source}, \textbf{Next flagged source}, \textbf{Previous flagged target}, and \textbf{Next flagged target}). Flags can be used to mark incidents that you would like to return to later. If you click the \textbf{Toggle flag for source} button, an exclamation mark will appear next to the index of the \textbf{source} incident to show that this incident is currently flagged (see figure \ref{fig:flaggedincident}). The same can be achieved for any \textbf{target} incident, using the \textbf{Toggle flag for target} button.
+In the area demarcated in figure \ref{fig:flagoptions}, you will find several buttons that refer to flagged incidents (\textbf{Toggle flag}, \textbf{Prev. flagged}, \textbf{Next flagged}). Flags can be used to mark incidents that you would like to return to later. If you click the LEFT \textbf{Toggle flag} button, an exclamation mark will appear next to the index of the \textbf{source} incident to show that this incident is currently flagged (see figure \ref{fig:flaggedincident}). The same can be achieved for any \textbf{target} incident, using the \textbf{Toggle flag} button on the right.
 
 \begin{figure}[h!]
   \centering
@@ -316,7 +316,7 @@ In the area demarcated in figure \ref{fig:flagoptions}, you will find several bu
   \label{fig:flagoptions}
 \end{figure}
 
-If you later want to return to a flagged \textbf{source} incident or a flagged \textbf{target incident}, you can use the \textbf{Prev. flagged source/target} or the \textbf{Next flagged source/target} buttons. These buttons work similar to the \textbf{Prev. source/target} and the \textbf{Next source/target} buttons, but they will skip all incidents that are not flagged. This should allow you to relatively easily find incidents that you flagged earlier.
+If you later want to return to a flagged \textbf{source} incident or a flagged \textbf{target} incident, you can use the corresponding \textbf{Prev. flagged} or the \textbf{Next flagged} buttons. These buttons work similar to the \textbf{Prev. source/target} and the \textbf{Next source/target} buttons, but they will skip all incidents that are not flagged. This should allow you to relatively easily find incidents that you flagged earlier.
 
 \begin{figure}[h!]
   \centering
@@ -336,16 +336,29 @@ If you later want to return to a flagged \textbf{source} incident or a flagged \
 \section{Coding linkages}
 \label{sec:codinglinkages}
 
-Indeed, the main purpose of the program is to code for linkages between the incidents. Coding for linkages is very easy. In between the two main fields, you will find a button named \textbf{Toggle link} (see figure \ref{fig:incidentsoverview}). If no link has been assigned yet to the current pair of incidents, then clicking this button will make an indicator appear above the button to indicate that a linkage from the current \textbf{source} incident to the current \textbf{target} incident has now been created (see figure \ref{fig:linkage}). Clicking the \textbf{Toggle link} button again will remove the linkage, indicated by the disappearance of the indicator.
+Indeed, the main purpose of the program is to code for linkages between the incident. There are two different modes that the user can use for this: \textbf{Manual coding} and \textbf{Assisted coding}. The differences between these two modes are most easily explained by describing how the \textbf{Assisted coding} mode actually assists the user.
+
+The logic underlying the \textbf{Assisted coding} mode is based on ideas from David Heise \footnote{See especially Heise, D. R. (1989). Modeling event structures. \emph{The Journal of Mathematical Sociology}, 14(2), 139–169.}. Heise discusses a practical problem that occurs when trying to identify relationships between a larger number of incidents: The number of relationships to consider increases exponentially with an increase in the number of incidents. We can deal with this problem by assuming that the linkages between incidents are transitive, and that this makes some linkages redundant. Consider an example in which we have three incidents (\(A\), \(B\), and \(C\)), where the order of occurrence is the same as their alphabetical order, and where \(B\) occurred in response to \(A\) and \(C\) occurred in response to \(B\) (see figure \ref{fig:simplechain}.1).
 
 \begin{figure}[h!]
   \centering
-  \caption{Indication that incidents are linked.}
-  \includegraphics[width=40mm]{Screenshot_10.pdf}
-  \label{fig:linkage}
+  \caption{A simple chain of incidents.}
+  \includegraphics[width=60mm]{Diagram_7.pdf}
+  \label{fig:simplechain}
 \end{figure}
 
-Once you have coded linkages, it also becomes possible to quickly navigate between them, using the \textbf{Prev. linked} and \textbf{Next linked} buttons (see figure \ref{fig:linkedbuttons}). Clicking one of this buttons will tell the program to jump to the previous or the next linkage that you assigned in this session respectively.
+If incident \(C\) also occurred in response to incident \(A\) the user might normally want to add a linkage between them (see figure \ref{fig:simplechain}.2). However, if we assume that the linkages between incidents are transitive, then this third linkage could be considered redundant, as the first situation already suggests that \(C\) responded to \(A\) indirectly, through \(B\). In other words, in this case we say that if some incident (\(C\)) responds to some other incident (\(B\)) that is the last in one or more chains of incidents (\(A \leftarrow B\)), then we say that the incident (\(C\)) also responds indirectly to incidents that occurred earlier in those chains (\(A\)). Indeed, this is quite a strong assumption to make for some types of relationships between incidents (including the one considered in the example used here). However, if we work with this assumption, it can greatly reduce the number of linkages that we need to consider during the coding process. In the example above, if we already know that incident \(B\) occurred in response to incident \(A\), and that incident \(C\) occurred in response to incident \(B\), then there is no need for us to consider the linkage between \(C\), since it is already present in its transitive form.
+
+The \textbf{Assisted coding} mode helps the user by figuring out which linkages are redundant. When the user starts the coding process in this mode, the user is required to explicitly indicate, for each pair of incidents that the user is presented, whether it is linked or not linked, using the corresponding buttons (see figure \ref{fig:linkbuttons}). 
+
+\begin{figure}[h!]
+  \centering
+  \caption{Location of the linking buttons.}
+  \includegraphics[width=100mm]{Screenshot_27.pdf}
+  \label{fig:linkbuttons}
+\end{figure}
+
+The pair of incidents that is initially presented to the user depends on the linkage direction that the user has set. When the direction is set to \textbf{Past to present}, the program will start with the last two incidents in the data set, and the user will work her/his way back through the data set from there. When the direction is set to \textbf{Present to past}, the program will start with the first two incidents in the data set, and the user will work her/his way forward through the data set from there. If the user has decided whether or not the initial pair of incidents is linked by clicking the corresponding button, then the program calculates which linkages are redundant according to the new situation, and then jump to the next non-redundant pair after a short pause. In other words, all pairs of incidents that are already linked transitively will be skipped. This means that, in the \textbf{Assisted coding} mode, the user can code the entire data set without ever having to use the navigation buttons (see \ref{sec:navigatingdata}). However, manual navigation is also possible in the \textbf{Assisted coding} mode, by using the appropriate navigation buttons\footnote{It is very important to remember that when you decide to navigate to some pair of incidents manually, and then use \textbf{Linked} or \textbf{Not linked} buttons, the \textbf{Assisted mode} will simply pick up from there, and assume that any pairs of incidents that you have skipped manually are not linked.}. Also, if you feel that you have made a mistake somewhere, you can jump between linked pairs of incidents, using the \textbf{Prev. linked} and \textbf{Next linked} buttons (see figure \ref{fig:linkedbuttons}).
 
 \begin{figure}[h!]
   \centering
@@ -354,6 +367,16 @@ Once you have coded linkages, it also becomes possible to quickly navigate betwe
   \label{fig:linkedbuttons}
 \end{figure}
 
+The \textbf{Manual coding} mode does not automatically jump between pairs of incidents, and thus requires the user to navigate the data her/himself. If the data set is small enough, and the user prefers to consider all the pairs of incidents, then this is the mode that should be used. It is always possible to switch between \textbf{Manual coding} and \textbf{Assisted coding} by clicking the corresponding button. However, the user should always consider that the \textbf{Assisted coding} mode assumes that the user works her/his way through the data set in a specific direction, which depends on the linkage direction chosen by the user. 
+
+As discussed above the user can indicate where or not a pair of incident is linked with the \textbf{Linked} and \textbf{Not linked} buttons (see figure \ref{fig:linkbuttons}). If the user clicks the \textbf{Link} button, an indication of the link will appear on the screen (see figure \ref{fig:linkage}). if the user clicks the \textbf{Not linked} button, the linkage between the current pair of incidents will be removed in case it is present. 
+
+\begin{figure}[h!]
+  \centering
+  \caption{Indication that incidents are linked.}
+  \includegraphics[width=40mm]{Screenshot_10.pdf}
+  \label{fig:linkage}
+\end{figure}
 
 Below the two main text fields you will find another text field called \textbf{Memo} (see figure \ref{fig:memo}). This field can be used to record any memos that you would like to add to the current pair of incidents. Whatever you type here will be instantly saved. If you want to remove a memo, simply delete the text. When you export your coded data (see \ref{sec:exportingdata}), the memos will also be included with all linkages that you have created (i.e., memos for pairs of incidents that have no linkage will not be exported). 
 
@@ -439,7 +462,7 @@ At the time of writing this manual, I am experimenting with the use of graph dat
 
 The graph database technology that I currently work with myself is the Neo4j Community Edition\footnote{See \url{https://neo4j.com/}.}, because (1) it is open source, which is something that I encourage, and (2) because it uses a query language and interface that I find very useful\footnote{I also see important drawbacks to Neo4j. In my opinion the configuration of Neo4j on your system, and the creation and management of new databases could have been made more intuitive. If you are completely new to Neo4j, it might take a while for you to get a solid grasp of how it works.}. I will not go into the details of how to use Neo4j here, because that would take me well beyond the scope of this manual. There is a wealth of information that can be found on the website of Neo4j\footnote{See, for example, \url{https://neo4j.com/docs/}.}, as well as on numerous other online forums. One of the files exported by the \emph{\textbf{Event Coder}} program (\textbf{"CYPHER.txt"}) is a list of Cypher commands (Cypher is the language used by Neo4j) that the user can simply copy and paste into the Neo4j interface to recreate the complete, coded data set as a Neo4j database.    
 
-Figure \ref{fig:graphdatabaseexample} shows a screenshot of a Neo4j database that I created in this way, using some made-up data. In this screenshot, the green nodes are our incidents, and the relationships contain all information on the linkages between our incidents.
+Figure \ref{fig:graphdatabaseexample} shows a screenshot of a Neo4j database that I created in this way, using some made-up data. In this screenshot, the yellow nodes are our incidents, and the green nodes are linkages between incidents. The relationships between the nodes indicate whether a given incident is a source or a target in the corresponding linkage\footnote{This is a somewhat inefficient way of representing the data, because the linkages between incidents could be represented more efficiently by storing them as relationships, without creating separate nodes for linkages. However, by treating the linkages as nodes, this would keep open the possibility to link these nodes to yet other entities in the database, which is something I may want to do in future versions of my programs.} 
 
 \begin{figure}[h!]
   \centering
