@@ -133,11 +133,15 @@ void DataInterface::readFile(const QString &fileName, const QString &sep)
     std::string::size_type stringLength = 0;
     std::string::size_type previousPos = 0;
     for (std::string::size_type i = 0; i != buffer.length(); i++) {
+      int quoteCount = 0;
+      if (buffer[i] == '"') {
+	quoteCount++;
+      }
       if (inTextField == false && buffer[i] == '"') {
 	inTextField = true;
 	previousPos++;
 	stringLength--;
-      } else if (inTextField == true && buffer[i] == '"' && (buffer[i + 1] == sepChar || i == buffer.length() - 1)) {
+      } else if (inTextField == true && buffer[i] == '"' && (buffer[i + 1] == sepChar || i == buffer.length() - 1) && quoteCount % 2 == 0) {
 	inTextField = false;
 	stringLength--;
       }
