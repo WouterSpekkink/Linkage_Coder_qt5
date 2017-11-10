@@ -475,6 +475,7 @@ void MainDialog::getFile() {
     warningBox->setIcon(QMessageBox::Warning);
     warningBox->setText("WARNING: session in progress!");
     warningBox->setInformativeText("You will lose all progress in the current session if you load a new file without saving first.");
+    delete warningBox;
     if (warningBox->exec() == QMessageBox::Ok) {
       QString file = QFileDialog::getOpenFileName(this, tr("Open File"),"","Comma Delimited Files(*.csv)");
       if(!file.trimmed().isEmpty()) {
@@ -624,6 +625,7 @@ void MainDialog::loadSession() {
 	logger->addToLog(newLog);
       }
     }
+    delete warningBox;
   } else {
    QString QloadFile = QFileDialog::getOpenFileName(this, tr("Load File"),"", tr("sav files (*.sav)"));
    if (!QloadFile.trimmed().isEmpty()) {
@@ -1691,6 +1693,7 @@ void MainDialog::importCodes() {
       QString newLog = timeText + " - " + "updated codes from " + QloadFile;
       logger->addToLog(newLog);
     }
+    delete warningBox;
   }
   updateTexts();
   updateIndexIndicators();

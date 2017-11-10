@@ -28,6 +28,7 @@
 
 #include <QProgressBar>
 #include <QtWidgets/QDialog>
+#include <QPointer>
 
 class ProgressBar : public QDialog {
 
@@ -40,9 +41,9 @@ public:
     ~ProgressBar() {}
 
 private:
-    QProgressBar *progress;
-    int minimum;
-    int maximum;
+  QPointer<QProgressBar> progress;
+  int minimum;
+  int maximum;
 
 };
 

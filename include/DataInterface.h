@@ -85,7 +85,7 @@ private:
   std::string relDir;
   std::string relDesc;
 
-  ProgressBar *loadProgress;
+  QPointer<ProgressBar> loadProgress;
 
   // We set some constant static strings that we will use more when saving and loading files.
   const static std::string IMPORTED_BEGIN;

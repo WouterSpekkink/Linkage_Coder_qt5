@@ -178,6 +178,7 @@ void CodeDialog::getFileOne() {
     warningBox->addButton(QMessageBox::Cancel);
     warningBox->setIcon(QMessageBox::Warning);
     warningBox->setText("WARNING: opening a new file will reset this dialog!");
+    delete warningBox;
     if (warningBox->exec() == QMessageBox::Ok) {
       setButtons(false); // We reset some buttons.
       fileNameOne = ""; // We also reset the file names.
@@ -232,6 +233,7 @@ void CodeDialog::compareFiles() {
     warningBox->setIcon(QMessageBox::Warning);
     warningBox->setText("ERROR: The two selected files are not of the same dataset!");
     warningBox->exec();
+    delete warningBox;
     // We should also abort if the relationship direction is not the same.
   } else if (dataOne->relDir != dataTwo->relDir) {
     QPointer <QMessageBox> warningBox = new QMessageBox;
@@ -239,6 +241,7 @@ void CodeDialog::compareFiles() {
     warningBox->setIcon(QMessageBox::Warning);
     warningBox->setText("ERROR: The direction of the relationship is different for the two files!");
     warningBox->exec();
+    delete warningBox;
     // If none of the above happens, we can continue.
   } else { 
     if (dataOne->relDesc != dataTwo->relDesc) {
@@ -248,6 +251,7 @@ void CodeDialog::compareFiles() {
       warningBox->setIcon(QMessageBox::Warning);
       warningBox->setText("WARNING: The relationship description differs for the two files!");
       warningBox->exec();
+      delete warningBox;
     }
 
     // We make sure that some variables are (re)set to 0.
@@ -329,6 +333,7 @@ void CodeDialog::writeResults() {
       errorBox->setInformativeText("It appears impossible to open the file to write data.");
       errorBox->exec();
       return;
+      delete errorBox;
     }
 
     fileOut << "==Results of code comparison 'Linkage Coder'==\n"; // A standard header for these files.
